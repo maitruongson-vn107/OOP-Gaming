@@ -19,12 +19,14 @@ public class Main extends Application {
     
     @Override
     public void start(Stage stage)throws Exception {
-       stage.setTitle("Battle ship");
+       stage.setTitle("Sky Fall");
+       stage.setResizable(true);
        Parent MainMenuLayout = FXMLLoader.load(getClass().getResource("view/MainMenuLayout.fxml"));
        Scene MainMenuScene = new Scene(MainMenuLayout);
        MainMenuScene.getStylesheets().add(getClass().getResource("view/Style.css").toExternalForm());
        stage.setScene(MainMenuScene);
-       stage.show();  
+       stage.setFullScreen(true);
+       stage.show();
     }
 
   
