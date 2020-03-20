@@ -1,9 +1,8 @@
 
 package com.company.skyfall.controller;
 
-import com.company.skyfall.view.play.PlayLayout;
+import com.company.skyfall.view.PlayLayout;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -11,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.util.Optional;
