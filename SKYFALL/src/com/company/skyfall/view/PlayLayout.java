@@ -6,10 +6,8 @@ import com.company.skyfall.model.Cell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,15 +16,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class PlayLayout  {
 
@@ -43,22 +37,20 @@ public class PlayLayout  {
     private static int time = 0;
     private static BorderPane root;
 
-    private static Text timetext=new Text("00:00");
+    private static Text timeText = new Text("00:00");
     //Make time counter appearing in root.Left
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
         String sec = (time%60<10?"0":"") + String.valueOf(time%60);
-        timetext.setText(min+":"+sec);
-        timetext.setFont(Font.font(25));
-        timetext.setFill(Color.YELLOW);
-      //  root.setLeft(timetext);
+        timeText.setText(min+":"+sec);
+        timeText.setFont(Font.font(25));
+        timeText.setFill(Color.YELLOW);
         time++;
     }));
 
     public static Parent createContent()throws Exception {
 
         root = new BorderPane();
-       // root.setPrefSize(1920, 1080);
         enemyBoard = new Board(true, event -> {
             if (!running)
                 return;
@@ -93,6 +85,8 @@ public class PlayLayout  {
         });
 
         //create Play Layout
+
+        //create Labels
         Label enemyBoardLabel = new Label("Computer Board");
         enemyBoardLabel.setTextFill(Color.YELLOW);
         enemyBoardLabel.setFont(Font.font(25));
@@ -101,17 +95,19 @@ public class PlayLayout  {
         Label playerBoardLabel = new Label("Player Board");
         playerBoardLabel.setTextFill(Color.YELLOW);
         playerBoardLabel.setFont(Font.font(25));
-        playerBoardLabel.setLabelFor(enemyBoard);
+        playerBoardLabel.setLabelFor(playerBoard);
 
-        //Make Main Menu Button in Play Scene
+        HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
+        labels.setPadding(new Insets(50, 50, 0, 400));
+
+        //create Main Menu Button in Play Scene
         Button mainMenuBtn = new Button("Main Menu");
-        mainMenuBtn.setPrefSize(260,100);
+        mainMenuBtn.setPrefSize(225,100);
 
-        //Set background image for MainMenu Button in Play Scene and format the text insides
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/ButtonBackgr.png"  );
+        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
         Image btnBackgrImage = new Image(btnInput);
-        BackgroundSize btnBackgrSize=new BackgroundSize(260,100,false,false,false,false);
-        BackgroundImage btnBackgr= new BackgroundImage(btnBackgrImage,
+        BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
+        BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT,
@@ -127,37 +123,38 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
-        HBox labels = new HBox(250, enemyBoardLabel, playerBoardLabel);
-        labels.setPadding(new Insets(0, 50, 0, 400));
 
-        timetext.setFont(Font.font(25));
-        timetext.setFill(Color.YELLOW);
+        //create Boards
+        HBox boards = new HBox(100, enemyBoard, playerBoard);
+        boards.setPadding(new Insets(75, 50, 50,400));
+        VBox centerBox = new VBox(0, labels, boards);
 
+        //create Time counter
+        timeText.setFont(Font.font(25));
+        timeText.setFill(Color.YELLOW);
         Text subtext=new Text("TIME:");
         subtext.setFont(Font.font(25));
         subtext.setFill(Color.YELLOW);
 
-        HBox timebox=new HBox(100,subtext,timetext,mainMenuBtn);
-        timebox.setPadding(new Insets(100,50,0,400));
-        VBox topbox=new VBox(timebox,labels);
-        HBox hBox = new HBox(100, enemyBoard, playerBoard);
-        hBox.setPadding(new Insets(100, 50, 50,400));
+        HBox timeBox = new HBox(100,subtext, timeText,mainMenuBtn);
+        timeBox.setPadding(new Insets(100,50,0,400));
 
 
-
-        // Set Background gif for Play Scene
+        //set background gif for Play Layout
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.gif"  );
         Image playBackgrImage = new Image(playBackgrInput);
-        BackgroundSize playBackgrSize=new BackgroundSize(1366,768,true,true,true,true);
+        BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT,
                 playBackgrSize);
+
+        //create Play Layout
         root.setBackground(new Background(playBackgr));
-        root.setTop(topbox);
-        root.setCenter(hBox);
-   //     root.setBottom(mainMenuBtn);
+        root.setTop(timeBox);
+        root.setCenter(centerBox);
+        root.setBottom(mainMenuBtn);
 
         return root;
     }
@@ -194,7 +191,7 @@ public class PlayLayout  {
             if (enemyBoard.placeAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
                 type--;
             }
-        };
+        }
 
         //start the time counter
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -203,18 +200,4 @@ public class PlayLayout  {
         running = true;
 
     }
-
-//    @Override
-//    public void start(Stage primaryStage) {
-//        //just for testing
-//        Scene scene = new Scene(PlayLayout.createContent());
-//        primaryStage.setTitle("Play");
-//        primaryStage.setScene(scene);
-//        primaryStage.setFullScreen(true);
-//        primaryStage.show();
-//    }
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
 }
