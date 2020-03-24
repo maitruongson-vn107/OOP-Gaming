@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.*?>
+<StackPane prefHeight="768" prefWidth="1366 " xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.skyfall.controller.Controller">
+   <children>
+       <VBox alignment="CENTER" spacing="30">
+          <children>
+              <Button fx:id="PlayBtn" onAction="#play" prefHeight="100.0" prefWidth="260.0" text="Play">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Button>
+              <Button fx:id="HowToPlayBtn" onAction="#howToPlay" prefHeight="100.0" prefWidth="260.0" text="How to play">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Button>
+              <Button prefHeight="99.0" prefWidth="259.0" text="Option">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Button>
+              <Button prefHeight="100.0" prefWidth="260.0" text="High Score">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Button>
+              <Button fx:id="ExitBtn" onAction="#exit" prefHeight="100.0" prefWidth="260.0" text="Exit">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Button>
+          </children>
+       </VBox>
+   </children>
+</StackPane>

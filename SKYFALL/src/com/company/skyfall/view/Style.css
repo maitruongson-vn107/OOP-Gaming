@@ -1,0 +1,18 @@
+.button{
+    -fx-background-image: url("ButtonBackgr.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-radius: 30;
+    -fx-background-color: #f5d69d;
+    -fx-text-fill: #f5d69d;
+}
+.button:hover{
+    -fx-font-weight: bold;
+}
+.root{
+    -fx-background-image:url("MainMenuBackgr.jpg");
+    -fx-background-size: 100% 100%;
+}
+.pane{
+    -fx-background-image:url("HowToPlayBackgr.jpg");
+    -fx-background-size: 100% 100%;
+}
