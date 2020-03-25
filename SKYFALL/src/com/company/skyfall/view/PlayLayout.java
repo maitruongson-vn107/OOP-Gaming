@@ -1,5 +1,6 @@
 package com.company.skyfall.view;
 
+import com.company.skyfall.model.HighScoreHandler;
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
 import com.company.skyfall.model.Cell;
@@ -7,10 +8,9 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -20,7 +20,12 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
+import java.util.Optional;
 import java.util.Random;
+
+import static com.company.skyfall.model.HighScoreHandler.isTop;
+import static com.company.skyfall.model.HighScoreHandler.writeHighScoreEasy;
+import static com.company.skyfall.model.HighScoreHandler.writeHighScoreHard;
 
 public class PlayLayout  {
 
@@ -36,8 +41,9 @@ public class PlayLayout  {
 
     private static int time = 0;
     private static BorderPane root;
-
-    private static Text timeText = new Text("00:00");
+    private static boolean easyMode=true;
+    private static int turn=0;
+    private static Text timeText = new Text("");
     //Make time counter appearing in root.Left
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -48,8 +54,9 @@ public class PlayLayout  {
         time++;
     }));
 
-    public static Parent createContent()throws Exception {
-
+    public static Parent createContent(boolean level)throws Exception {
+        time=0;
+        easyMode=level;
         root = new BorderPane();
         enemyBoard = new Board(true, event -> {
             if (!running)
@@ -58,16 +65,35 @@ public class PlayLayout  {
             Cell cell = (Cell) event.getSource();
             if (cell.wasShot)
                 return;
-
+            turn++;
             enemyTurn = !cell.shoot();
 
             if (enemyBoard.airCrafts == 0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("You win");
-                alert.setHeaderText("Congrats!");
-                alert.setContentText("YOU WIN!");
-                alert.showAndWait();
-            }
+                Alert winalert = new Alert(Alert.AlertType.INFORMATION);
+                winalert.setTitle("You win");
+                winalert.setHeaderText("Congrats!");
+                winalert.setContentText("YOU WIN!");
+                winalert.showAndWait();
+                TextField namefield = new TextField();
+               try {
+                   if(isTop(turn,time,easyMode)) { // if player got high score
+                         // maek a dialog enter player's name
+                         TextInputDialog dialog = new TextInputDialog();
+                         dialog.setTitle("Enter your name");
+                         dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
+                         dialog.setContentText("Your name:");
+                         Optional<String> result = dialog.showAndWait();
+                         namefield = dialog.getEditor();
+                         if (!easyMode){
+                               writeHighScoreHard(namefield.getText(),turn,time);
+                         } else {
+                               writeHighScoreEasy(namefield.getText(),turn,time);
+                           }
+                   }
+               } catch (Exception e){
+                   e.printStackTrace();
+               }
+        }
             if (enemyTurn)
                 enemyMove();
         });
@@ -141,7 +167,7 @@ public class PlayLayout  {
 
 
         //set background gif for Play Layout
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.gif"  );
+        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/MainMenuBackgr.jpg"  );
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
