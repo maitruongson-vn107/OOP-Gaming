@@ -66,9 +66,9 @@ public class PlayLayout  {
             turn++;
             int type_of_bullet;
             type_of_bullet = random.nextInt(3);
-            if (type_of_bullet == 0) enemyTurn = !cell.shoot_type1();
-            else if (type_of_bullet == 1) enemyTurn = !cell.shoot_type2();
-            else enemyTurn = !cell.shoot_type3();
+            if (type_of_bullet == 0) enemyTurn = !cell.shootType1();
+            else if (type_of_bullet == 1) enemyTurn = !cell.shootType2();
+            else enemyTurn = !cell.shootType3();
 
             if (enemyBoard.airCrafts == 0){
                 Alert winalert = new Alert(Alert.AlertType.INFORMATION);
@@ -197,9 +197,9 @@ public class PlayLayout  {
                 continue;
 
             int type_of_bullet = random.nextInt(3);
-            if (type_of_bullet == 0) enemyTurn = cell.shoot_type1();
-            else if (type_of_bullet == 1) enemyTurn = cell.shoot_type2();
-            else enemyTurn = cell.shoot_type3();
+            if (type_of_bullet == 0) enemyTurn = cell.shootType1();
+            else if (type_of_bullet == 1) enemyTurn = cell.shootType2();
+            else enemyTurn = cell.shootType3();
 
 
             if (playerBoard.airCrafts == 0){

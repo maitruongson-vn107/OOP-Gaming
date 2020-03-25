@@ -14,10 +14,14 @@ public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy ;
     public int  airCrafts = 3;
+    public int numBulletType2 = 3;
+    public int numBulletType3 = 1;
 
     private Random random = new Random();
 
-    // xay dung bang
+    /** Setting up and checking condition for Board */
+
+    // Build Board
     public Board(boolean enemy, EventHandler<? super MouseEvent> handler) {
         this.enemy = enemy;
         for (int y = 0; y < 10; y++) {
@@ -34,18 +38,17 @@ public class Board extends Parent {
         getChildren().add(rows);
     }
 
-    // lay vi tri o tren bang tai o (x,y)
+    // Get position (x,y) on Board
     public Cell getCell(int x, int y) {
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
     }
 
-    // diem (x,y) co thuoc bang hay khong ?
+    // Check validity of point (x,y)
     private boolean isValidPoint(int x, int y){
-        if (0 <= x && x < 10 && 0 <= y && y < 10) return true;
-        return false;
+        return 0 <= x && x < 10 && 0 <= y && y < 10;
     }
 
-    // diem (x,y) co ke canh voi may bay nao khac hay khong?
+    // Check edge-shared cells around point (x,y)
     public boolean checkFourDirection(int x, int y){
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
@@ -62,7 +65,7 @@ public class Board extends Parent {
         return true;
     }
 
-    // diem (x,y) co dat duoc may bay hay khong?
+    // Check condition to set AC on (x,y)
     public boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y){
         int type = airCraft.type;
 
@@ -89,8 +92,8 @@ public class Board extends Parent {
         return true;
     }
 
-    //dat may bay tai o (x,y)
-    public boolean setAirCraft(AirCraft airCraft, int x, int y){
+    // Set AC on point (x,y)
+        public boolean setAirCraft(AirCraft airCraft, int x, int y){
         if (isOkToSetAirCraft(airCraft, x, y)){
             int type = airCraft.type;
 
@@ -135,13 +138,14 @@ public class Board extends Parent {
             setStroke(Color.WHITE);
         }
 
-        //DAN THUONG
-        public boolean shoot_type1() {
+        /** Shoot methods */
+        //Bullet type 1
+        public boolean shootType1() {
             wasShot = true;
             setFill(Color.rgb(33, 233, 255));
 
             if (airCraft != null) {
-                airCraft.shoot_center();
+                airCraft.hitType1();
                 setFill(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
                     board.airCrafts--;
@@ -151,58 +155,64 @@ public class Board extends Parent {
             return false;
         }
 
-        //DAN TOA
-        public boolean shoot_type2(){
-            //xet tam diem ban
-            wasShot = true;
-            boolean da_ban_trung = false;
-            setFill(Color.rgb(33, 233, 255));
+        //Bullet type 2
+        public boolean shootType2() {
+            if (numBulletType2 > 0) {
+                // Center cell
+                wasShot = true;
+                boolean da_ban_trung = false;
+                setFill(Color.rgb(33, 233, 255));
 
-            if (airCraft != null) {
-                da_ban_trung = true;
-                airCraft.shoot_neighbor();
-                setFill(Color.rgb(255, 74, 54));
-                if (!airCraft.isAlive())
-                    board.airCrafts--;
-            }
+                if (airCraft != null) {
+                    da_ban_trung = true;
+                    airCraft.hitType2();
+                    setFill(Color.rgb(255, 74, 54));
+                    if (!airCraft.isAlive())
+                        board.airCrafts--;
+                }
 
-            //xet 8 o ke canh
-            int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-            int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+                // 8 cells surround
+                int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+                int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-            for(int i = 0; i < 7; i++){
-                int xx = x + dx[i];
-                int yy = y + dy[i];
+                for (int i = 0; i < 7; i++) {
+                    int xx = x + dx[i];
+                    int yy = y + dy[i];
 
-                if ((isValidPoint(xx,yy))) {
-                    Cell cell = getCell(xx, yy);
-                    cell.wasShot = true;
-                    setFill(Color.rgb(33, 233, 255));
+                    if ((isValidPoint(xx, yy))) {
+                        Cell cell = getCell(xx, yy);
+                        cell.wasShot = true;
+                        setFill(Color.rgb(33, 233, 255));
 
-                    if (cell.airCraft != null) {
-                        da_ban_trung = true;
-                        cell.airCraft.shoot_neighbor();
-                        setFill(Color.rgb(255, 74, 54));
-                        if (!airCraft.isAlive())
-                            board.airCrafts--;
+                        if (cell.airCraft != null) {
+                            da_ban_trung = true;
+                            cell.airCraft.hitType2();
+                            setFill(Color.rgb(255, 74, 54));
+                            if (!airCraft.isAlive())
+                                board.airCrafts--;
+                        }
                     }
                 }
+                numBulletType2 --;
+                return da_ban_trung;
             }
-            return da_ban_trung;
+            return false;
         }
 
-        //DAN NO
-        public boolean shoot_type3() {
-            wasShot = true;
-            setFill(Color.rgb(33, 233, 255));
+        // Bullet type 3
+        public boolean shootType3() {
+            if (numBulletType3 > 0) {
+                wasShot = true;
+                setFill(Color.rgb(33, 233, 255));
 
-            if (airCraft != null) {
-                setFill(Color.rgb(255, 74, 54));
-                while (airCraft.isAlive()) {
-                    airCraft.shoot_center();
+                if (airCraft != null) {
+                    setFill(Color.rgb(255, 74, 54));
+                    while (airCraft.isAlive()) {
+                        airCraft.hitType3();
+                    }
+                    board.airCrafts--;
+                    return true;
                 }
-                board.airCrafts--;
-                return true;
             }
             return false;
         }

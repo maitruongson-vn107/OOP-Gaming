@@ -13,16 +13,24 @@ public class AirCraft extends Parent {
         this.HP = model_type*100;
     }
 
-    public void shoot_neighbor(){
-        HP = HP - 50;
-    }
+    /** Hàm xử lý HP khi BỊ TRÚNG ĐẠN */
 
-    public void shoot_center(){
-        HP = HP - 100;
+    //hit by bullet type 1
+    public void hitType1(){
+        if(HP > 100) HP -= 100;
+        else HP = 0;
     }
-
+    //hit by bullet type 2
+    public void hitType2(){
+        if(HP > 50) HP -= 50;
+        else HP = 0;
+    }
+    //hit by bullet type 3
+    public void hitType3(){
+        HP = 0;
+    }
+    //kiem tra dieu kien song
     public boolean isAlive(){
-        if (HP > 0) return true;
-        return false;
+        return HP > 0;
     }
 }
