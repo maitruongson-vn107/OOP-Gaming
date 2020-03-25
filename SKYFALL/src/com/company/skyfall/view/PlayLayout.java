@@ -1,14 +1,12 @@
 package com.company.skyfall.view;
 
-import com.company.skyfall.model.HighScoreHandler;
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
-import com.company.skyfall.model.Cell;
+import com.company.skyfall.model.Board.Cell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -66,7 +64,11 @@ public class PlayLayout  {
             if (cell.wasShot)
                 return;
             turn++;
-            enemyTurn = !cell.shoot();
+            int type_of_bullet;
+            type_of_bullet = random.nextInt(3);
+            if (type_of_bullet == 0) enemyTurn = !cell.shoot_type1();
+            else if (type_of_bullet == 1) enemyTurn = !cell.shoot_type2();
+            else enemyTurn = !cell.shoot_type3();
 
             if (enemyBoard.airCrafts == 0){
                 Alert winalert = new Alert(Alert.AlertType.INFORMATION);
@@ -103,7 +105,7 @@ public class PlayLayout  {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.placeAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
+            if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
                 if (--airCraftsToPlace == 0) {
                     startGame();
                 }
@@ -194,7 +196,11 @@ public class PlayLayout  {
             if (cell.wasShot)
                 continue;
 
-            enemyTurn = cell.shoot();
+            int type_of_bullet = random.nextInt(3);
+            if (type_of_bullet == 0) enemyTurn = cell.shoot_type1();
+            else if (type_of_bullet == 1) enemyTurn = cell.shoot_type2();
+            else enemyTurn = cell.shoot_type3();
+
 
             if (playerBoard.airCrafts == 0){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -214,7 +220,7 @@ public class PlayLayout  {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
-            if (enemyBoard.placeAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
+            if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
                 type--;
             }
         }
