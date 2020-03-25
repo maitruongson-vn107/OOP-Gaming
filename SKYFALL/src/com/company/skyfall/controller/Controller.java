@@ -10,14 +10,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
-    private boolean easyMode=true;
+    private boolean easyMode = true;
     //switch to PlayLayout when "Play" button is clicked
     public void play(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -26,6 +29,7 @@ public class Controller implements Initializable {
         stage.setScene(scene);
         stage.setFullScreen(true);
         stage.show();
+
     }
 
     //switch to HowToPlayLayout when "How To Play" button is clicked
@@ -43,16 +47,16 @@ public class Controller implements Initializable {
     //alert a confirmation when exiting
     public void exit(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-       ButtonType ExitYesBtn = new ButtonType("Yes");
-       ButtonType ExitNoBtn = new ButtonType("No");
-      
-       Alert ExitAlert = new Alert(Alert.AlertType.CONFIRMATION);
-       ExitAlert.setTitle("Exit Confirmation");
-       ExitAlert.setHeaderText("Are you sure to exit now?");
-       ExitAlert.getButtonTypes().setAll(ExitYesBtn,ExitNoBtn);
+        ButtonType ExitYesBtn = new ButtonType("Yes");
+        ButtonType ExitNoBtn = new ButtonType("No");
+
+        Alert ExitAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        ExitAlert.setTitle("Exit Confirmation");
+        ExitAlert.setHeaderText("Are you sure to exit now?");
+        ExitAlert.getButtonTypes().setAll(ExitYesBtn,ExitNoBtn);
 
         Optional<ButtonType> ExitAlertResult=ExitAlert.showAndWait();
-        if (ExitAlertResult.get()==ExitYesBtn) stage.close();    
+        if (ExitAlertResult.get()==ExitYesBtn) stage.close();
     }
 
 
