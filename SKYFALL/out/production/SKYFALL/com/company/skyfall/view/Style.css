@@ -12,7 +12,11 @@
     -fx-background-image:url("MainMenuBackgr.jpg");
     -fx-background-size: 100% 100%;
 }
-.pane{
+#HowToPlay{
     -fx-background-image:url("HowToPlayBackgr.jpg");
     -fx-background-size: 100% 100%;
+}
+#MainMenuBtn{
+ -fx-background-image:url("BackToMainMenuButtonBackgr.png");
+ -fx-background-size: 100% 100%;
 }

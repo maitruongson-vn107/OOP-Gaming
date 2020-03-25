@@ -17,11 +17,11 @@ import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
-
+    private boolean easyMode=true;
     //switch to PlayLayout when "Play" button is clicked
     public void play(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(PlayLayout.createContent(), 1500, 900);
+        Scene scene = new Scene(PlayLayout.createContent(easyMode));
         stage.setTitle("Play");
         stage.setScene(scene);
         stage.setFullScreen(true);
@@ -78,6 +78,11 @@ public class Controller implements Initializable {
         stage.setFullScreen(true);
     }
 
+    // change level
+//    public void chooseLevel(ActionEvent event) throws Exception{
+//        ....
+//        easyMode=....;
+//    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
