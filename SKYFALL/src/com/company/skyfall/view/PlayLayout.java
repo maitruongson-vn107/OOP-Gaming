@@ -18,30 +18,25 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.io.FileInputStream;
-import java.util.Optional;
 import java.util.Random;
 
-import static com.company.skyfall.model.HighScoreHandler.isTop;
-import static com.company.skyfall.model.HighScoreHandler.writeHighScoreEasy;
-import static com.company.skyfall.model.HighScoreHandler.writeHighScoreHard;
+import static com.company.skyfall.model.HighScoreHandler.*;
+import com.company.skyfall.controller.*;
+
 
 public class PlayLayout  {
 
     private static boolean running = false;
     private static Board enemyBoard;
     private static Board playerBoard;
-
     private static int airCraftsToPlace = 3;
-
     private static boolean enemyTurn = false;
-
     private static Random random = new Random();
-
     private static int time = 0;
-    private static BorderPane root;
     private static boolean easyMode=true;
-    private static int turn=0;
+    private static int turn = 0;
     private static Text timeText = new Text("");
+
     //Make time counter appearing in root.Left
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -52,50 +47,64 @@ public class PlayLayout  {
         time++;
     }));
 
-    public static Parent createContent(boolean level)throws Exception {
-        time=0;
-        easyMode=level;
-        root = new BorderPane();
+    public static Parent createContent(boolean level) throws Exception {
+        time = 0;
+        easyMode = level;
+        BorderPane root = new BorderPane();
         enemyBoard = new Board(true, event -> {
             if (!running)
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (cell.wasShot)
-                return;
+            if (playerBoard.preCell.equals(cell)) return;
             turn++;
-            int type_of_bullet;
-            type_of_bullet = random.nextInt(3);
-            if (type_of_bullet == 0) enemyTurn = !cell.shoot_type1();
-            else if (type_of_bullet == 1) enemyTurn = !cell.shoot_type2();
-            else enemyTurn = !cell.shoot_type3();
+
+            //choose type of bullet
+            int typeOfBullet;
+            while (true) {
+                typeOfBullet = random.nextInt(3) + 1;
+                if (typeOfBullet == 1){
+                    enemyTurn = !cell.shootType1();
+                    break;
+                }
+                if (typeOfBullet == 2 && playerBoard.numBulletType2 > 0)
+                {
+                    enemyTurn = !cell.shootType2();
+                    break;
+                }
+                if (typeOfBullet == 3 && playerBoard.numBulletType3 > 0){
+                    enemyTurn = !cell.shootType3();
+                    break;
+                }
+            }
 
             if (enemyBoard.airCrafts == 0){
-                Alert winalert = new Alert(Alert.AlertType.INFORMATION);
-                winalert.setTitle("You win");
-                winalert.setHeaderText("Congrats!");
-                winalert.setContentText("YOU WIN!");
-                winalert.showAndWait();
-                TextField namefield = new TextField();
-               try {
-                   if(isTop(turn,time,easyMode)) { // if player got high score
-                         // maek a dialog enter player's name
-                         TextInputDialog dialog = new TextInputDialog();
-                         dialog.setTitle("Enter your name");
-                         dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
-                         dialog.setContentText("Your name:");
-                         Optional<String> result = dialog.showAndWait();
-                         namefield = dialog.getEditor();
-                         if (!easyMode){
-                               writeHighScoreHard(namefield.getText(),turn,time);
-                         } else {
-                               writeHighScoreEasy(namefield.getText(),turn,time);
-                           }
-                   }
-               } catch (Exception e){
-                   e.printStackTrace();
-               }
-        }
+                Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
+                winAlert.setTitle("You win");
+                winAlert.setHeaderText("Congrats!");
+                winAlert.setContentText("YOU WIN!");
+                winAlert.showAndWait();
+                TextField nameField;
+                try {
+                    // if player got high score
+                    // make a dialog enter player's name
+                    if(isTop(turn,time,easyMode)) {
+                        TextInputDialog dialog = new TextInputDialog();
+                        dialog.setTitle("Enter your name");
+                        dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
+                        dialog.setContentText("Your name:");
+                        dialog.showAndWait();
+                        nameField = dialog.getEditor();
+                        if (!easyMode){
+                            writeHighScoreHard(nameField.getText(),turn,time);
+                        } else {
+                            writeHighScoreEasy(nameField.getText(),turn,time);
+                        }
+                    }
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
             if (enemyTurn)
                 enemyMove();
         });
@@ -169,7 +178,7 @@ public class PlayLayout  {
 
 
         //set background gif for Play Layout
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/MainMenuBackgr.jpg"  );
+        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg"  );
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
@@ -193,13 +202,27 @@ public class PlayLayout  {
             int y = random.nextInt(10);
 
             Cell cell = playerBoard.getCell(x, y);
-            if (cell.wasShot)
-                continue;
+            if (enemyBoard.preCell.equals(cell)) continue;
+            enemyBoard.preCell = cell;
 
-            int type_of_bullet = random.nextInt(3);
-            if (type_of_bullet == 0) enemyTurn = cell.shoot_type1();
-            else if (type_of_bullet == 1) enemyTurn = cell.shoot_type2();
-            else enemyTurn = cell.shoot_type3();
+            //choose type of bullet and move
+            int typeOfBullet;
+            while (true) {
+                typeOfBullet = random.nextInt(3) + 1;
+                if (typeOfBullet == 1){
+                    enemyTurn = !cell.shootType1();
+                    break;
+                }
+                if (typeOfBullet == 2 && enemyBoard.numBulletType2 > 0)
+                {
+                    enemyTurn = !cell.shootType2();
+                    break;
+                }
+                if (typeOfBullet == 3 && enemyBoard.numBulletType3 > 0){
+                    enemyTurn = !cell.shootType3();
+                    break;
+                }
+            }
 
 
             if (playerBoard.airCrafts == 0){
@@ -230,6 +253,5 @@ public class PlayLayout  {
         timeline.play();
 
         running = true;
-
     }
 }
