@@ -46,11 +46,11 @@ public class Board extends Parent {
     }
 
     // diem (x,y) co ke canh voi may bay nao khac hay khong?
-    public boolean checkEightDirection(int x, int y){
-        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+    public boolean checkFourDirection(int x, int y){
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {-1, 1, 0, 0};
 
-        for(int i = 0; i < 7; i++){
+        for(int i = 0; i < 3; i++){
             int xx = x + dx[i];
             int yy = y + dy[i];
 
@@ -73,7 +73,7 @@ public class Board extends Parent {
                 Cell cell = getCell(x,j);
                 if (cell.airCraft != null) return false;
 
-                if (!checkEightDirection(x,j)) return false;
+                if (!checkFourDirection(x,j)) return false;
             }
         }
         else {
@@ -83,7 +83,7 @@ public class Board extends Parent {
                 Cell cell = getCell(i, y);
                 if (cell.airCraft != null) return false;
 
-                if (!checkEightDirection(i, y)) return false;
+                if (!checkFourDirection(i, y)) return false;
             }
         }
         return true;
