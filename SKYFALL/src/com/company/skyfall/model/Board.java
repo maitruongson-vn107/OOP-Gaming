@@ -160,7 +160,7 @@ public class Board extends Parent {
 
             if (airCraft != null) {
                 da_ban_trung = true;
-                airCraft.shoot_center();
+                airCraft.shoot_neighbor();
                 setFill(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive())
                     board.airCrafts--;
