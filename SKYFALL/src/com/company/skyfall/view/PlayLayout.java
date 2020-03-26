@@ -56,9 +56,9 @@ public class PlayLayout  {
                 return;
 
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.preCell.equals(cell)) return;
+            if (enemyBoard.preCell.equals(cell)) return;
+            enemyBoard.preCell = cell;
             turn++;
-
 
             //choose type of bullet
             int typeOfBullet;
@@ -71,14 +71,15 @@ public class PlayLayout  {
                 if (typeOfBullet == 2 && playerBoard.numBulletType2 > 0)
                 {
                     enemyTurn = !cell.shootType2();
+                    playerBoard.numBulletType2--;
                     break;
                 }
                 if (typeOfBullet == 3 && playerBoard.numBulletType3 > 0){
                     enemyTurn = !cell.shootType3();
+                    playerBoard.numBulletType3--;
                     break;
                 }
             }
-
 
             if (enemyBoard.airCrafts == 0){
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -204,30 +205,29 @@ public class PlayLayout  {
             int y = random.nextInt(10);
 
             Cell cell = playerBoard.getCell(x, y);
-
-            if (enemyBoard.preCell.equals(cell)) continue;
-            enemyBoard.preCell = cell;
+            if (playerBoard.preCell.equals(cell)) continue;
+            playerBoard.preCell = cell;
 
             //choose type of bullet and move
-            int typeOfBullet;
             while (true) {
-                typeOfBullet = random.nextInt(3) + 1;
+                int typeOfBullet = random.nextInt(3) + 1;
                 if (typeOfBullet == 1){
-                    enemyTurn = !cell.shootType1();
+                    enemyTurn = cell.shootType1();
                     break;
                 }
                 if (typeOfBullet == 2 && enemyBoard.numBulletType2 > 0)
                 {
-                    enemyTurn = !cell.shootType2();
+                    enemyTurn = cell.shootType2();
+                    enemyBoard.numBulletType2--;
                     break;
                 }
                 if (typeOfBullet == 3 && enemyBoard.numBulletType3 > 0){
-                    enemyTurn = !cell.shootType3();
+                    enemyTurn = cell.shootType3();
+                    enemyBoard.numBulletType3--;
                     break;
                 }
             }
 
-           
 
             if (playerBoard.airCrafts == 0){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
