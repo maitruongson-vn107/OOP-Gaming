@@ -16,8 +16,7 @@ public class Board extends Parent {
     public int  airCrafts = 3;
     public int numBulletType2 = 3;
     public int numBulletType3 = 1;
-
-    public Cell preCell = null;
+    public Cell preCell = new Cell(10,10, this);
 
     private Random random = new Random();
 
@@ -40,13 +39,14 @@ public class Board extends Parent {
         getChildren().add(rows);
     }
 
-    // Get position (x,y) on Board
+
+        // Get position (x,y) on Board
     public Cell getCell(int x, int y) {
         return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
     }
 
     // Check validity of point (x,y)
-    private boolean isValidPoint(int x, int y){
+    public boolean isValidPoint(int x, int y){
         return 0 <= x && x < 10 && 0 <= y && y < 10;
     }
 
@@ -142,43 +142,22 @@ public class Board extends Parent {
         /** Shoot methods */
         //Bullet type 1
         public boolean shootType1() {
-            wasShot = true;
-            
-            setFill(Color.rgb(33, 233, 255));
-
             if (airCraft != null) {
                 airCraft.hitType1();
                 setFill(Color.rgb(255, 74, 54));
-                if (!airCraft.isAlive()) {
+                if (!airCraft.isAlive())
                     board.airCrafts--;
-                }
+
                 return true;
             }
+            setFill(Color.rgb(33, 233, 255));
             return false;
         }
 
         //Bullet type 2
         public boolean shootType2() {
-            
-            if (numBulletType2 > 0) {
                 boolean isShot = false;
-                numBulletType2 --;
-                
-                // Center cell
-                wasShot = true;
-                boolean da_ban_trung = false;
-                setFill(Color.rgb(33, 233, 255));
-
-                if (airCraft != null) {
-                    da_ban_trung = true;
-                    airCraft.hitType2();
-                    setFill(Color.rgb(255, 74, 54));
-                    if (!airCraft.isAlive())
-                        board.airCrafts--;
-                }
-              
-                
-                // 3*3 cells surround
+                // 3*3 block
                 int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
                 int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
 
@@ -188,44 +167,76 @@ public class Board extends Parent {
 
                     if ((isValidPoint(xx, yy))) {
                         Cell cell = getCell(xx, yy);
-
-                        setFill(Color.rgb(33, 233, 255));
+                        System.out.println(xx + " " + yy);
 
                         if (cell.airCraft != null) {
                             isShot = true;
                             cell.airCraft.hitType2();
-                            setFill(Color.rgb(255,233, 33));
-               
+                            cell.setFill(Color.rgb(255,233, 33));
                             if (!airCraft.isAlive())
                                 board.airCrafts--;
                         }
+                        else
+                            cell.setFill(Color.rgb(33, 233, 255));
                     }
                 }
-
                 return isShot;
-
-             
-            }
-            return false;
         }
 
         // Bullet type 3
         public boolean shootType3() {
-
-                setFill(Color.rgb(33, 233, 255));
-                numBulletType3 --;
-
-
-
+                setFill(Color.rgb(44, 255, 47));
                 if (airCraft != null) {
-                    setFill(Color.rgb(255, 74, 54));
-                    while (airCraft.isAlive()) {
-                        airCraft.hitType3();
-                    }
+                    if (!airCraft.isAlive()) return false;
                     board.airCrafts--;
+                    airCraft.hitType3();
+
+                    // change the color of died AC to BLACK
+                    if (airCraft.vertical){
+                        int xx = x;
+                        int yy = y;
+                        Cell cellTemp = getCell(xx,yy);
+                        while (cellTemp.airCraft != null){
+                            cellTemp.setFill(Color.rgb(14,6,3));
+                            xx--;
+                            if (isValidPoint(xx,yy)) cellTemp = getCell(xx,yy);
+                            else break;
+                        }
+
+                        xx = x; yy = y;
+                        cellTemp = getCell(xx,yy);
+                        while (cellTemp.airCraft != null){
+                            cellTemp.setFill(Color.rgb(14,6,3));
+                            xx++;
+                            if (isValidPoint(xx,yy)) cellTemp = getCell(xx,yy);
+                            else break;
+                        }
+                    }
+                    else {
+                        int xx = x;
+                        int yy = y;
+                        Cell cellTemp = getCell(xx, yy);
+                        while (cellTemp.airCraft != null) {
+                            cellTemp.setFill(Color.rgb(14,6,3));
+                            yy--;
+                            if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
+                            else break;
+                        }
+
+                        xx = x; yy = y;
+                        cellTemp = getCell(xx, yy);
+                        while (cellTemp.airCraft != null) {
+                            cellTemp.setFill(Color.rgb(14,6,3));
+                            yy++;
+                            if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
+                            else break;
+                        }
+                    }
                     return true;
                 }
+                return false;
             }
         }
+
 }
 
