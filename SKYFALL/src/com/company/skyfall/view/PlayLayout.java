@@ -59,6 +59,7 @@ public class PlayLayout  {
             if (playerBoard.preCell.equals(cell)) return;
             turn++;
 
+
             //choose type of bullet
             int typeOfBullet;
             while (true) {
@@ -77,6 +78,7 @@ public class PlayLayout  {
                     break;
                 }
             }
+
 
             if (enemyBoard.airCrafts == 0){
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
@@ -202,6 +204,7 @@ public class PlayLayout  {
             int y = random.nextInt(10);
 
             Cell cell = playerBoard.getCell(x, y);
+
             if (enemyBoard.preCell.equals(cell)) continue;
             enemyBoard.preCell = cell;
 
@@ -224,6 +227,7 @@ public class PlayLayout  {
                 }
             }
 
+           
 
             if (playerBoard.airCrafts == 0){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

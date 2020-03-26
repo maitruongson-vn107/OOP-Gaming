@@ -16,6 +16,7 @@ public class Board extends Parent {
     public int  airCrafts = 3;
     public int numBulletType2 = 3;
     public int numBulletType3 = 1;
+
     public Cell preCell = null;
 
     private Random random = new Random();
@@ -141,6 +142,8 @@ public class Board extends Parent {
         /** Shoot methods */
         //Bullet type 1
         public boolean shootType1() {
+            wasShot = true;
+            
             setFill(Color.rgb(33, 233, 255));
 
             if (airCraft != null) {
@@ -156,8 +159,25 @@ public class Board extends Parent {
 
         //Bullet type 2
         public boolean shootType2() {
+            
+            if (numBulletType2 > 0) {
                 boolean isShot = false;
                 numBulletType2 --;
+                
+                // Center cell
+                wasShot = true;
+                boolean da_ban_trung = false;
+                setFill(Color.rgb(33, 233, 255));
+
+                if (airCraft != null) {
+                    da_ban_trung = true;
+                    airCraft.hitType2();
+                    setFill(Color.rgb(255, 74, 54));
+                    if (!airCraft.isAlive())
+                        board.airCrafts--;
+                }
+              
+                
                 // 3*3 cells surround
                 int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
                 int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -168,24 +188,35 @@ public class Board extends Parent {
 
                     if ((isValidPoint(xx, yy))) {
                         Cell cell = getCell(xx, yy);
+
                         setFill(Color.rgb(33, 233, 255));
 
                         if (cell.airCraft != null) {
                             isShot = true;
                             cell.airCraft.hitType2();
                             setFill(Color.rgb(255,233, 33));
+               
                             if (!airCraft.isAlive())
                                 board.airCrafts--;
                         }
                     }
                 }
+
                 return isShot;
+
+             
+            }
+            return false;
         }
 
         // Bullet type 3
         public boolean shootType3() {
+
                 setFill(Color.rgb(33, 233, 255));
                 numBulletType3 --;
+
+
+
                 if (airCraft != null) {
                     setFill(Color.rgb(255, 74, 54));
                     while (airCraft.isAlive()) {
@@ -194,7 +225,6 @@ public class Board extends Parent {
                     board.airCrafts--;
                     return true;
                 }
-                return false;
             }
         }
 }

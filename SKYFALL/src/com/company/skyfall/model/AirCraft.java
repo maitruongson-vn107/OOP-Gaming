@@ -18,7 +18,7 @@ public class AirCraft extends Parent {
 
     //hit by bullet type 1
     public void hitType1(){
-        if (HP > 100) HP -= 100;
+        if (HP > 100) HP -= 100; 
         else HP = 0;
     }
     //hit by bullet type 2
@@ -32,6 +32,7 @@ public class AirCraft extends Parent {
     }
     //kiem tra dieu kien song
     public boolean isAlive(){
+
         if (HP > 0 ) return true;
         if (die == false) {
             die = true;
