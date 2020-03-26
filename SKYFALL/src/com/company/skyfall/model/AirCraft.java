@@ -14,11 +14,11 @@ public class AirCraft extends Parent {
         this.HP = type*100;
     }
 
-    /** Hàm xử lý HP khi BỊ TRÚNG ĐẠN */
+    /** Hàm xử lý AC khi BỊ TRÚNG ĐẠN */
 
     //hit by bullet type 1
     public void hitType1(){
-        if (HP > 100) HP -= 100; 
+        if (HP > 100) HP -= 100;
         else HP = 0;
     }
     //hit by bullet type 2
@@ -30,9 +30,8 @@ public class AirCraft extends Parent {
     public void hitType3(){
         HP = 0;
     }
-    //kiem tra dieu kien song
+    //AC was really ALive or not
     public boolean isAlive(){
-
         if (HP > 0 ) return true;
         if (die == false) {
             die = true;
