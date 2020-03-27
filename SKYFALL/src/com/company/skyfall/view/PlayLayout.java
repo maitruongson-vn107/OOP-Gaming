@@ -61,7 +61,8 @@ public class PlayLayout  {
             turn++;
 
             //choose type of bullet
-            int typeOfBullet;
+            int typeOfBullet=3;
+
             while (true) {
                 typeOfBullet = random.nextInt(3) + 1;
                 if (typeOfBullet == 1){
@@ -209,8 +210,9 @@ public class PlayLayout  {
             playerBoard.preCell = cell;
 
             //choose type of bullet and move
-            while (true) {
+           while (true) {
                 int typeOfBullet = random.nextInt(3) + 1;
+
                 if (typeOfBullet == 1){
                     enemyTurn = cell.shootType1();
                     break;
