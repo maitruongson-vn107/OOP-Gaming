@@ -1,20 +1,28 @@
 package com.company.skyfall.model;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.scene.shape.Rectangle;
+
+import java.util.Random;
 
 public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy;
-    public int airCrafts = 3;
+    public int  airCrafts = 3;
+    public int numBulletType2 = 3;
+    public int numBulletType3 = 1;
+    public Cell preCell = new Cell(10,10, this);
 
+    private Random random = new Random();
+
+    /** Setting up and checking condition for Board */
+
+    // Build Board
     public Board(boolean enemy, EventHandler<? super MouseEvent> handler) {
         this.enemy = enemy;
         for (int y = 0; y < 10; y++) {
@@ -31,108 +39,217 @@ public class Board extends Parent {
         getChildren().add(rows);
     }
 
-    public boolean placeAirCraft(AirCraft airCraft, int x, int y) {
-        if (canPlaceAirCraft(airCraft, x, y)) {
-            int length = airCraft.type;
 
-            if (airCraft.vertical) {
-                for (int i = y; i < y + length; i++) {
-                    Cell cell = getCell(x, i);
+        // Get position (x,y) on Board
+    public Cell getCell(int x, int y) {
+        return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
+    }
+
+    // Check validity of point (x,y)
+    public boolean isValidPoint(int x, int y){
+        return 0 <= x && x < 10 && 0 <= y && y < 10;
+    }
+
+    // Check edge-shared cells around point (x,y)
+    public boolean checkFourDirection(int x, int y){
+        int[] dx = {0, 0, 1, -1};
+        int[] dy = {1, -1, 0, 0};
+
+        for(int i = 0; i < 4; i++){
+            int xx = x + dx[i];
+            int yy = y + dy[i];
+
+            if ((isValidPoint(xx,yy))){
+                Cell cell = getCell(xx,yy);
+                if (cell.airCraft != null) return false;
+            }
+        }
+        return true;
+    }
+
+    // Check condition to set AC on (x,y)
+    public boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y){
+        int type = airCraft.type;
+
+        if (airCraft.vertical){
+            for (int j = y; j < y + type; j++) {
+                if (!isValidPoint(x, j)) return false;
+
+                Cell cell = getCell(x,j);
+                if (cell.airCraft != null) return false;
+
+                if (!checkFourDirection(x,j)) return false;
+            }
+        }
+        else {
+            for (int i = x; i < x + type; i++) {
+                if (!isValidPoint(i, y)) return false;
+
+                Cell cell = getCell(i, y);
+                if (cell.airCraft != null) return false;
+
+                if (!checkFourDirection(i, y)) return false;
+            }
+        }
+        return true;
+    }
+
+    // Set AC on point (x,y)
+        public boolean setAirCraft(AirCraft airCraft, int x, int y){
+        if (isOkToSetAirCraft(airCraft, x, y)){
+            int type = airCraft.type;
+
+            if (airCraft.vertical){
+                for (int j = y; j < y + type; j++){
+                    Cell cell = getCell(x, j);
                     cell.airCraft = airCraft;
-                    if (!enemy) {
+                    if (!enemy){
                         cell.setFill(Color.WHITE);
                         cell.setStroke(Color.GREEN);
                     }
                 }
             }
             else {
-                for (int i = x; i < x + length; i++) {
+                for (int i = x; i < x + type; i++){
                     Cell cell = getCell(i, y);
                     cell.airCraft = airCraft;
-                    if (!enemy) {
+                    if (!enemy){
                         cell.setFill(Color.WHITE);
                         cell.setStroke(Color.GREEN);
                     }
                 }
             }
-
             return true;
         }
-
         return false;
     }
 
-    public Cell getCell(int x, int y) {
-        return (Cell)((HBox)rows.getChildren().get(y)).getChildren().get(x);
-    }
+    public class Cell extends Rectangle {
+        public int x, y;
+        public AirCraft airCraft = null;
 
-    private Cell[] getNeighbors(int x, int y) {
-        Point2D[] points = new Point2D[] {
-                new Point2D(x - 1, y),
-                new Point2D(x + 1, y),
-                new Point2D(x, y - 1),
-                new Point2D(x, y + 1)
-        };
+        private Board board;
 
-        List<Cell> neighbors = new ArrayList<>();
-
-        for (Point2D p : points) {
-            if (isValidPoint(p)) {
-                neighbors.add(getCell((int)p.getX(), (int)p.getY()));
-            }
+        public Cell(int x, int y, Board board) {
+            super(30, 30);
+            this.x = x;
+            this.y = y;
+            this.board = board;
+            setFill(Color.TRANSPARENT);
+            setStroke(Color.WHITE);
         }
 
-        return neighbors.toArray(new Cell[0]);
-    }
+        /** Shoot methods */
+        //Bullet type 1
+        public boolean shootType1() {
+            if (airCraft != null ) {
+                if (airCraft.die ) return false;
+                airCraft.hitType1();
+                setFill(Color.rgb(255, 74, 54));
+                if (!airCraft.isAlive())
+                {
+                    board.airCrafts--;
+                    changeColor(this);
+                }
 
-    private boolean canPlaceAirCraft(AirCraft airCraft, int x, int y) {
-        int length = airCraft.type;
+                return true;
+            }
+            setFill(Color.rgb(33, 233, 255));
+            return false;
+        }
 
-        if (airCraft.vertical) {
-            for (int i = y; i < y + length; i++) {
-                if (!isValidPoint(x, i))
-                    return false;
+        //Bullet type 2
+        public boolean shootType2() {
+                boolean isShot = false;
+                // 3*3 block
+                int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+                int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
 
-                Cell cell = getCell(x, i);
-                if (cell.airCraft != null)
-                    return false;
+                for (int i = 0; i < 9; i++) {
+                    int xx = x + dx[i];
+                    int yy = y + dy[i];
 
-                for (Cell neighbor : getNeighbors(x, i)) {
-                    if (!isValidPoint(x, i))
-                        return false;
+                    if ((isValidPoint(xx, yy))) {
+                        Cell cell = getCell(xx, yy);
 
-                    if (neighbor.airCraft != null)
-                        return false;
+                        if (cell.airCraft != null ) {
+                            if (cell.airCraft.die) continue;
+                            isShot = true;
+                            cell.airCraft.hitType2();
+                            cell.setFill(Color.rgb(255,233, 33));
+                            if (!cell.airCraft.isAlive())
+                            {
+                                board.airCrafts--;
+                                changeColor(this);
+                            }
+                        }
+                        else
+                            cell.setFill(Color.rgb(33, 233, 255));
+                    }
+                }
+                return isShot;
+        }
+
+        // Bullet type 3
+        public boolean shootType3() {
+                if (airCraft != null) {
+                    if (airCraft.die) return false;
+                    airCraft.die = true;
+                    board.airCrafts--;
+                    airCraft.hitType3();
+
+                    // change the color of died AC to BLACK
+                    changeColor(this);
+                    return true;
+                }
+                else
+                    setFill(Color.rgb(44, 255, 47));
+                return false;
+            }
+        }
+        public void changeColor(Cell cell){
+            if (!cell.airCraft.vertical){
+                int xx = cell.x;
+                int yy = cell.y;
+                Cell cellTemp = getCell(xx,yy);
+                while (cellTemp.airCraft != null){
+                    cellTemp.setFill(Color.rgb(14,6,3));
+                    xx--;
+                    if (isValidPoint(xx,yy)) cellTemp = getCell(xx,yy);
+                    else break;
+                }
+
+                xx = cell.x; yy = cell.y;
+                cellTemp = getCell(xx,yy);
+                while (cellTemp.airCraft != null){
+                    cellTemp.setFill(Color.rgb(14,6,3));
+                    xx++;
+                    if (isValidPoint(xx,yy)) cellTemp = getCell(xx,yy);
+                    else break;
                 }
             }
-        }
-        else {
-            for (int i = x; i < x + length; i++) {
-                if (!isValidPoint(i, y))
-                    return false;
+            else {
+                int xx = cell.x;
+                int yy = cell.y;
+                Cell cellTemp = getCell(xx, yy);
+                while (cellTemp.airCraft != null) {
+                    cellTemp.setFill(Color.rgb(14,6,3));
+                    yy--;
+                    if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
+                    else break;
+                }
 
-                Cell cell = getCell(i, y);
-                if (cell.airCraft != null)
-                    return false;
-
-                for (Cell neighbor : getNeighbors(i, y)) {
-                    if (!isValidPoint(i, y))
-                        return false;
-
-                    if (neighbor.airCraft != null)
-                        return false;
+                xx = cell.x; yy = cell.y;
+                cellTemp = getCell(xx, yy);
+                while (cellTemp.airCraft != null) {
+                    cellTemp.setFill(Color.rgb(14,6,3));
+                    yy++;
+                    if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
+                    else break;
                 }
             }
+
         }
 
-        return true;
-    }
-
-    private boolean isValidPoint(Point2D point) {
-        return isValidPoint(point.getX(), point.getY());
-    }
-
-    private boolean isValidPoint(double x, double y) {
-        return x >= 0 && x < 10 && y >= 0 && y < 10;
-    }
 }
+

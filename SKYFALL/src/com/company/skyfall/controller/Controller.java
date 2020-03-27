@@ -1,6 +1,7 @@
 
 package com.company.skyfall.controller;
 
+import com.company.skyfall.view.HighScoreLayout;
 import com.company.skyfall.view.PlayLayout;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -77,7 +78,14 @@ public class Controller implements Initializable {
         stage.setScene(MainMenuScene);
         stage.setFullScreen(true);
     }
-
+    public void highScore(ActionEvent event) throws  Exception{
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(HighScoreLayout.creatHighScoreLayout());
+        stage.setTitle("HIGH SCORE");
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+        stage.show();
+    }
     // change level
 //    public void chooseLevel(ActionEvent event) throws Exception{
 //        ....
