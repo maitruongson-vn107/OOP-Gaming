@@ -5,24 +5,22 @@ import java.lang.NullPointerException;
 public class HighScoreHandler  {
     //Take high score infor from hard-level-high-score file
     public static String[][] hardReader()throws  Exception{
-        String[]   s1 = new String[5];
         String[][] s2 = new String[5][3];
         BufferedReader br = new BufferedReader(new FileReader("src/com/company/skyfall/view/hard_high_score.txt"));
         for (int i = 0;i<=4;i++) {
-            s1[i]=br.readLine();
-            s2[i]=s1[i].split("\\s");
+            for (int j = 0; j <= 2; j++)
+                s2[i][j] = br.readLine();
         }
         br.close();
         return s2;
     }
     //Take high score infor from easy-level-high-score file
     public static String[][] easyReader()throws  Exception{
-        String[]   s1 = new String[5];
         String[][] s2 = new String[5][3];
         BufferedReader br = new BufferedReader(new FileReader("src/com/company/skyfall/view/easy_high_score.txt"));
         for (int i = 0;i<=4;i++) {
-            s1[i]=br.readLine();
-            s2[i]=s1[i].split("\\s");
+            for (int j = 0; j <= 2; j++)
+                s2[i][j] = br.readLine();
         }
         br.close();
         return s2;
@@ -34,9 +32,9 @@ public class HighScoreHandler  {
             topdet=hardReader();
             if (Integer.parseInt(topdet[4][1]) == 0) return true;
             if (turn < Integer.parseInt(topdet[4][1])) return true;
-             else if (turn == Integer.parseInt(topdet[4][1]) && time < Integer.parseInt(topdet[4][2])) return true;
+            else if (turn == Integer.parseInt(topdet[4][1]) && time < Integer.parseInt(topdet[4][2])) return true;
             return false;
-            }
+        }
         else {
             String[][] topdet = new String[5][3];
             topdet=easyReader();
@@ -45,7 +43,7 @@ public class HighScoreHandler  {
             else if (turn == Integer.parseInt(topdet[4][1]) && time < Integer.parseInt(topdet[4][2])) return true;
             return false;
         }
-        };
+    };
     //save the high score infor into file
     public static void writeHighScoreHard(String name,int turn,int time)throws  Exception{
         String[][] topdet = new String[5][3];
@@ -61,7 +59,10 @@ public class HighScoreHandler  {
             topdet[i][1]=String.valueOf(turn);
             topdet[i][2]=String.valueOf(time);
             for(i = 0; i <=4; i++){
-                bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
+                bw.write(topdet[i][0]+"\n");
+                bw.write(topdet[i][1]+"\n");
+                bw.write(topdet[i][2]+"\n");
+                //  bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
             }
             bw.close();
             return;
@@ -77,7 +78,10 @@ public class HighScoreHandler  {
         topdet[i+1][1] = String.valueOf(turn);
         topdet[i+1][2] = String.valueOf(time);
         for(i = 0; i <=4; i++){
-            bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
+            bw.write(topdet[i][0]+"\n");
+            bw.write(topdet[i][1]+"\n");
+            bw.write(topdet[i][2]+"\n");
+            //   bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
         }
         bw.close();
     }
@@ -96,7 +100,10 @@ public class HighScoreHandler  {
             topdet[i][1]=String.valueOf(turn);
             topdet[i][2]=String.valueOf(time);
             for(i = 0; i <=4; i++){
-                bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
+                bw.write(topdet[i][0]+"\n");
+                bw.write(topdet[i][1]+"\n");
+                bw.write(topdet[i][2]+"\n");;
+                // bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
             }
             bw.close();
             return;
@@ -111,10 +118,17 @@ public class HighScoreHandler  {
         topdet[i+1][0] = name;
         topdet[i+1][1] = String.valueOf(turn);
         topdet[i+1][2] = String.valueOf(time);
-            for(i = 0; i <=4; i++){
-                bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
-            }
+        for(i = 0; i <=4; i++){
+            bw.write(topdet[i][0]+"\n");
+            bw.write(topdet[i][1]+"\n");
+            bw.write(topdet[i][2]+"\n");
+            // bw.write(topdet[i][0]+ " " + topdet[i][1] + " " + topdet[i][2] + "\n");
+        }
         bw.close();
     }
+
+//    public static void main(String[] args)throws Exception {
+//        writeHighScoreEasy("huy",3,3);
+//    }
 
 }
