@@ -30,7 +30,7 @@ public class PlayLayout  {
     private static boolean running = false;
     private static Board enemyBoard;
     private static Board playerBoard;
-    private static int airCraftsToPlace = 3;
+    private static int airCraftsToPlace = 4;
     private static boolean enemyTurn = false;
     private static Random random = new Random();
     private static int time = 0;
@@ -53,7 +53,7 @@ public class PlayLayout  {
         typeOfBullet = 1;
         overGame = false;
         running = false;
-        airCraftsToPlace=3;
+        airCraftsToPlace=4;
         time=0;
         timeText.setText("");
         easyMode=level;
@@ -442,7 +442,7 @@ public class PlayLayout  {
 
             Cell cell = (Cell) event.getSource();
             if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
-                if (--airCraftsToPlace == 0) {
+                if (--airCraftsToPlace == 1) {
                     //start the time counter
                     timeline.setCycleCount(Animation.INDEFINITE);
                     timeline.play();
@@ -571,9 +571,9 @@ public class PlayLayout  {
 
     private static void startGame() {
         // place enemy air crafts
-        int type = 3;
+        int type = 4;
 
-        while (type > 0) {
+        while (type > 1) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 

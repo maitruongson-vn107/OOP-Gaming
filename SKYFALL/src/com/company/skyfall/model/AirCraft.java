@@ -5,8 +5,9 @@ import javafx.scene.Parent;
 public class AirCraft extends Parent {
     public int type;
     public boolean vertical;
-    public int HP;
+    private int HP;
     public boolean die = false;
+    public Board.Cell head;
 
     public AirCraft(int type, boolean vertical){
         this.type = type;
