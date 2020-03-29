@@ -1,24 +1,22 @@
 package com.company.skyfall.view;
 
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.FileInputStream;
-import java.lang.String;
+
 import static com.company.skyfall.model.HighScoreHandler.easyReader;
 import static com.company.skyfall.model.HighScoreHandler.hardReader;
 public class HighScoreLayout {
-    public static Parent creatHighScoreLayout()throws Exception{
-        String[][] easyTop = new String[5][3];
-        String[][] hardTop = new String[5][3];
+    public static Parent createHighScoreLayout()throws Exception{
+        String[][] easyTop;
+        String[][] hardTop;
         easyTop = easyReader();
         hardTop = hardReader();
         StackPane root = new StackPane();
@@ -143,11 +141,10 @@ public class HighScoreLayout {
         LLabel time24 = new LLabel((Integer.parseInt(hardTop[3][2])/60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[3][2])/60) +":" +(Integer.parseInt(hardTop[3][2])%60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[3][2])%60));
         LLabel time25 = new LLabel((Integer.parseInt(hardTop[4][2])/60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])/60) +":" +(Integer.parseInt(hardTop[4][2])%60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])%60));
         hatimevbox.getChildren().addAll(time2,time21,time22,time23,time24,time25);
-        //   root.getCenter().(Integer.parseInt(hardTop[0][2])/60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[0][2])/60) +":" +(Integer.parseInt(hardTop[0][2])%60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[0][2])%60)
 
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/HighScoreBackgr.jpg"  );
         Image playBackgrImage = new Image(playBackgrInput);
-        BackgroundSize playBackgrSize = new BackgroundSize(1366,768,true,true,true,true);
+        BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,

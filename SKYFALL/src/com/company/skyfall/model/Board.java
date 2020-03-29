@@ -6,21 +6,39 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+import java.io.File;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy;
+    public static double soundLevel = 1;
     public int airCrafts = 3;
     public int numBulletType2 = 3;
     public int numBulletType3 = 1;
     public Cell preCell = new Cell(10, 10, this);
 
     private Random random = new Random();
+
+    public static void playSound() {
+        MediaPlayer soundPlayer = new MediaPlayer(new Media(
+                new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
+        ));
+        soundPlayer.play();
+        soundPlayer.setVolume(Board.soundLevel);
+        try {
+            TimeUnit.MILLISECONDS.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Setting up and checking condition for Board
@@ -50,12 +68,12 @@ public class Board extends Parent {
     }
 
     // Check validity of point (x,y)
-    public boolean isValidPoint(int x, int y) {
+    private boolean isValidPoint(int x, int y) {
         return 0 <= x && x < 10 && 0 <= y && y < 10;
     }
 
     // Check edge-shared cells around point (x,y)
-    public boolean checkFourDirection(int x, int y) {
+    private boolean checkFourDirection(int x, int y) {
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
 
@@ -72,7 +90,7 @@ public class Board extends Parent {
     }
 
     // Check condition to set AC on (x,y)
-    public boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y) {
+    private boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y) {
         int type = airCraft.type;
 
         if (airCraft.vertical) {
@@ -128,11 +146,11 @@ public class Board extends Parent {
 
     public class Cell extends Rectangle {
         public int x, y;
-        public AirCraft airCraft = null;
+        AirCraft airCraft = null;
 
         private Board board;
 
-        public Cell(int x, int y, Board board) {
+        Cell(int x, int y, Board board) {
             super(30, 30);
             this.x = x;
             this.y = y;
@@ -145,14 +163,14 @@ public class Board extends Parent {
          * Shoot methods
          */
         //Bullet type 1
-        public boolean shootType1() {
+        public boolean shootType1(){
+            Board.playSound();
             if (airCraft != null) {
                 if (airCraft.die) return false;
                 airCraft.hitType1();
                 setFill(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
                     board.airCrafts--;
-                    //changeColor(this);
                     changeImage(this);
                 }
 
@@ -164,6 +182,7 @@ public class Board extends Parent {
 
         //Bullet type 2
         public boolean shootType2() {
+            Board.playSound();
             boolean isShot = false;
             // 3*3 block
             int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
@@ -183,7 +202,6 @@ public class Board extends Parent {
                         cell.setFill(Color.rgb(255, 233, 33));
                         if (!cell.airCraft.isAlive()) {
                             board.airCrafts--;
-                            //changeColor(this);
                             changeImage(this);
                         }
                     } else
@@ -194,14 +212,13 @@ public class Board extends Parent {
         }
 
         // Bullet type 3
-        public boolean shootType3() {
+        public boolean shootType3(){
+            Board.playSound();
             if (airCraft != null) {
                 if (airCraft.die) return false;
                 airCraft.die = true;
                 board.airCrafts--;
                 airCraft.hitType3();
-
-                //changeColor(this);
                 changeImage(this);
                 return true;
             } else
@@ -210,53 +227,7 @@ public class Board extends Parent {
         }
     }
 
-
-    /*public void changeColor(Cell cell) {
-        if (!cell.airCraft.vertical) {
-            int xx = cell.x;
-            int yy = cell.y;
-            Cell cellTemp = getCell(xx, yy);
-            while (cellTemp.airCraft != null) {
-                cellTemp.setFill(Color.rgb(14, 6, 3));
-                xx--;
-                if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
-                else break;
-            }
-
-            xx = cell.x;
-            yy = cell.y;
-            cellTemp = getCell(xx, yy);
-            while (cellTemp.airCraft != null) {
-                cellTemp.setFill(Color.rgb(14, 6, 3));
-                xx++;
-                if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
-                else break;
-            }
-        } else {
-            int xx = cell.x;
-            int yy = cell.y;
-            Cell cellTemp = getCell(xx, yy);
-            while (cellTemp.airCraft != null) {
-                cellTemp.setFill(Color.rgb(14, 6, 3));
-                yy--;
-                if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
-                else break;
-            }
-
-            xx = cell.x;
-            yy = cell.y;
-            cellTemp = getCell(xx, yy);
-            while (cellTemp.airCraft != null) {
-                cellTemp.setFill(Color.rgb(14, 6, 3));
-                yy++;
-                if (isValidPoint(xx, yy)) cellTemp = getCell(xx, yy);
-                else break;
-            }
-        }
-
-    }*/
-
-    public void changeImage(Cell cell) {
+    private void changeImage(Cell cell) {
         if(cell.airCraft != null) {
             Cell head = cell.airCraft.head;
             if (cell.airCraft.vertical) {

@@ -17,12 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-
 import java.io.FileInputStream;
 import java.util.Random;
-
 import static com.company.skyfall.model.HighScoreHandler.*;
-import com.company.skyfall.controller.*;
 
 
 public class PlayLayout  {
@@ -39,6 +36,7 @@ public class PlayLayout  {
     private static boolean overGame = false;
     private static Text timeText = new Text("");
     private static byte typeOfBullet = 1;
+
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -53,17 +51,17 @@ public class PlayLayout  {
         typeOfBullet = 1;
         overGame = false;
         running = false;
-        airCraftsToPlace=4;
-        time=0;
+        airCraftsToPlace = 4;
+        time = 0;
         timeText.setText("");
-        easyMode=level;
+        easyMode = level;
         BorderPane root = new BorderPane();
 
         VBox bulletBox = new VBox(50);
         bulletBox.setAlignment(Pos.CENTER);
         bulletBox.setPrefWidth(333);
 
-        //creat bullet type 1 button
+        //create bullet type 1 button
         Button gun1Btn = new Button();
         gun1Btn.setPrefSize(225,100);
         FileInputStream gun1Input;
@@ -80,7 +78,7 @@ public class PlayLayout  {
                 gun1BtnBackgrSize);
         gun1Btn.setBackground(new Background(gun1BtnBackgr));
 
-        //creat bullet type 2 button
+        //create bullet type 2 button
         Button gun2Btn = new Button();
         gun2Btn.setPrefSize(150,66.7);
         FileInputStream gun2Input;
@@ -140,8 +138,6 @@ public class PlayLayout  {
                     gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
                     Image gun32Image;
                     gun32Image = new Image(gun32Input);
-                    BackgroundSize gun32BtnBackgrSize;
-                    gun32BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
                     BackgroundImage gun32BtnBackgr;
                     gun32BtnBackgr = new BackgroundImage(gun32Image,
                             BackgroundRepeat.NO_REPEAT,
@@ -199,8 +195,6 @@ public class PlayLayout  {
                     gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
                     Image gun32Image;
                     gun32Image = new Image(gun32Input);
-                    BackgroundSize gun32BtnBackgrSize;
-                    gun32BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
                     BackgroundImage gun32BtnBackgr;
                     gun32BtnBackgr = new BackgroundImage(gun32Image,
                             BackgroundRepeat.NO_REPEAT,
@@ -275,8 +269,6 @@ public class PlayLayout  {
                     gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
                     Image gun32Image;
                     gun32Image = new Image(gun32Input);
-                    BackgroundSize gun32BtnBackgrSize;
-                    gun32BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
                     BackgroundImage gun32BtnBackgr;
                     gun32BtnBackgr = new BackgroundImage(gun32Image,
                             BackgroundRepeat.NO_REPEAT,
@@ -379,8 +371,6 @@ public class PlayLayout  {
                     gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
                     Image gun32Image;
                     gun32Image = new Image(gun32Input);
-                    BackgroundSize gun32BtnBackgrSize;
-                    gun32BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
                     BackgroundImage gun32BtnBackgr;
                     gun32BtnBackgr = new BackgroundImage(gun32Image,
                             BackgroundRepeat.NO_REPEAT,
@@ -395,8 +385,7 @@ public class PlayLayout  {
                     break;
                 }
             }
-
-            if (enemyBoard.airCrafts == 0){ //if player wins
+            if (enemyBoard.airCrafts == 0){
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
                 winAlert.setHeaderText("Congrats!");
@@ -412,16 +401,7 @@ public class PlayLayout  {
                         dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
                         dialog.setContentText("Your name:");
                         dialog.showAndWait();
-                        //Code later
-//                        Node okbtn = dialog.getDialogPane().lookupButton(ButtonType.OK);
-//                       okbtn.setDisable(true);
                         nameField = dialog.getEditor();
-                        //deny entering empty String. Fix later.
-//                       namefield.textProperty().addListener((observable, oldValue, newValue)->
-//                          {
-//                             okbtn.setDisable(newValue.trim().isEmpty);
-//                          }
-//                         );
                         if (!easyMode){
                             writeHighScoreHard(nameField.getText(),turn,time);
                         } else {
@@ -435,7 +415,8 @@ public class PlayLayout  {
             if (enemyTurn)
                 enemyMove();
         });
-        //creat player board and set up
+
+        //create player board and set up
         playerBoard = new Board(false, event -> {
             if (running)
                 return;
@@ -493,6 +474,7 @@ public class PlayLayout  {
         });
 
         //create Boards
+
         HBox boards = new HBox(100, enemyBoard, playerBoard);
         boards.setPadding(new Insets(75, 50, 0,0));
         VBox centerBox = new VBox(0, labels, boards);
@@ -509,7 +491,7 @@ public class PlayLayout  {
 
 
         //set background gif for Play Layout
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg"  );
+        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
