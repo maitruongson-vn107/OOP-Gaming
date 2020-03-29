@@ -9,7 +9,7 @@
             xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.company.skyfall.controller.Controller">
     <bottom>
-        <Button  id="MainMenuBtn" mnemonicParsing="false" text="MainMenu" onAction="#backToMainMenuFromHowToPlay" BorderPane.alignment="CENTER" >
+        <Button  id="MainMenuBtn" mnemonicParsing="false" text="Main Menu" onAction="#backToMainMenu" BorderPane.alignment="CENTER_LEFT" >
             <font>
                 <Font size="25" />
             </font>
