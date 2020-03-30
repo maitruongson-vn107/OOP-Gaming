@@ -31,6 +31,7 @@ public class Board extends Parent {
         MediaPlayer soundPlayer = new MediaPlayer(new Media(
                 new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
         ));
+        soundPlayer.stop();
         soundPlayer.play();
         soundPlayer.setVolume(Board.soundLevel);
         try {
