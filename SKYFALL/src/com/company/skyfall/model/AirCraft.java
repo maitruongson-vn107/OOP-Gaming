@@ -3,11 +3,11 @@ package com.company.skyfall.model;
 import javafx.scene.Parent;
 
 public class AirCraft extends Parent {
-    public int type;
-    public boolean vertical;
+    private int type;
+    private boolean vertical;
     private int HP;
-    public boolean die = false;
-    public Board.Cell head;
+    private boolean die = false;
+    private Board.Cell head;
 
     public AirCraft(int type, boolean vertical){
         this.type = type;
@@ -39,5 +39,46 @@ public class AirCraft extends Parent {
             return false;
         }
         return true;
+    }
+
+    /** getter and setter */
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public boolean isVertical() {
+        return vertical;
+    }
+
+    public void setVertical(boolean vertical) {
+        this.vertical = vertical;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public void setHP(int HP) {
+        this.HP = HP;
+    }
+
+    public boolean isDie() {
+        return die;
+    }
+
+    public void setDie(boolean die) {
+        this.die = die;
+    }
+
+    public Board.Cell getHead() {
+        return head;
+    }
+
+    public void setHead(Board.Cell head) {
+        this.head = head;
     }
 }

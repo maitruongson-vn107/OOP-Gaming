@@ -171,7 +171,7 @@ public class PlayLayout  {
         //set onAction Handler for bullet type 2 button
         gun2Btn.setOnAction(e->{
             try{
-                if (playerBoard.numBulletType2 == 0 ) return;
+                if (playerBoard.getNumBulletType2() == 0 ) return;
                 if (typeOfBullet == 1) {
                     gun1Btn.setPrefSize(150,66.7);
                     FileInputStream gun12Input;
@@ -228,7 +228,7 @@ public class PlayLayout  {
         //set onAction Handler for bullet type 3 button
         gun3Btn.setOnAction(e->{
             try{
-                if (playerBoard.numBulletType3 == 0) return;
+                if (playerBoard.getNumBulletType3() == 0) return;
                 if (typeOfBullet == 1) {
                     gun1Btn.setPrefSize(150,66.7);
                     FileInputStream gun12Input;
@@ -307,7 +307,7 @@ public class PlayLayout  {
                 if (typeOfBullet == 2 )
                 {
                     enemyTurn = !cell.shootType2();
-                    playerBoard.numBulletType2--;
+                    playerBoard.setNumBulletType3(playerBoard.getNumBulletType2() - 1);
                     //set bullet type to 1 as default
                     try {
                         gun1Btn.setPrefSize(225,100);
@@ -348,7 +348,7 @@ public class PlayLayout  {
                 }
                 if (typeOfBullet == 3 ){
                     enemyTurn = !cell.shootType3();
-                    playerBoard.numBulletType3--;
+                    playerBoard.setNumBulletType3(playerBoard.getNumBulletType3() - 1);
                     //set bullet type to 1 as default
                     try {
                     gun1Btn.setPrefSize(225,100);
@@ -385,7 +385,11 @@ public class PlayLayout  {
                     break;
                 }
             }
+<<<<<<< HEAD
+            if (enemyBoard.getAirCrafts() == 0){
+=======
             if (enemyBoard.airCrafts == 0){
+>>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
                 winAlert.setHeaderText("Congrats!");
@@ -526,21 +530,21 @@ public class PlayLayout  {
                     enemyTurn = cell.shootType1();
                     break;
                 }
-                if (typeOfBullet == 2 && enemyBoard.numBulletType2 > 0)
+                if (typeOfBullet == 2 && enemyBoard.getNumBulletType2() > 0)
                 {
                     enemyTurn = cell.shootType2();
-                    enemyBoard.numBulletType2--;
+                    enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
                     break;
                 }
-                if (typeOfBullet == 3 && enemyBoard.numBulletType3 > 0){
+                if (typeOfBullet == 3 && enemyBoard.getNumBulletType3() > 0){
                     enemyTurn = cell.shootType3();
-                    enemyBoard.numBulletType3--;
+                    enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                     break;
                 }
             }
 
 
-            if (playerBoard.airCrafts == 0){
+            if (playerBoard.getAirCrafts() == 0){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("You lose");
                 alert.setHeaderText("Game over!");

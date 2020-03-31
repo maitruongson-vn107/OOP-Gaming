@@ -20,9 +20,16 @@ public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy;
     public static double soundLevel = 1;
+<<<<<<< HEAD
+    private int airCrafts = 3;
+    private int numBulletType2 = 3;
+    private int numBulletType3 = 1;
+
+=======
     public int airCrafts = 3;
     public int numBulletType2 = 3;
     public int numBulletType3 = 1;
+>>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
     public Cell preCell = new Cell(10, 10, this);
 
     private Random random = new Random();
@@ -92,9 +99,13 @@ public class Board extends Parent {
 
     // Check condition to set AC on (x,y)
     private boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y) {
+<<<<<<< HEAD
+        int type = airCraft.getType();
+=======
         int type = airCraft.type;
+>>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
 
-        if (airCraft.vertical) {
+        if (airCraft.isVertical()) {
             for (int j = y; j < y + type; j++) {
                 if (!isValidPoint(x, j)) return false;
 
@@ -119,9 +130,9 @@ public class Board extends Parent {
     // Set AC on point (x,y)
     public boolean setAirCraft(AirCraft airCraft, int x, int y) {
         if (isOkToSetAirCraft(airCraft, x, y)) {
-            int type = airCraft.type;
-            airCraft.head = getCell(x, y);
-            if (airCraft.vertical) {
+            int type = airCraft.getType();
+            airCraft.setHead(getCell(x, y));
+            if (airCraft.isVertical()) {
                 for (int j = y; j < y + type; j++) {
                     Cell cell = getCell(x, j);
                     cell.airCraft = airCraft;
@@ -141,6 +152,33 @@ public class Board extends Parent {
                 }
             }
             return true;
+        }
+        return false;
+    }
+    //Reposition of AC
+    public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
+        //AC being shot && difference of head position
+        if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
+            && airCraft.getHead() != getCell(x, y)) {
+            //check new position's conditions
+            if (isOkToSetAirCraft(airCraft, x, y)) {
+                //turn current position's aircraft to null
+                if (airCraft.isVertical()) {
+                    for (int i = 0; i < airCraft.getType() ; i++) {
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft =null;
+                    }
+                }
+                else {
+                    for (int i = 0; i < airCraft.getType() ; i++) {
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft =null;
+                    }
+
+                }
+
+                setAirCraft(airCraft, x, y);
+                return true;
+            }
+            return false;
         }
         return false;
     }
@@ -167,7 +205,7 @@ public class Board extends Parent {
         public boolean shootType1(){
             Board.playSound();
             if (airCraft != null) {
-                if (airCraft.die) return false;
+                if (airCraft.isDie()) return false;
                 airCraft.hitType1();
                 setFill(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
@@ -197,7 +235,7 @@ public class Board extends Parent {
                     Cell cell = getCell(xx, yy);
 
                     if (cell.airCraft != null) {
-                        if (cell.airCraft.die) continue;
+                        if (cell.airCraft.isDie()) continue;
                         isShot = true;
                         cell.airCraft.hitType2();
                         cell.setFill(Color.rgb(255, 233, 33));
@@ -216,8 +254,8 @@ public class Board extends Parent {
         public boolean shootType3(){
             Board.playSound();
             if (airCraft != null) {
-                if (airCraft.die) return false;
-                airCraft.die = true;
+                if (airCraft.isDie()) return false;
+                airCraft.setDie(true);
                 board.airCrafts--;
                 airCraft.hitType3();
                 changeImage(this);
@@ -230,9 +268,9 @@ public class Board extends Parent {
 
     private void changeImage(Cell cell) {
         if(cell.airCraft != null) {
-            Cell head = cell.airCraft.head;
-            if (cell.airCraft.vertical) {
-                switch (cell.airCraft.type) {
+            Cell head = cell.airCraft.getHead();
+            if (cell.airCraft.isVertical()) {
+                switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/AC dead/2/v2.1.png").toString()))));
@@ -265,7 +303,7 @@ public class Board extends Parent {
                         break;
                 }
             } else {
-                switch (cell.airCraft.type) {
+                switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/AC dead/2/h2.1.png").toString()))));
@@ -301,6 +339,53 @@ public class Board extends Parent {
         }
     }
 
+    public boolean isEnemy() {
+        return enemy;
+    }
+
+    public void setEnemy(boolean enemy) {
+        this.enemy = enemy;
+    }
+
+    public int getAirCrafts() {
+        return airCrafts;
+    }
+
+    public void setAirCrafts(int airCrafts) {
+        this.airCrafts = airCrafts;
+    }
+
+    public int getNumBulletType2() {
+        return numBulletType2;
+    }
+
+    public void setNumBulletType2(int numBulletType2) {
+        this.numBulletType2 = numBulletType2;
+    }
+
+    public int getNumBulletType3() {
+        return numBulletType3;
+    }
+
+    public void setNumBulletType3(int numBulletType3) {
+        this.numBulletType3 = numBulletType3;
+    }
+
+    public Cell getPreCell() {
+        return preCell;
+    }
+
+    public void setPreCell(Cell preCell) {
+        this.preCell = preCell;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
+    }
 }
 
 
