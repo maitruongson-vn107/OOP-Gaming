@@ -150,14 +150,18 @@ public class Board extends Parent {
             //check new position's conditions
             if (isOkToSetAirCraft(airCraft, x, y)) {
 
-                //turn current position's aircraft to null
+                //reset color and aircraft
                 if (airCraft.isVertical()) {
                     for (int i = 0; i < airCraft.getType(); i++) {
                         getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft = null;
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setStroke(Color.WHITE);
                     }
                 } else {
                     for (int i = 0; i < airCraft.getType(); i++) {
                         getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft = null;
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setStroke(Color.WHITE);
                     }
 
                 }
@@ -253,6 +257,7 @@ public class Board extends Parent {
             return false;
         }
     }
+
 
     private void changeImage(Cell cell) {
         if (cell.airCraft != null) {
