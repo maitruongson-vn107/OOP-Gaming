@@ -20,16 +20,11 @@ public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy;
     public static double soundLevel = 1;
-<<<<<<< HEAD
+
     private int airCrafts = 3;
     private int numBulletType2 = 3;
     private int numBulletType3 = 1;
 
-=======
-    public int airCrafts = 3;
-    public int numBulletType2 = 3;
-    public int numBulletType3 = 1;
->>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
     public Cell preCell = new Cell(10, 10, this);
 
     private Random random = new Random();
