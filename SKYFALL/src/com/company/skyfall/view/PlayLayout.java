@@ -62,105 +62,37 @@ public class PlayLayout  {
         bulletBox.setPrefWidth(333);
 
         //create bullet type 1 button
-        Button gun1Btn = new Button();
-        gun1Btn.setPrefSize(225,100);
-        FileInputStream gun1Input;
-        gun1Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-        Image gun1Image;
-        gun1Image = new Image(gun1Input);
-        BackgroundSize gun1BtnBackgrSize;
-        gun1BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
-        BackgroundImage gun1BtnBackgr;
-        gun1BtnBackgr = new BackgroundImage(gun1Image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                gun1BtnBackgrSize);
-        gun1Btn.setBackground(new Background(gun1BtnBackgr));
+        Button bullet1Btn = new Button();
+        bullet1Btn.setPrefSize(225,100);
+        String  bullet1Imgae = PlayLayout.class.getResource("bullet1.png").toExternalForm();
+        bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
 
         //create bullet type 2 button
-        Button gun2Btn = new Button();
-        gun2Btn.setPrefSize(150,66.7);
-        FileInputStream gun2Input;
-        gun2Input = new FileInputStream("src/com/company/skyfall/view/gun2.png"  );
-        Image gun2Image;
-        gun2Image = new Image(gun2Input);
-        BackgroundSize gun2BtnBackgrSize;
-        gun2BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-        BackgroundImage gun2BtnBackgr;
-        gun2BtnBackgr = new BackgroundImage(gun2Image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                gun2BtnBackgrSize);
-        gun2Btn.setBackground(new Background(gun2BtnBackgr));
+        Button bullet2Btn = new Button();
+        bullet2Btn.setPrefSize(150,66.7);
+        String  bullet2Imgae = PlayLayout.class.getResource("bullet2.png").toExternalForm();
+        bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
 
         //creat bullet type 3 button
-        Button gun3Btn = new Button();
-        gun3Btn.setPrefSize(150,66.7);
-        FileInputStream gun3Input;
-        gun3Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
-        Image gun3Image;
-        gun3Image = new Image(gun3Input);
-        BackgroundSize gun3BtnBackgrSize;
-        gun3BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-        BackgroundImage gun3BtnBackgr;
-        gun3BtnBackgr = new BackgroundImage(gun3Image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                gun3BtnBackgrSize);
-        gun3Btn.setBackground(new Background(gun3BtnBackgr));
+        Button bullet3Btn = new Button();
+        bullet3Btn.setPrefSize(150,66.7);
+        String  bullet3Imgae= PlayLayout.class.getResource("bullet3.png").toExternalForm();
+        bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
 
         //set onAction Handler for bullet type 1 button
-        gun1Btn.setOnAction(e->{
+        bullet1Btn.setOnAction(e->{
             try{
                 if (typeOfBullet == 2) {
-                    gun2Btn.setPrefSize(150,66.7);
-                    FileInputStream gun22Input;
-                    gun22Input = new FileInputStream("src/com/company/skyfall/view/gun2.png"  );
-                    Image gun22Image;
-                    gun22Image = new Image(gun22Input);
-                    BackgroundSize gun22BtnBackgrSize;
-                    gun22BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-                    BackgroundImage gun22BtnBackgr;
-                    gun22BtnBackgr = new BackgroundImage(gun22Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun22BtnBackgrSize);
-                    gun2Btn.setBackground(new Background(gun22BtnBackgr));
-
+                    bullet2Btn.setPrefSize(150,66.7);
                 }
-                if (typeOfBullet == 3 ){
-                    gun3Btn.setPrefSize(150,66.7);
-                    FileInputStream gun32Input;
-                    gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
-                    Image gun32Image;
-                    gun32Image = new Image(gun32Input);
-                    BackgroundImage gun32BtnBackgr;
-                    gun32BtnBackgr = new BackgroundImage(gun32Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun3BtnBackgrSize);
-                    gun3Btn.setBackground(new Background(gun32BtnBackgr));
+                if (typeOfBullet == 3 ) {
+                    bullet3Btn.setPrefSize(150, 66.7);
                 }
                 if (typeOfBullet != 1) {
-                    gun1Btn.setPrefSize(225,100);
-                    FileInputStream gun12Input;
-                    gun12Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-                    Image gun12Image;
-                    gun12Image = new Image(gun12Input);
-                    BackgroundSize gun12BtnBackgrSize;
-                    gun12BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
-                    BackgroundImage gun12BtnBackgr;
-                    gun12BtnBackgr = new BackgroundImage(gun12Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun12BtnBackgrSize);
-                    gun1Btn.setBackground(new Background(gun12BtnBackgr));
+                    bullet1Btn.setPrefSize(225,100);
                 }
                 typeOfBullet = 1;
             }
@@ -169,55 +101,17 @@ public class PlayLayout  {
             }
         });
         //set onAction Handler for bullet type 2 button
-        gun2Btn.setOnAction(e->{
+        bullet2Btn.setOnAction(e->{
             try{
                 if (playerBoard.getNumBulletType2() == 0 ) return;
                 if (typeOfBullet == 1) {
-                    gun1Btn.setPrefSize(150,66.7);
-                    FileInputStream gun12Input;
-                    gun12Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-                    Image gun12Image;
-                    gun12Image = new Image(gun12Input);
-                    BackgroundSize gun12BtnBackgrSize;
-                    gun12BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-                    BackgroundImage gun12BtnBackgr;
-                    gun12BtnBackgr = new BackgroundImage(gun12Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun12BtnBackgrSize);
-                    gun1Btn.setBackground(new Background(gun12BtnBackgr));
-
+                    bullet1Btn.setPrefSize(150,66.7);
                 }
                 if (typeOfBullet == 3 ){
-                    gun3Btn.setPrefSize(150,66.7);
-                    FileInputStream gun32Input;
-                    gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
-                    Image gun32Image;
-                    gun32Image = new Image(gun32Input);
-                    BackgroundImage gun32BtnBackgr;
-                    gun32BtnBackgr = new BackgroundImage(gun32Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun3BtnBackgrSize);
-                    gun3Btn.setBackground(new Background(gun32BtnBackgr));
+                    bullet3Btn.setPrefSize(150,66.7);
                 }
                 if (typeOfBullet != 2) {
-                    gun2Btn.setPrefSize(225,100);
-                    FileInputStream gun22Input;
-                    gun22Input = new FileInputStream("src/com/company/skyfall/view/gun2.png"  );
-                    Image gun22Image;
-                    gun22Image = new Image(gun22Input);
-                    BackgroundSize gun22BtnBackgrSize;
-                    gun22BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
-                    BackgroundImage gun22BtnBackgr;
-                    gun22BtnBackgr = new BackgroundImage(gun22Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun22BtnBackgrSize);
-                    gun2Btn.setBackground(new Background(gun22BtnBackgr));
+                    bullet2Btn.setPrefSize(225,100);
                 }
                 typeOfBullet = 2;
             }
@@ -226,56 +120,18 @@ public class PlayLayout  {
             }
         });
         //set onAction Handler for bullet type 3 button
-        gun3Btn.setOnAction(e->{
+        bullet3Btn.setOnAction(e->{
             try{
                 if (playerBoard.getNumBulletType3() == 0) return;
                 if (typeOfBullet == 1) {
-                    gun1Btn.setPrefSize(150,66.7);
-                    FileInputStream gun12Input;
-                    gun12Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-                    Image gun12Image;
-                    gun12Image = new Image(gun12Input);
-                    BackgroundSize gun12BtnBackgrSize;
-                    gun12BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-                    BackgroundImage gun12BtnBackgr;
-                    gun12BtnBackgr = new BackgroundImage(gun12Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun12BtnBackgrSize);
-                    gun1Btn.setBackground(new Background(gun12BtnBackgr));
-
+                    bullet1Btn.setPrefSize(150,66.7);
                 }
                 if (typeOfBullet == 2 ){
-                    gun2Btn.setPrefSize(150,66.7);
-                    FileInputStream gun22Input;
-                    gun22Input = new FileInputStream("src/com/company/skyfall/view/gun2.png"  );
-                    Image gun22Image;
-                    gun22Image = new Image(gun22Input);
-                    BackgroundSize gun22BtnBackgrSize;
-                    gun22BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-                    BackgroundImage gun22BtnBackgr;
-                    gun22BtnBackgr = new BackgroundImage(gun22Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun22BtnBackgrSize);
-                    gun2Btn.setBackground(new Background(gun22BtnBackgr));
+                    bullet2Btn.setPrefSize(150,66.7);
                 }
                 if (typeOfBullet != 3)
                 {
-                    gun3Btn.setPrefSize(225,100);
-                    FileInputStream gun32Input;
-                    gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
-                    Image gun32Image;
-                    gun32Image = new Image(gun32Input);
-                    BackgroundImage gun32BtnBackgr;
-                    gun32BtnBackgr = new BackgroundImage(gun32Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun3BtnBackgrSize);
-                    gun3Btn.setBackground(new Background(gun32BtnBackgr));
+                    bullet3Btn.setPrefSize(225,100);
                 }
                 typeOfBullet = 3;
             }
@@ -284,7 +140,7 @@ public class PlayLayout  {
             }
         });
 
-        bulletBox.getChildren().addAll(gun1Btn,gun2Btn,gun3Btn);
+        bulletBox.getChildren().addAll(bullet1Btn,bullet2Btn,bullet3Btn);
         root.setLeft(bulletBox);
 
         enemyBoard = new Board(true, event -> {
@@ -307,38 +163,11 @@ public class PlayLayout  {
                 if (typeOfBullet == 2 )
                 {
                     enemyTurn = !cell.shootType2();
-                    playerBoard.setNumBulletType3(playerBoard.getNumBulletType2() - 1);
+                    playerBoard.setNumBulletType2(playerBoard.getNumBulletType2() - 1);
                     //set bullet type to 1 as default
                     try {
-                        gun1Btn.setPrefSize(225,100);
-                        FileInputStream gun12Input;
-                        gun12Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-                        Image gun12Image;
-                        gun12Image = new Image(gun12Input);
-                        BackgroundSize gun12BtnBackgrSize;
-                        gun12BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
-                        BackgroundImage gun12BtnBackgr;
-                        gun12BtnBackgr = new BackgroundImage(gun12Image,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.DEFAULT,
-                                gun12BtnBackgrSize);
-                        gun1Btn.setBackground(new Background(gun12BtnBackgr));
-
-                        gun2Btn.setPrefSize(150,66.7);
-                        FileInputStream gun22Input;
-                        gun22Input = new FileInputStream("src/com/company/skyfall/view/gun2.png"  );
-                        Image gun22Image;
-                        gun22Image = new Image(gun22Input);
-                        BackgroundSize gun22BtnBackgrSize;
-                        gun22BtnBackgrSize = new BackgroundSize(150,66.7,false,false,false,false);
-                        BackgroundImage gun22BtnBackgr;
-                        gun22BtnBackgr = new BackgroundImage(gun22Image,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT,
-                                BackgroundPosition.DEFAULT,
-                                gun22BtnBackgrSize);
-                        gun2Btn.setBackground(new Background(gun22BtnBackgr));
+                        bullet1Btn.setPrefSize(225,100);
+                        bullet2Btn.setPrefSize(150,66.7);
                     }
                     catch (Exception ex){
                         ex.printStackTrace();
@@ -351,33 +180,9 @@ public class PlayLayout  {
                     playerBoard.setNumBulletType3(playerBoard.getNumBulletType3() - 1);
                     //set bullet type to 1 as default
                     try {
-                    gun1Btn.setPrefSize(225,100);
-                    FileInputStream gun12Input;
-                    gun12Input = new FileInputStream("src/com/company/skyfall/view/gun1.png"  );
-                    Image gun12Image;
-                    gun12Image = new Image(gun12Input);
-                    BackgroundSize gun12BtnBackgrSize;
-                    gun12BtnBackgrSize = new BackgroundSize(225,100,false,false,false,false);
-                    BackgroundImage gun12BtnBackgr;
-                    gun12BtnBackgr = new BackgroundImage(gun12Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun12BtnBackgrSize);
-                    gun1Btn.setBackground(new Background(gun12BtnBackgr));
-
-                    gun3Btn.setPrefSize(150,66.7);
-                    FileInputStream gun32Input;
-                    gun32Input = new FileInputStream("src/com/company/skyfall/view/gun3.png"  );
-                    Image gun32Image;
-                    gun32Image = new Image(gun32Input);
-                    BackgroundImage gun32BtnBackgr;
-                    gun32BtnBackgr = new BackgroundImage(gun32Image,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundRepeat.NO_REPEAT,
-                            BackgroundPosition.DEFAULT,
-                            gun3BtnBackgrSize);
-                    gun3Btn.setBackground(new Background(gun32BtnBackgr));}
+                    bullet1Btn.setPrefSize(225,100);
+                    bullet3Btn.setPrefSize(150,66.7);
+                    }
                     catch (Exception ex){
                         ex.printStackTrace();
                     }
@@ -398,7 +203,7 @@ public class PlayLayout  {
                     if(isTop(turn,time,easyMode)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Enter your name");
-                        dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
+                        dialog.setHeaderText("You got a high score\nPlease enter your name:");
                         dialog.setContentText("Your name:");
                         dialog.showAndWait();
                         nameField = dialog.getEditor();
