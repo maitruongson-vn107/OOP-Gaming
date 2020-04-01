@@ -94,12 +94,7 @@ public class Board extends Parent {
 
     // Check condition to set AC on (x,y)
     private boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y) {
-<<<<<<< HEAD
         int type = airCraft.getType();
-=======
-        int type = airCraft.type;
->>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
-
         if (airCraft.isVertical()) {
             for (int j = y; j < y + type; j++) {
                 if (!isValidPoint(x, j)) return false;
