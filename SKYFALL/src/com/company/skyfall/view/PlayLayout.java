@@ -385,11 +385,7 @@ public class PlayLayout  {
                     break;
                 }
             }
-<<<<<<< HEAD
             if (enemyBoard.getAirCrafts() == 0){
-=======
-            if (enemyBoard.airCrafts == 0){
->>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
                 winAlert.setHeaderText("Congrats!");

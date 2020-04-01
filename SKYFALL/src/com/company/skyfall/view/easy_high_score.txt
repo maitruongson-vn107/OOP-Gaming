@@ -1,27 +1,15 @@
 Lam
 7
 23
-<<<<<<< HEAD
 Sơn 
 14
 72
 Sơn
 19
 94
-=======
->>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664
 Sơn
 20
 163
 Bui Thanh Lam
 21
 53
-<<<<<<< HEAD
-=======
-Lam
-22
-35
-huy
-23
-16
->>>>>>> 2afc9e14f2afb88b9fcbb22cc95347f63d295664

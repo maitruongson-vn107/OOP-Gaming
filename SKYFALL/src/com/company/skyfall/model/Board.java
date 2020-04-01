@@ -20,7 +20,6 @@ public class Board extends Parent {
     private VBox rows = new VBox();
     private boolean enemy;
     public static double soundLevel = 1;
-
     private int airCrafts = 3;
     private int numBulletType2 = 3;
     private int numBulletType3 = 1;
@@ -95,6 +94,7 @@ public class Board extends Parent {
     // Check condition to set AC on (x,y)
     private boolean isOkToSetAirCraft(AirCraft airCraft, int x, int y) {
         int type = airCraft.getType();
+
         if (airCraft.isVertical()) {
             for (int j = y; j < y + type; j++) {
                 if (!isValidPoint(x, j)) return false;
@@ -147,11 +147,15 @@ public class Board extends Parent {
     }
     //Reposition of AC
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
-        //AC being shot && difference of head position
+
+        //AC being shot && difference of head position && reposition
         if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
-            && airCraft.getHead() != getCell(x, y)) {
+            && airCraft.getHead() != getCell(x, y)
+            && !airCraft.wasRepos()) {
+
             //check new position's conditions
             if (isOkToSetAirCraft(airCraft, x, y)) {
+
                 //turn current position's aircraft to null
                 if (airCraft.isVertical()) {
                     for (int i = 0; i < airCraft.getType() ; i++) {
@@ -166,6 +170,7 @@ public class Board extends Parent {
                 }
 
                 setAirCraft(airCraft, x, y);
+                airCraft.setRepos(true);
                 return true;
             }
             return false;
