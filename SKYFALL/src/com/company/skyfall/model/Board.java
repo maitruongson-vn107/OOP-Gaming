@@ -3,7 +3,7 @@ package com.company.skyfall.model;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -14,32 +14,32 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.File;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Board extends Parent {
-    private VBox rows = new VBox();
+    public VBox rows = new VBox();
     private boolean enemy;
     public static double soundLevel = 1;
     private int airCrafts = 3;
     private int numBulletType2 = 3;
     private int numBulletType3 = 1;
+    public AirCraft acToMove = null;
 
     public Cell preCell = new Cell(10, 10, this);
 
     private Random random = new Random();
-
+    private static   MediaPlayer soundPlayer = new MediaPlayer(new Media(
+            new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
+    ));
     public static void playSound() {
-        MediaPlayer soundPlayer = new MediaPlayer(new Media(
-                new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
-        ));
+
         soundPlayer.stop();
         soundPlayer.play();
         soundPlayer.setVolume(Board.soundLevel);
-        try {
-            TimeUnit.MILLISECONDS.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            TimeUnit.MILLISECONDS.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     /**
@@ -56,12 +56,53 @@ public class Board extends Parent {
                 c.setOnMouseClicked(handler);
                 row.getChildren().add(c);
             }
-
             rows.getChildren().add(row);
         }
 
         getChildren().add(rows);
     }
+    public void dragEffect(){
+        for (int i = 0; i <= 9; i++)
+            for (int j = 0; j <= 9; j++){
+                Cell c = getCell(i,j);
+                c.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Dragboard db = c.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent ct = new ClipboardContent();
+                        if (c.airCraft != null) {
+                        int gap = (c.airCraft.isVertical())?(c.y-c.airCraft.getHead().y):(c.x-c.airCraft.getHead().x);
+                        ct.putString(String.valueOf(gap));
+                        acToMove = c.airCraft;
+                        }
+                        db.setContent(ct);
+                        event.consume();
+                    }
+                });
+                c.setOnDragOver(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent event) {
+                        event.acceptTransferModes(TransferMode.ANY);
+                        event.consume();
+                    }
+                });
+                c.setOnDragDropped(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent event) {
+                        if (acToMove != null) {
+                            boolean ver = acToMove.isVertical();
+                            int gap = Integer.parseInt(event.getDragboard().getString());
+                            if (ver)
+                            reposAirCraft(acToMove, c.x, c.y-gap);
+                            else reposAirCraft(acToMove,c.x-gap,c.y);
+                        }
+                        event.setDropCompleted(true);
+                        event.consume();
+                    }
+                });
+            }
+    }
+
 
 
     // Get position (x,y) on Board
@@ -147,7 +188,6 @@ public class Board extends Parent {
     }
     //Reposition of AC
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
-
         //AC being shot && difference of head position && reposition
         if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
             && airCraft.getHead() != getCell(x, y)
@@ -160,11 +200,13 @@ public class Board extends Parent {
                 if (airCraft.isVertical()) {
                     for (int i = 0; i < airCraft.getType() ; i++) {
                         getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft =null;
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
                     }
                 }
                 else {
                     for (int i = 0; i < airCraft.getType() ; i++) {
                         getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft =null;
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
                     }
 
                 }
@@ -180,9 +222,13 @@ public class Board extends Parent {
 
     public class Cell extends Rectangle {
         public int x, y;
-        AirCraft airCraft = null;
+        public AirCraft airCraft = null;
 
         private Board board;
+
+        public Board getBoard() {
+            return board;
+        }
 
         Cell(int x, int y, Board board) {
             super(30, 30);
@@ -202,7 +248,9 @@ public class Board extends Parent {
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
                 airCraft.hitType1();
+                if (this.getBoard().enemy )
                 setFill(Color.rgb(255, 74, 54));
+                 else setStroke(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
                     board.airCrafts--;
                     changeImage(this);
@@ -233,7 +281,9 @@ public class Board extends Parent {
                         if (cell.airCraft.isDie()) continue;
                         isShot = true;
                         cell.airCraft.hitType2();
-                        cell.setFill(Color.rgb(255, 233, 33));
+                        if (cell.getBoard().enemy)
+                            cell.setFill(Color.rgb(255, 233, 33));
+                        else cell.setStroke(Color.rgb(255, 233, 33));
                         if (!cell.airCraft.isAlive()) {
                             board.airCrafts--;
                             changeImage(this);
@@ -256,7 +306,7 @@ public class Board extends Parent {
                 changeImage(this);
                 return true;
             } else
-                setFill(Color.rgb(44, 255, 47));
+                   setFill(Color.rgb(44, 255, 47));
             return false;
         }
     }

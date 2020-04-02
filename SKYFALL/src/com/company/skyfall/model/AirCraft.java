@@ -8,7 +8,7 @@ public class AirCraft extends Parent {
     private int HP;
     private boolean die = false;
     private Board.Cell head;
-    private static boolean repos = false;
+    private  boolean repos = false;
 
     public AirCraft(int type, boolean vertical){
         this.type = type;
