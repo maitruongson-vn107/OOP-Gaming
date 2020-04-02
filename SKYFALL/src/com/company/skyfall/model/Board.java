@@ -13,6 +13,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 import java.io.File;
+
 import java.util.Random;
 
 public class Board extends Parent {
@@ -29,7 +30,7 @@ public class Board extends Parent {
     private Random random = new Random();
     private static   MediaPlayer soundPlayer = new MediaPlayer(new Media(
             new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
-    ));
+    ));    
     public static void playSound() {
 
         soundPlayer.stop();
@@ -40,6 +41,7 @@ public class Board extends Parent {
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+
     }
 
     /**
@@ -186,27 +188,33 @@ public class Board extends Parent {
         }
         return false;
     }
+
     //Reposition of AC
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
         //AC being shot && difference of head position && reposition
-        if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
-            && airCraft.getHead() != getCell(x, y)
-            && !airCraft.wasRepos()) {
+        if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType() * 100
+                && airCraft.getHead() != getCell(x, y)
+                && !airCraft.wasRepos()) {
 
             //check new position's conditions
             if (isOkToSetAirCraft(airCraft, x, y)) {
+                Cell cell;
+                //reset color and aircraft
+                if (airCraft.isVertical()) {           
 
-                //turn current position's aircraft to null
-                if (airCraft.isVertical()) {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft =null;
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
+                    for (int i = 0; i < airCraft.getType(); i++) {
+                        cell = getCell(airCraft.getHead().x, airCraft.getHead().y + i);
+                        cell.airCraft = null;
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
                     }
-                }
-                else {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft =null;
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
+                } else {
+                    for (int i = 0; i < airCraft.getType(); i++) {
+                        cell = getCell(airCraft.getHead().x + i, airCraft.getHead().y);
+                        cell.airCraft = null;
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
+
                     }
 
                 }
@@ -243,7 +251,7 @@ public class Board extends Parent {
          * Shoot methods
          */
         //Bullet type 1
-        public boolean shootType1(){
+        public boolean shootType1() {
             Board.playSound();
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
@@ -296,7 +304,7 @@ public class Board extends Parent {
         }
 
         // Bullet type 3
-        public boolean shootType3(){
+        public boolean shootType3() {
             Board.playSound();
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
@@ -311,8 +319,9 @@ public class Board extends Parent {
         }
     }
 
+
     private void changeImage(Cell cell) {
-        if(cell.airCraft != null) {
+        if (cell.airCraft != null) {
             Cell head = cell.airCraft.getHead();
             if (cell.airCraft.isVertical()) {
                 switch (cell.airCraft.getType()) {
@@ -384,20 +393,8 @@ public class Board extends Parent {
         }
     }
 
-    public boolean isEnemy() {
-        return enemy;
-    }
-
-    public void setEnemy(boolean enemy) {
-        this.enemy = enemy;
-    }
-
     public int getAirCrafts() {
         return airCrafts;
-    }
-
-    public void setAirCrafts(int airCrafts) {
-        this.airCrafts = airCrafts;
     }
 
     public int getNumBulletType2() {
@@ -416,22 +413,6 @@ public class Board extends Parent {
         this.numBulletType3 = numBulletType3;
     }
 
-    public Cell getPreCell() {
-        return preCell;
-    }
-
-    public void setPreCell(Cell preCell) {
-        this.preCell = preCell;
-    }
-
-    public Random getRandom() {
-        return random;
-    }
-
-    public void setRandom(Random random) {
-        this.random = random;
-    }
 }
-
 
 

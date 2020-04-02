@@ -204,7 +204,7 @@ public class PlayLayout  {
                     if(isTop(turn,time,easyMode)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Enter your name");
-                        dialog.setHeaderText("You got a high score\nPlease enter your name with no space");
+                        dialog.setHeaderText("You got a high score\nPlease enter your name:");
                         dialog.setContentText("Your name:");
                         dialog.showAndWait();
                         nameField = dialog.getEditor();

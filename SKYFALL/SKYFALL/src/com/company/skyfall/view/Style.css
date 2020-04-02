@@ -1,0 +1,21 @@
+.button{
+    -fx-background-image: url("ButtonBackgr.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-color: #f5d69d;
+    -fx-text-fill: #f5d69d;
+}
+.root{
+    -fx-background-image:url("MainMenuBackgr.jpg");
+    -fx-background-size: 100% 100%;
+}
+#HowToPlay{
+    -fx-background-image:url("HowToPlayBackgr.jpg");
+    -fx-background-size: 100% 100%;
+}
+#MainMenuBtn{
+ -fx-background-image:url("BackToMainMenuButtonBackgr.png");
+ -fx-background-size: 100% 100%;
+ -fx-background-color: transparent;
+ -fx-font-size: 26;
+ -fx-font-color: #f5d69d;
+}
