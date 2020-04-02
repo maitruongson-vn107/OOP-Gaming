@@ -149,19 +149,21 @@ public class Board extends Parent {
 
             //check new position's conditions
             if (isOkToSetAirCraft(airCraft, x, y)) {
-
+                Cell cell;
                 //reset color and aircraft
                 if (airCraft.isVertical()) {
                     for (int i = 0; i < airCraft.getType(); i++) {
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft = null;
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setStroke(Color.WHITE);
+                        cell = getCell(airCraft.getHead().x, airCraft.getHead().y + i);
+                        cell.airCraft = null;
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
                     }
                 } else {
                     for (int i = 0; i < airCraft.getType(); i++) {
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft = null;
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setStroke(Color.WHITE);
+                        cell = getCell(airCraft.getHead().x + i, airCraft.getHead().y);
+                        cell.airCraft = null;
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
                     }
 
                 }
@@ -178,6 +180,7 @@ public class Board extends Parent {
     public class Cell extends Rectangle {
         public int x, y;
         AirCraft airCraft = null;
+        public boolean wasShot = false;
 
         private Board board;
 
@@ -186,6 +189,7 @@ public class Board extends Parent {
             this.x = x;
             this.y = y;
             this.board = board;
+            this.wasShot = false;
             setFill(Color.TRANSPARENT);
             setStroke(Color.WHITE);
         }
@@ -196,6 +200,7 @@ public class Board extends Parent {
         //Bullet type 1
         public boolean shootType1() {
             Board.playSound();
+            wasShot = true;
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
                 airCraft.hitType1();
@@ -214,7 +219,7 @@ public class Board extends Parent {
         //Bullet type 2
         public boolean shootType2() {
             Board.playSound();
-            boolean isShot = false;
+            boolean tmp = false;
             // 3*3 block
             int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
             int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
@@ -226,9 +231,10 @@ public class Board extends Parent {
                 if ((isValidPoint(xx, yy))) {
                     Cell cell = getCell(xx, yy);
 
+                    cell.wasShot = true;
                     if (cell.airCraft != null) {
                         if (cell.airCraft.isDie()) continue;
-                        isShot = true;
+                        tmp = true;
                         cell.airCraft.hitType2();
                         cell.setFill(Color.rgb(255, 233, 33));
                         if (!cell.airCraft.isAlive()) {
@@ -239,12 +245,13 @@ public class Board extends Parent {
                         cell.setFill(Color.rgb(33, 233, 255));
                 }
             }
-            return isShot;
+            return tmp;
         }
 
         // Bullet type 3
         public boolean shootType3() {
             Board.playSound();
+            wasShot = true;
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
                 airCraft.setDie(true);
@@ -332,6 +339,36 @@ public class Board extends Parent {
         }
     }
 
+    // check the 3*3 block on (x,y) to shot by bullet 3
+    public  boolean isAbleToShotThisCell(int x, int y) {
+        int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+
+        for (int i = 0; i < 9; i++) {
+            int xx = x + dx[i];
+            int yy = y + dy[i];
+
+            if ((isValidPoint(xx, yy))) {
+                Cell cell = getCell(xx, yy);
+                if (cell.wasShot) return false;
+            }
+        }
+        return true;
+    }
+
+    public void makeNewBoard(){
+        for(int i = 0; i < 10; i++)
+            for(int j = 0; j < 10; j++){
+                Cell cell = getCell(i, j);
+                if (cell.airCraft != null && cell.airCraft.isDie())
+                    continue;
+                else {
+                    cell.wasShot = false;
+                    cell.airCraft = null;
+                }
+            }
+    }
+
     public int getAirCrafts() {
         return airCrafts;
     }
@@ -353,5 +390,3 @@ public class Board extends Parent {
     }
 
 }
-
-

@@ -217,8 +217,9 @@ public class PlayLayout  {
                     e.printStackTrace();
                 }
             }
-            if (enemyTurn)
-                enemyMove();
+            if (enemyTurn && easyMode)
+                enemyMoveEasy();
+            else if (enemyTurn && !easyMode) enemyMoveHard();
         });
 
         //create player board and set up
@@ -314,7 +315,7 @@ public class PlayLayout  {
         return root;
     }
 
-    private static void enemyMove() {
+    private static void enemyMoveEasy() {
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
@@ -325,6 +326,48 @@ public class PlayLayout  {
 
             //choose type of bullet and move
            while (true) {
+                int typeOfBullet = random.nextInt(3) + 1;
+
+                if (typeOfBullet == 1){
+                    enemyTurn = cell.shootType1();
+                    break;
+                }
+                if (typeOfBullet == 2 && enemyBoard.getNumBulletType2() > 0)
+                {
+                    enemyTurn = cell.shootType2();
+                    enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
+                    break;
+                }
+                if (typeOfBullet == 3 && enemyBoard.getNumBulletType3() > 0){
+                    enemyTurn = cell.shootType3();
+                    enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
+                    break;
+                }
+            }
+
+
+            if (playerBoard.getAirCrafts() == 0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("You lose");
+                alert.setHeaderText("Game over!");
+                alert.setContentText("YOU LOSE!");
+                alert.showAndWait();
+                overGame = true;
+            }
+        }
+    }
+
+    private static void enemyMoveHard() {
+        while (enemyTurn) {
+            int x = random.nextInt(10);
+            int y = random.nextInt(10);
+
+            Cell cell = playerBoard.getCell(x, y);
+            if (playerBoard.preCell.equals(cell)) continue;
+            playerBoard.preCell = cell;
+
+            //choose type of bullet and move
+            while (true) {
                 int typeOfBullet = random.nextInt(3) + 1;
 
                 if (typeOfBullet == 1){
