@@ -6,13 +6,12 @@ import com.company.skyfall.model.Board.Cell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -32,12 +31,12 @@ public class PlayLayout  {
     private static boolean enemyTurn = false;
     private static Random random = new Random();
     private static int time = 0;
-    private static boolean easyMode=true;
+    private static boolean easyMode=false;
     private static int turn = 0;
     private static boolean overGame = false;
     private static Text timeText = new Text("");
     private static byte typeOfBullet = 1;
-    public static AirCraft ac;
+
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -55,7 +54,7 @@ public class PlayLayout  {
         airCraftsToPlace = 4;
         time = 0;
         timeText.setText("");
-        easyMode = level;
+        easyMode = false;
         BorderPane root = new BorderPane();
 
         VBox bulletBox = new VBox(50);
@@ -157,11 +156,11 @@ public class PlayLayout  {
 
             while (true) {
 
-                if (typeOfBullet == 1){ //if shoot with bullet1
+                if (typeOfBullet == 1){
                     enemyTurn = !cell.shootType1();
                     break;
                 }
-                if (typeOfBullet == 2 ) // if shoot with buller2
+                if (typeOfBullet == 2 )
                 {
                     enemyTurn = !cell.shootType2();
                     playerBoard.setNumBulletType2(playerBoard.getNumBulletType2() - 1);
@@ -176,8 +175,8 @@ public class PlayLayout  {
                     typeOfBullet = 1;
                     break;
                 }
-                if (typeOfBullet == 3 ){//if shoot with bullet3
-                     enemyTurn = !cell.shootType3();
+                if (typeOfBullet == 3 ){
+                    enemyTurn = !cell.shootType3();
                     playerBoard.setNumBulletType3(playerBoard.getNumBulletType3() - 1);
                     //set bullet type to 1 as default
                     try {
@@ -218,8 +217,9 @@ public class PlayLayout  {
                     e.printStackTrace();
                 }
             }
-            if (enemyTurn)
-                enemyMove();
+            if (enemyTurn && easyMode)
+                enemyMoveEasy();
+            else if (enemyTurn && !easyMode) enemyMoveHard();
         });
 
         //create player board and set up
@@ -236,7 +236,6 @@ public class PlayLayout  {
                     startGame();
                 }
             }
-
         });
         playerBoard.dragEffect();
         //create Play Layout
@@ -316,7 +315,8 @@ public class PlayLayout  {
         return root;
     }
 
-    private static void enemyMove() {
+    private static void enemyMoveEasy() {
+        if (overGame) return;
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
@@ -355,6 +355,103 @@ public class PlayLayout  {
                 alert.showAndWait();
                 overGame = true;
             }
+        }
+    }
+
+    private static void enemyMoveHard() {
+        if (overGame) return;
+        while (enemyTurn) {
+
+            if (playerBoard.getAirCrafts() == 0){
+                overGame = true;
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("You lose");
+                alert.setHeaderText("Game over!");
+                alert.setContentText("YOU LOSE!");
+                alert.showAndWait();
+            }
+            // check the number of Alive COM aircraft
+            int type = enemyBoard.checkTheNumberOfAliveAirCraft();
+            if (type != 0) {
+
+                enemyBoard.makeNewBoard();
+
+                while (true) {
+                    int x = random.nextInt(10);
+                    int y = random.nextInt(10);
+
+                    if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
+                        break;
+                    }
+                }
+                enemyTurn = false;
+                continue;
+            }
+
+            //find Alive AC of playerBoard
+            Cell cell = playerBoard.findAliveAirCraft();
+
+            //found
+            if (cell.x != 10){
+                if (cell.equals(playerBoard.preCell)){
+                    // shot on edge shared cell
+                    Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
+                    if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0){
+                        enemyTurn = cellTmp.shootType3();
+                        enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
+                        playerBoard.preCell = cellTmp;
+                    }
+                    else{
+                        enemyTurn = cellTmp.shootType1();
+                        playerBoard.preCell = cellTmp;
+                    }
+                }
+                else {
+                    //shot on cell
+                    if (enemyBoard.getNumBulletType3() > 0){
+                        enemyTurn = cell.shootType3();
+                        enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
+                        playerBoard.preCell = cell;
+                    }
+                    else {
+                        enemyTurn = cell.shootType1();
+                        playerBoard.preCell = cell;
+                    }
+                }
+                continue;
+            }
+
+            //shot by bullet 2
+            if (enemyBoard.getNumBulletType2() > 0){
+                while (true){
+                    int x = random.nextInt(10);
+                    int y = random.nextInt(10);
+                    if (playerBoard.isAbleToShotThisCell(x,y)){
+                        Cell cellTmp = playerBoard.getCell(x,y);
+                        enemyTurn = cellTmp.shootType2();
+                        enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
+                        playerBoard.preCell = cellTmp;
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            //shot by bullet 1
+            int edge = playerBoard.findMaxNumberOfEdgeShared();
+            while (true){
+                int x = random.nextInt(10);
+                int y = random.nextInt(10);
+                if (playerBoard.getCell(x,y).wasShot) continue;
+                int count = playerBoard.countNumberOfEdgeShared(x, y);
+                if (count == edge){
+                    Cell cellTmp = playerBoard.getCell(x, y);
+                    enemyTurn = cellTmp.shootType1();
+                    playerBoard.preCell = cellTmp;
+                    break;
+                }
+            }
+
         }
     }
 
