@@ -237,7 +237,7 @@ public class PlayLayout  {
                 }
             }
         });
-
+        playerBoard.dragEffect();
         //create Play Layout
 
         //create Labels
@@ -316,6 +316,7 @@ public class PlayLayout  {
     }
 
     private static void enemyMoveEasy() {
+        if (overGame) return;
         while (enemyTurn) {
             int x = random.nextInt(10);
             int y = random.nextInt(10);
@@ -358,15 +359,16 @@ public class PlayLayout  {
     }
 
     private static void enemyMoveHard() {
+        if (overGame) return;
         while (enemyTurn) {
 
             if (playerBoard.getAirCrafts() == 0){
+                overGame = true;
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("You lose");
                 alert.setHeaderText("Game over!");
                 alert.setContentText("YOU LOSE!");
                 alert.showAndWait();
-                overGame = true;
             }
             // check the number of Alive COM aircraft
             int type = enemyBoard.checkTheNumberOfAliveAirCraft();

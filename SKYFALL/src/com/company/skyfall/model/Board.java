@@ -3,7 +3,7 @@ package com.company.skyfall.model;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -22,7 +22,7 @@ public class Board extends Parent {
     private int airCrafts = 3;
     private int numBulletType2 = 3;
     private int numBulletType3 = 1;
-
+    public AirCraft acToMove = null;
     public Cell preCell = new Cell(10, 10, this);
 
     private static MediaPlayer soundPlayer = new MediaPlayer(new Media(
@@ -56,7 +56,48 @@ public class Board extends Parent {
 
         getChildren().add(rows);
     }
-
+    //add dragged and dropped ability to cell
+    public void dragEffect(){
+        for (int i = 0; i <= 9; i++)
+            for (int j = 0; j <= 9; j++){
+                Cell c = getCell(i,j);
+                c.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Dragboard db = c.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent ct = new ClipboardContent();
+                        if (c.airCraft != null) {
+                            int gap = (c.airCraft.isVertical())?(c.y-c.airCraft.getHead().y):(c.x-c.airCraft.getHead().x);
+                            ct.putString(String.valueOf(gap));
+                            acToMove = c.airCraft;
+                        }
+                        db.setContent(ct);
+                        event.consume();
+                    }
+                });
+                c.setOnDragOver(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent event) {
+                        event.acceptTransferModes(TransferMode.ANY);
+                        event.consume();
+                    }
+                });
+                c.setOnDragDropped(new EventHandler<DragEvent>() {
+                    @Override
+                    public void handle(DragEvent event) {
+                        if (acToMove != null) {
+                            boolean ver = acToMove.isVertical();
+                            int gap = Integer.parseInt(event.getDragboard().getString());
+                            if (ver)
+                                reposAirCraft(acToMove, c.x, c.y-gap);
+                            else reposAirCraft(acToMove,c.x-gap,c.y);
+                        }
+                        event.setDropCompleted(true);
+                        event.consume();
+                    }
+                });
+            }
+    }
 
     // Get position (x,y) on Board
     public Cell getCell(int x, int y) {
@@ -139,7 +180,39 @@ public class Board extends Parent {
         }
         return false;
     }
+    //reposition aircraft
+    public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
+        //AC being shot && difference of head position && reposition
+        if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
+                && airCraft.getHead() != getCell(x, y)
+                && !airCraft.wasRepos()) {
 
+            //check new position's conditions
+            if (isOkToSetAirCraft(airCraft, x, y)) {
+
+                //turn current position's aircraft to null
+                if (airCraft.isVertical()) {
+                    for (int i = 0; i < airCraft.getType() ; i++) {
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft =null;
+                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
+                    }
+                }
+                else {
+                    for (int i = 0; i < airCraft.getType() ; i++) {
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft =null;
+                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
+                    }
+
+                }
+
+                setAirCraft(airCraft, x, y);
+                airCraft.setRepos(true);
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
     public class Cell extends Rectangle {
         public int x, y;
         AirCraft airCraft = null;
