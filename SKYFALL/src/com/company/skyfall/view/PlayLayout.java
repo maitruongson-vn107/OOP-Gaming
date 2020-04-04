@@ -5,6 +5,7 @@ import com.company.skyfall.model.Board;
 import com.company.skyfall.model.Board.Cell;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +16,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import java.io.FileInputStream;
@@ -36,6 +38,11 @@ public class PlayLayout  {
     private static boolean overGame = false;
     private static Text timeText = new Text("");
     private static byte typeOfBullet = 1;
+    public static StackPane centerStack = new StackPane();
+    public static HBox boards = new HBox();
+    public static Label ytlb = new Label();
+    public static Label etlb = new Label();
+    public static Label stlb = new Label();
 
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
@@ -48,6 +55,11 @@ public class PlayLayout  {
     }));
 
     public static Parent createContent(boolean level) throws Exception {
+        centerStack = new StackPane();
+        boards = new HBox();
+        ytlb = new Label();
+        stlb = new Label();
+        etlb = new Label();
         typeOfBullet = 1;
         overGame = false;
         running = false;
@@ -58,9 +70,9 @@ public class PlayLayout  {
         BorderPane root = new BorderPane();
 
         VBox bulletBox = new VBox(50);
-        bulletBox.setAlignment(Pos.CENTER);
+        bulletBox.setAlignment(Pos.CENTER_LEFT);
         bulletBox.setPrefWidth(333);
-
+        bulletBox.setPadding(new Insets(0,0,0,20));
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225,100);
@@ -73,14 +85,22 @@ public class PlayLayout  {
         bullet2Btn.setPrefSize(150,66.7);
         String  bullet2Imgae = PlayLayout.class.getResource("bullet2.png").toExternalForm();
         bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
-
+        HBox bullet2Hbox = new HBox();
+        Label bullet2Label = new Label("x3");
+        bullet2Label.setFont(Font.font(50));
+        bullet2Label.setTextFill(Color.YELLOW);
+        bullet2Hbox.getChildren().addAll(bullet2Btn,bullet2Label);
 
         //creat bullet type 3 button
         Button bullet3Btn = new Button();
         bullet3Btn.setPrefSize(150,66.7);
         String  bullet3Imgae= PlayLayout.class.getResource("bullet3.png").toExternalForm();
         bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
-
+        HBox bullet3Hbox = new HBox();
+        Label bullet3Label = new Label("x1");
+        bullet3Label.setFont(Font.font(50));
+        bullet3Label.setTextFill(Color.YELLOW);
+        bullet3Hbox.getChildren().addAll(bullet3Btn,bullet3Label);
 
         //set onAction Handler for bullet type 1 button
         bullet1Btn.setOnAction(e->{
@@ -121,7 +141,7 @@ public class PlayLayout  {
         });
         //set onAction Handler for bullet type 3 button
         bullet3Btn.setOnAction(e->{
-            try{
+               try{
                 if (playerBoard.getNumBulletType3() == 0) return;
                 if (typeOfBullet == 1) {
                     bullet1Btn.setPrefSize(150,66.7);
@@ -140,7 +160,7 @@ public class PlayLayout  {
             }
         });
 
-        bulletBox.getChildren().addAll(bullet1Btn,bullet2Btn,bullet3Btn);
+        bulletBox.getChildren().addAll(bullet1Btn,bullet2Hbox,bullet3Hbox);
         root.setLeft(bulletBox);
 
         enemyBoard = new Board(true, event -> {
@@ -156,72 +176,82 @@ public class PlayLayout  {
 
             while (true) {
 
-                if (typeOfBullet == 1){
+                if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
                     break;
                 }
-                if (typeOfBullet == 2 )
-                {
+                if (typeOfBullet == 2) {
                     enemyTurn = !cell.shootType2();
                     playerBoard.setNumBulletType2(playerBoard.getNumBulletType2() - 1);
+                    bullet2Label.setText("x" + String.valueOf(playerBoard.getNumBulletType2()));
                     //set bullet type to 1 as default
                     try {
-                        bullet1Btn.setPrefSize(225,100);
-                        bullet2Btn.setPrefSize(150,66.7);
-                    }
-                    catch (Exception ex){
+                        bullet1Btn.setPrefSize(225, 100);
+                        bullet2Btn.setPrefSize(150, 66.7);
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                     typeOfBullet = 1;
                     break;
                 }
-                if (typeOfBullet == 3 ){
+                if (typeOfBullet == 3) {
                     enemyTurn = !cell.shootType3();
                     playerBoard.setNumBulletType3(playerBoard.getNumBulletType3() - 1);
+                    bullet3Label.setText("x" + String.valueOf(playerBoard.getNumBulletType3()));
                     //set bullet type to 1 as default
                     try {
-                    bullet1Btn.setPrefSize(225,100);
-                    bullet3Btn.setPrefSize(150,66.7);
-                    }
-                    catch (Exception ex){
+                        bullet1Btn.setPrefSize(225, 100);
+                        bullet3Btn.setPrefSize(150, 66.7);
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                     typeOfBullet = 1;
                     break;
                 }
             }
-            if (enemyBoard.getAirCrafts() == 0){
+            if (enemyBoard.getAirCrafts() == 0) {
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
                 winAlert.setHeaderText("Congrats!");
                 winAlert.setContentText("YOU WIN!");
                 winAlert.showAndWait();
                 TextField nameField;
+                overGame = true;
                 try {
                     // if player got high score
                     // make a dialog enter player's name
-                    if(isTop(turn,time,easyMode)) {
+                    if (isTop(turn, time, easyMode)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Enter your name");
                         dialog.setHeaderText("You got a high score\nPlease enter your name:");
                         dialog.setContentText("Your name:");
                         dialog.showAndWait();
                         nameField = dialog.getEditor();
-                        if (!easyMode){
-                            writeHighScoreHard(nameField.getText(),turn,time);
+                        if (!easyMode) {
+                            writeHighScoreHard(nameField.getText(), turn, time);
                         } else {
-                            writeHighScoreEasy(nameField.getText(),turn,time);
+                            writeHighScoreEasy(nameField.getText(), turn, time);
                         }
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (enemyTurn && easyMode)
-                enemyMoveEasy();
-            else if (enemyTurn && !easyMode) enemyMoveHard();
-        });
+        if (!overGame && enemyTurn) {
+            centerStack.getChildren().add(etlb);
+            boards.setDisable(true);
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(ex -> {
+                boards.setDisable(false);
+                centerStack.getChildren().remove(1);
+                if (enemyTurn && easyMode)
+                    enemyMoveEasy();
+                else if (enemyTurn && !easyMode) enemyMoveHard();
+            });
+            pause.play();
+        };
 
+        });
         //create player board and set up
         playerBoard = new Board(false, event -> {
             if (running)
@@ -281,10 +311,25 @@ public class PlayLayout  {
 
         //create Boards
 
-        HBox boards = new HBox(100, enemyBoard, playerBoard);
+        boards = new HBox(100, enemyBoard, playerBoard);
         boards.setPadding(new Insets(75, 50, 0,0));
         VBox centerBox = new VBox(0, labels, boards);
         centerBox.setPrefHeight(500);
+
+        //creat turn chaging label
+        centerStack.getChildren().add(centerBox);
+        ytlb.setText("--YOUR TURN--");
+        ytlb.setTextFill(Color.YELLOW);
+        ytlb.setFont(Font.font("Arial Black", FontWeight.LIGHT,50));
+
+        etlb.setText("--ENEMY'S TURN--");
+        etlb.setTextFill(Color.YELLOW);
+        etlb.setFont(Font.font("Arial Black",FontWeight.LIGHT,50));
+
+        stlb.setText("--START GAME--");
+        stlb.setTextFill(Color.YELLOW);
+        stlb.setFont(Font.font("Arial Black",FontWeight.LIGHT,50));
+
         //create Time counter
         timeText.setFont(Font.font(25));
         timeText.setFill(Color.YELLOW);
@@ -309,21 +354,37 @@ public class PlayLayout  {
         //create Play Layout
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
-        root.setCenter(centerBox);
+        root.setCenter(centerStack);
         root.setBottom(mainMenuBtn);
-
+        Pane rightPane = new Pane();
+        rightPane.setPrefWidth(280);
+        root.setRight(rightPane);
         return root;
     }
 
     private static void enemyMoveEasy() {
         if (overGame) return;
         while (enemyTurn) {
+            if (playerBoard.getAirCrafts() == 0){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("You lose");
+                alert.setHeaderText("Game over!");
+                alert.setContentText("YOU LOSE!");
+                alert.showAndWait();
+                overGame = true;
+            }
+            if (overGame) break;;
             int x = random.nextInt(10);
             int y = random.nextInt(10);
 
             Cell cell = playerBoard.getCell(x, y);
             if (playerBoard.preCell.equals(cell)) continue;
             playerBoard.preCell = cell;
+
+            boards.setDisable(true);
+            PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
+            pause1.setOnFinished(ex -> boards.setDisable(false));
+            pause1.play();
 
             //choose type of bullet and move
            while (true) {
@@ -345,15 +406,12 @@ public class PlayLayout  {
                     break;
                 }
             }
-
-
-            if (playerBoard.getAirCrafts() == 0){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("You lose");
-                alert.setHeaderText("Game over!");
-                alert.setContentText("YOU LOSE!");
-                alert.showAndWait();
-                overGame = true;
+            if (!overGame) {
+                centerStack.getChildren().add(ytlb);
+                boards.setDisable(true);
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(ex -> {boards.setDisable(false);centerStack.getChildren().remove(1);});
+                pause.play();
             }
         }
     }
@@ -368,8 +426,15 @@ public class PlayLayout  {
                 alert.setTitle("You lose");
                 alert.setHeaderText("Game over!");
                 alert.setContentText("YOU LOSE!");
-                alert.showAndWait();
+                alert.show();
+                overGame = true;
             }
+            if (overGame) break;
+
+            boards.setDisable(true);
+            PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
+            pause1.setOnFinished(ex -> boards.setDisable(false));
+            pause1.play();
             // check the number of Alive COM aircraft
             int type = enemyBoard.checkTheNumberOfAliveAirCraft();
             if (type != 0) {
@@ -453,6 +518,13 @@ public class PlayLayout  {
             }
 
         }
+        if (!overGame) {
+            centerStack.getChildren().add(ytlb);
+            boards.setDisable(true);
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(ex -> {boards.setDisable(false);centerStack.getChildren().remove(1);});
+            pause.play();
+        }
     }
 
     private static void startGame() {
@@ -468,5 +540,10 @@ public class PlayLayout  {
             }
         }
         running = true;
+        centerStack.getChildren().add(stlb);
+        boards.setDisable(true);
+        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        pause.setOnFinished(ex -> {boards.setDisable(false);centerStack.getChildren().removeAll(stlb);});
+        pause.play();
     }
 }
