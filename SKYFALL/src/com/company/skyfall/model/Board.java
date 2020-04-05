@@ -237,6 +237,10 @@ public class Board extends Parent {
             setStroke(Color.WHITE);
         }
 
+        public AirCraft getAirCraft() {
+            return airCraft;
+        }
+
         /**
          * Shoot methods
          */

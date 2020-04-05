@@ -3,6 +3,8 @@ package com.company.skyfall.view;
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
 import com.company.skyfall.model.Board.Cell;
+import com.company.skyfall.model.LogList;
+import com.company.skyfall.model.PlayLog;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -44,6 +46,8 @@ public class PlayLayout  {
     public static Label etlb = new Label();
     public static Label stlb = new Label();
 
+    static LogList logList;
+
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -67,6 +71,8 @@ public class PlayLayout  {
         time = 0;
         timeText.setText("");
         easyMode = false;
+        logList= new LogList();
+
         BorderPane root = new BorderPane();
 
         VBox bulletBox = new VBox(50);
@@ -175,6 +181,7 @@ public class PlayLayout  {
             //choose type of bullet
 
             while (true) {
+                logList.add(new PlayLog(cell,typeOfBullet));
 
                 if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
