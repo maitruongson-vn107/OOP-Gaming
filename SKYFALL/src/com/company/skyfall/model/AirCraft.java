@@ -8,7 +8,6 @@ public class AirCraft extends Parent {
     private int HP;
     private boolean die = false;
     private Board.Cell head;
-    private  boolean repos = false;
 
     public AirCraft(int type, boolean vertical){
         this.type = type;
@@ -81,13 +80,5 @@ public class AirCraft extends Parent {
 
     public void setHead(Board.Cell head) {
         this.head = head;
-    }
-
-    public boolean wasRepos() {
-        return repos;
-    }
-
-    public void setRepos(boolean repos) {
-        this.repos = repos;
     }
 }
