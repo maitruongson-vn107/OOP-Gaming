@@ -186,8 +186,7 @@ public class Board extends Parent {
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
         //AC being shot && difference of head position && reposition
         if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
-                && airCraft.getHead() != getCell(x, y)
-                && !airCraft.wasRepos() &&!didRepo) {
+                && airCraft.getHead() != getCell(x, y) &&!didRepo) {
 
             //check new position's conditions
             if (isOkToSetAirCraft(airCraft, x, y)) {
@@ -207,8 +206,7 @@ public class Board extends Parent {
 
                 }
 
-                setAirCraft(airCraft, x, y);
-                airCraft.setRepos(true);
+                setAirCraft(airCraft, x, y);              
                 didRepo = true;
                 return true;
             }
