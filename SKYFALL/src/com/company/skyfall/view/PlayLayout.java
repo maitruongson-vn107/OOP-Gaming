@@ -13,6 +13,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -21,6 +24,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
 import java.io.FileInputStream;
 import java.util.Random;
 import static com.company.skyfall.model.HighScoreHandler.*;
@@ -47,7 +51,6 @@ public class PlayLayout  {
     public static Label stlb = new Label();
 
     static LogList logList;
-
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -74,11 +77,11 @@ public class PlayLayout  {
         logList= new LogList();
 
         BorderPane root = new BorderPane();
-
         VBox bulletBox = new VBox(50);
         bulletBox.setAlignment(Pos.CENTER_LEFT);
         bulletBox.setPrefWidth(333);
         bulletBox.setPadding(new Insets(0,0,0,20));
+
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225,100);
@@ -126,6 +129,7 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
+
         //set onAction Handler for bullet type 2 button
         bullet2Btn.setOnAction(e->{
             try{
@@ -145,6 +149,7 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
+
         //set onAction Handler for bullet type 3 button
         bullet3Btn.setOnAction(e->{
                try{
@@ -179,7 +184,6 @@ public class PlayLayout  {
             turn++;
 
             //choose type of bullet
-
             while (true) {
                 logList.add(new PlayLog(cell,typeOfBullet));
 
@@ -216,6 +220,7 @@ public class PlayLayout  {
                     break;
                 }
             }
+
             if (enemyBoard.getAirCrafts() == 0) {
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
@@ -244,7 +249,8 @@ public class PlayLayout  {
                     e.printStackTrace();
                 }
             }
-        if (!overGame && enemyTurn) {
+
+            if (!overGame && enemyTurn) {
             centerStack.getChildren().add(etlb);
             boards.setDisable(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
@@ -259,6 +265,7 @@ public class PlayLayout  {
         };
 
         });
+
         //create player board and set up
         playerBoard = new Board(false, event -> {
             if (running)
@@ -274,6 +281,7 @@ public class PlayLayout  {
                 }
             }
         });
+
         playerBoard.dragEffect();
         //create Play Layout
 
@@ -289,11 +297,12 @@ public class PlayLayout  {
         playerBoardLabel.setLabelFor(playerBoard);
 
         HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
-        labels.setPadding(new Insets(50, 50, 0, 0));
+        labels.setPadding(new Insets(0, 50, 0, 0));
 
         //create Main Menu Button in Play Scene
         Button mainMenuBtn = new Button("Main Menu");
         mainMenuBtn.setPrefSize(225,100);
+
         //set backgr for main menu button
         FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
         Image btnBackgrImage = new Image(btnInput);
@@ -319,7 +328,7 @@ public class PlayLayout  {
         //create Boards
 
         boards = new HBox(100, enemyBoard, playerBoard);
-        boards.setPadding(new Insets(75, 50, 0,0));
+        boards.setPadding(new Insets(0, 50, 0,0));
         VBox centerBox = new VBox(0, labels, boards);
         centerBox.setPrefHeight(500);
 
@@ -345,7 +354,8 @@ public class PlayLayout  {
         subtext.setFill(Color.YELLOW);
 
         HBox timeBox = new HBox(100,subtext, timeText,mainMenuBtn);
-        timeBox.setPadding(new Insets(100,50,0,400));
+        timeBox.setPrefHeight(100);
+        timeBox.setPadding(new Insets(50,50,0,400));
 
 
         //set background gif for Play Layout
@@ -362,6 +372,7 @@ public class PlayLayout  {
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
         root.setCenter(centerStack);
+        //HBox btmHbox = new HBox(600,mainMenuBtn,ACToSet.creat());
         root.setBottom(mainMenuBtn);
         Pane rightPane = new Pane();
         rightPane.setPrefWidth(280);
