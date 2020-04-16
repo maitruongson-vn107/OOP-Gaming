@@ -453,27 +453,27 @@ public class PlayLayout  {
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
             pause1.setOnFinished(ex -> boards.setDisable(false));
             pause1.play();
-            // check the number of Alive COM aircraft
-            int type = enemyBoard.checkTheNumberOfAliveAirCraft();
-            if (type != 0) {
 
-                enemyBoard.makeNewBoard();
-
-                while (true) {
-                    int x = random.nextInt(10);
-                    int y = random.nextInt(10);
-
-                    if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
-                        break;
+            AirCraft lastAC = enemyBoard.lastAC();
+            if (lastAC != null) {
+                int x = random.nextInt(10);
+                int y = random.nextInt(10);
+                boolean b = enemyBoard.reposAirCraft(lastAC, x, y);
+                if (b) {
+                    for (int i = 0; i < 10 ; i++) {
+                        for (int j = 0; j < 10; j++) {
+                            Cell cell = enemyBoard.getCell(i, j);
+                            if (cell.airCraft == null)
+                                cell.setFill(Color.TRANSPARENT);
+                        }
                     }
                 }
-                enemyTurn = false;
-                continue;
+
             }
+
 
             //find Alive AC of playerBoard
             Cell cell = playerBoard.findAliveAirCraft();
-
             //found
             if (cell.x != 10){
                 if (cell.equals(playerBoard.preCell)){

@@ -57,18 +57,19 @@ public class Board extends Parent {
 
         getChildren().add(rows);
     }
+
     //add dragged and dropped ability to cell
-    public void dragEffect(){
+    public void dragEffect() {
         for (int i = 0; i <= 9; i++)
-            for (int j = 0; j <= 9; j++){
-                Cell c = getCell(i,j);
+            for (int j = 0; j <= 9; j++) {
+                Cell c = getCell(i, j);
                 c.setOnDragDetected(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         Dragboard db = c.startDragAndDrop(TransferMode.ANY);
                         ClipboardContent ct = new ClipboardContent();
                         if (c.airCraft != null) {
-                            int gap = (c.airCraft.isVertical())?(c.y-c.airCraft.getHead().y):(c.x-c.airCraft.getHead().x);
+                            int gap = (c.airCraft.isVertical()) ? (c.y - c.airCraft.getHead().y) : (c.x - c.airCraft.getHead().x);
                             ct.putString(String.valueOf(gap));
                             acToMove = c.airCraft;
                         }
@@ -90,8 +91,8 @@ public class Board extends Parent {
                             boolean ver = acToMove.isVertical();
                             int gap = Integer.parseInt(event.getDragboard().getString());
                             if (ver)
-                                reposAirCraft(acToMove, c.x, c.y-gap);
-                            else reposAirCraft(acToMove,c.x-gap,c.y);
+                                reposAirCraft(acToMove, c.x, c.y - gap);
+                            else reposAirCraft(acToMove, c.x - gap, c.y);
                         }
                         event.setDropCompleted(true);
                         event.consume();
@@ -154,7 +155,7 @@ public class Board extends Parent {
     }
 
     // Set AC on point (x,y)
-    public boolean  setAirCraft(AirCraft airCraft, int x, int y) {
+    public boolean setAirCraft(AirCraft airCraft, int x, int y) {
         if (isOkToSetAirCraft(airCraft, x, y)) {
             int type = airCraft.getType();
             airCraft.setHead(getCell(x, y));
@@ -177,48 +178,42 @@ public class Board extends Parent {
                     }
                 }
             }
-            if (!this.enemy) changeImagePlayerAlive(getCell(x,y));
+            if (!this.enemy) changeImagePlayerAlive(getCell(x, y));
             return true;
         }
         return false;
     }
+
     //reposition aircraft
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
+
         //AC being shot && difference of head position && reposition
-        if (airCraft.isAlive() && airCraft.getHP() < airCraft.getType()*100
-                && airCraft.getHead() != getCell(x, y)
-                && !airCraft.wasRepos() &&!didRepo) {
+        if (airCraft.isAlive() && airCraft.lostHP() && !didRepo
+            && !airCraft.getHead().equals(getCell(x, y)) ) {
 
-            //check new position's conditions
-            if (isOkToSetAirCraft(airCraft, x, y)) {
+            //turn current position's aircraft to null
+            if (airCraft.isVertical()) {
+                for (int i = 0; i < airCraft.getType(); i++)
+                    getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft = null;
 
-                //turn current position's aircraft to null
-                if (airCraft.isVertical()) {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft =null;
-                        getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
-                    }
-                }
-                else {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft =null;
-                        getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
-                    }
-
-                }
-
-                setAirCraft(airCraft, x, y);
-                airCraft.setRepos(true);
-                didRepo = true;
-                return true;
+            } else {
+                for (int i = 0; i < airCraft.getType(); i++)
+                    getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft = null;
             }
-            return false;
+            setAirCraft(airCraft, x, y);
+            
+            
+            didRepo = true;
+            return true;
         }
         return false;
     }
+
+
+
     public class Cell extends Rectangle {
         public int x, y;
-        AirCraft airCraft = null;
+        public AirCraft airCraft = null;
         public boolean wasShot = false;
 
         private Board board;
@@ -251,12 +246,12 @@ public class Board extends Parent {
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
                 airCraft.hitType1();
-                if (this.getBoard().enemy )
+                if (this.getBoard().enemy)
                     setFill(Color.rgb(255, 74, 54));
                 else setStroke(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
                     board.airCrafts--;
-                   if (!this.getBoard().enemy) changeImagePlayerDead(this);
+                    if (!this.getBoard().enemy) changeImagePlayerDead(this);
                     else changeImageEnemyDead(this);
                 }
 
@@ -318,7 +313,6 @@ public class Board extends Parent {
             return false;
         }
     }
-
 
     private void changeImageEnemyDead(Cell cell) {
         if (cell.airCraft != null) {
@@ -392,8 +386,9 @@ public class Board extends Parent {
             }
         }
     }
+
     private void changeImagePlayerAlive(Cell cell) {
-        if(cell.airCraft != null) {
+        if (cell.airCraft != null) {
 
             Cell head = cell.airCraft.getHead();
             if (cell.airCraft.isVertical()) {
@@ -465,6 +460,7 @@ public class Board extends Parent {
             }
         }
     }
+
     private void changeImagePlayerDead(Cell cell) {
         if (cell.airCraft != null) {
             Cell head = cell.airCraft.getHead();
@@ -539,7 +535,7 @@ public class Board extends Parent {
     }
 
     // check the 3*3 block on (x,y) to shot by bullet 3
-    public  boolean isAbleToShotThisCell(int x, int y) {
+    public boolean isAbleToShotThisCell(int x, int y) {
         int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
 
@@ -555,9 +551,12 @@ public class Board extends Parent {
         return true;
     }
 
-    public void makeNewBoard(){
-        for(int i = 0; i < 10; i++)
-            for(int j = 0; j < 10; j++){
+    /** Hàm makeNewBoard() với checkTheNumberOfAliveAirCraft()
+     * không cần thiết nữa khi reposition nữa.
+     * Nếu Vân Anh vẫn cần dùng để sửa đoạn bắn thì bỏ comment nhé */
+    /*public void makeNewBoard() {
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 10; j++) {
                 Cell cell = getCell(i, j);
                 if (cell.airCraft != null && cell.airCraft.isDie())
                     continue;
@@ -580,25 +579,40 @@ public class Board extends Parent {
                 else if (cell.airCraft != null && cell.airCraft.getHP() < cell.airCraft.getType() * 100)
                     typeOfAliveAirCraft = cell.airCraft.getType();
             }
-        for(int i = 2; i < 5; i++)
+        for (int i = 2; i < 5; i++)
             if (!Alive[i]) number--;
         if (number > 1) return 0;
         if (number == 1 && typeOfAliveAirCraft == 0) return 0;
         return typeOfAliveAirCraft;
+    }*/
+
+    //find the last was-shot AC
+    public AirCraft lastAC() {
+        if (airCrafts == 1) {
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    Cell cell = getCell(i, j);
+                    if (cell.airCraft != null && cell.airCraft.lostHP() && !cell.airCraft.isDie()) {
+                        return cell.airCraft;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     // find Alive AC and Was shot
-    public Cell findAliveAirCraft(){
-        for(int i = 0; i < 10; i++)
-            for(int j = 0; j < 10; j++){
-                Cell cell = getCell(i,j);
+    public Cell findAliveAirCraft() {
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 10; j++) {
+                Cell cell = getCell(i, j);
                 if (cell.airCraft != null && cell.wasShot && !cell.airCraft.isDie()) return cell;
             }
-        Cell cell = new Cell(10,10,this);
+        Cell cell = new Cell(10, 10, this);
         return cell;
     }
 
-    public Cell findEdgeSharedCell(int x, int y){
+    public Cell findEdgeSharedCell(int x, int y) {
         Random random = new Random();
 
         int[] dx = {0, 0, 1, -1};
@@ -607,18 +621,18 @@ public class Board extends Parent {
         for (int i = 0; i < 4; i++) {
             int xx = x + dx[i];
             int yy = y + dy[i];
-            if (isValidPoint(xx,yy)){
-                Cell cell = getCell(xx,yy);
+            if (isValidPoint(xx, yy)) {
+                Cell cell = getCell(xx, yy);
                 if (cell.airCraft != null && cell.wasShot)
                     return cell;
             }
         }
-        while (true){
+        while (true) {
             int tmp = random.nextInt(4);
             int xx = x + dx[tmp];
             int yy = y + dy[tmp];
-            if (isValidPoint(xx,yy)){
-                Cell cell = getCell(xx,yy);
+            if (isValidPoint(xx, yy)) {
+                Cell cell = getCell(xx, yy);
                 return cell;
             }
         }
@@ -638,23 +652,23 @@ public class Board extends Parent {
         return count;
     }
 
-    public int findMaxNumberOfEdgeShared(){
+    public int findMaxNumberOfEdgeShared() {
         int max = 0;
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
 
-        for(int x = 0; x < 10; x++)
-            for(int y = 0; y < 10; y++)
-            if (!getCell(x,y).wasShot){
-                int count = 0;
-                for(int i = 0; i < 4; i++) {
-                    int xx = x + dx[i];
-                    int yy = y + dy[i];
-                    if (isValidPoint(xx, yy) && !getCell(xx,yy).wasShot) count ++;
+        for (int x = 0; x < 10; x++)
+            for (int y = 0; y < 10; y++)
+                if (!getCell(x, y).wasShot) {
+                    int count = 0;
+                    for (int i = 0; i < 4; i++) {
+                        int xx = x + dx[i];
+                        int yy = y + dy[i];
+                        if (isValidPoint(xx, yy) && !getCell(xx, yy).wasShot) count++;
 
+                    }
+                    if (count > max) max = count;
                 }
-                if (count > max) max = count;
-            }
         return max;
     }
 

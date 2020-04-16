@@ -8,7 +8,6 @@ public class AirCraft extends Parent {
     private int HP;
     private boolean die = false;
     private Board.Cell head;
-    private  boolean repos = false;
 
     public AirCraft(int type, boolean vertical){
         this.type = type;
@@ -40,6 +39,11 @@ public class AirCraft extends Parent {
             return false;
         }
         return true;
+    }
+
+    //AC has lost HP or not
+    public boolean lostHP() {
+        return HP < type*100;
     }
 
     /** getter and setter */
@@ -83,11 +87,18 @@ public class AirCraft extends Parent {
         this.head = head;
     }
 
-    public boolean wasRepos() {
-        return repos;
+    //equals overriding
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AirCraft)) return false;
+
+        AirCraft airCraft = (AirCraft) o;
+
+        if (getType() != airCraft.getType()) return false;
+        if (isVertical() != airCraft.isVertical()) return false;
+        return getHead() != null ? getHead().equals(airCraft.getHead()) : airCraft.getHead() == null;
     }
 
-    public void setRepos(boolean repos) {
-        this.repos = repos;
-    }
 }
