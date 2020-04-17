@@ -460,6 +460,7 @@ public class PlayLayout  {
                 int y = random.nextInt(10);
                 boolean b = enemyBoard.reposAirCraft(lastAC, x, y);
                 if (b) {
+                    enemyTurn = false;
                     for (int i = 0; i < 10 ; i++) {
                         for (int j = 0; j < 10; j++) {
                             Cell cell = enemyBoard.getCell(i, j);
