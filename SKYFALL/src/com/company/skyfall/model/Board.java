@@ -193,12 +193,15 @@ public class Board extends Parent {
 
             //turn current position's aircraft to null
             if (airCraft.isVertical()) {
-                for (int i = 0; i < airCraft.getType(); i++)
+                for (int i = 0; i < airCraft.getType(); i++) {
                     getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft = null;
-
+                    getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
+                }
             } else {
-                for (int i = 0; i < airCraft.getType(); i++)
+                for (int i = 0; i < airCraft.getType(); i++) {
                     getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft = null;
+                    getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
+                }
             }
             setAirCraft(airCraft, x, y);
             
