@@ -184,7 +184,7 @@ public class Board extends Parent {
         return false;
     }
 
-    //reposition aircraft
+   //reposition aircraft
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
 
         //AC being shot && difference of head position && reposition
@@ -194,26 +194,26 @@ public class Board extends Parent {
             //turn current position's aircraft to null
             if (airCraft.isVertical()) {
                 for (int i = 0; i < airCraft.getType(); i++) {
-                    getCell(airCraft.getHead().x, airCraft.getHead().y + i).airCraft = null;
-                    getCell(airCraft.getHead().x, airCraft.getHead().y + i).setFill(Color.TRANSPARENT);
+                    Cell cell = getCell(airCraft.getHead().x, airCraft.getHead().y + i);
+                    cell.airCraft = null;
+                    cell.setFill(Color.TRANSPARENT);
+                    cell.setStroke(Color.WHITE);
                 }
             } else {
                 for (int i = 0; i < airCraft.getType(); i++) {
-                    getCell(airCraft.getHead().x + i, airCraft.getHead().y).airCraft = null;
-                    getCell(airCraft.getHead().x + i, airCraft.getHead().y).setFill(Color.TRANSPARENT);
+                    Cell cell = getCell(airCraft.getHead().x + i, airCraft.getHead().y);
+                    cell.airCraft = null;
+                    cell.setFill(Color.TRANSPARENT);
+                    cell.setStroke(Color.WHITE);
                 }
             }
-            setAirCraft(airCraft, x, y);
-            
-            
+            setAirCraft(airCraft, x, y);            
             didRepo = true;
             return true;
         }
         return false;
     }
-
-
-
+    
     public class Cell extends Rectangle {
         public int x, y;
         public AirCraft airCraft = null;
