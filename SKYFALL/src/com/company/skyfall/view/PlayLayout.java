@@ -508,8 +508,10 @@ public class PlayLayout  {
             //shot by bullet 2
             if (enemyBoard.getNumBulletType2() > 0){
                 while (true){
-                    int x = random.nextInt(10);
-                    int y = random.nextInt(10);
+                    int x = random.nextInt(9);
+                    int y = random.nextInt(9);
+                    if (x==0) x++;
+                    if (y==0) y++;
                     if (playerBoard.isAbleToShotThisCell(x,y)){
                         Cell cellTmp = playerBoard.getCell(x,y);
                         enemyTurn = cellTmp.shootType2();
