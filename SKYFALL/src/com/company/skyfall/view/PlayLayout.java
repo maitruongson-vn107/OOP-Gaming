@@ -3,6 +3,8 @@ package com.company.skyfall.view;
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
 import com.company.skyfall.model.Board.Cell;
+import com.company.skyfall.model.LogList;
+import com.company.skyfall.model.PlayLog;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
@@ -11,14 +13,19 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+
 import java.io.FileInputStream;
 import java.util.Random;
 import static com.company.skyfall.model.HighScoreHandler.*;
@@ -26,14 +33,14 @@ import static com.company.skyfall.model.HighScoreHandler.*;
 
 public class PlayLayout  {
 
-    private static boolean running = false;
+    public static boolean running = false;
     private static Board enemyBoard;
     private static Board playerBoard;
     private static int airCraftsToPlace = 4;
-    private static boolean enemyTurn = false;
+    public static boolean enemyTurn = false;
     private static Random random = new Random();
     private static int time = 0;
-    private static boolean easyMode=false;
+    public static boolean easyMode=false;
     private static int turn = 0;
     private static boolean overGame = false;
     private static Text timeText = new Text("");
@@ -43,7 +50,14 @@ public class PlayLayout  {
     public static Label ytlb = new Label();
     public static Label etlb = new Label();
     public static Label stlb = new Label();
+    public static boolean[] acSet = {false,false,false};
+    public static boolean justRepo = false;
+    public static AirCraft[] AC = new AirCraft[3];
+    public static HBox acBox = (HBox) ACToSet.acBox();
+    public static HBox acHBox = ((HBox) (acBox.getChildren().get(1)));
+    public static VBox acVBox = ((VBox) acBox.getChildren().get(0));
 
+    static LogList logList;
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
@@ -55,6 +69,8 @@ public class PlayLayout  {
     }));
 
     public static Parent createContent(boolean level) throws Exception {
+        for (int i = 0;i < 3;i++)
+            acSet[i] = false;
         centerStack = new StackPane();
         boards = new HBox();
         ytlb = new Label();
@@ -67,12 +83,51 @@ public class PlayLayout  {
         time = 0;
         timeText.setText("");
         easyMode = false;
-        BorderPane root = new BorderPane();
+        logList= new LogList();
+        AC[0] = AC[1] = AC[2] = null;
+        acVBox.getChildren().clear();
+        acHBox.getChildren().clear();
+        acVBox.getChildren().addAll(ACToSet.h2,ACToSet.h3,ACToSet.h4);
+        acHBox.getChildren().addAll(ACToSet.v2,ACToSet.v3,ACToSet.v4);
 
+        BorderPane root = new BorderPane();
         VBox bulletBox = new VBox(50);
         bulletBox.setAlignment(Pos.CENTER_LEFT);
         bulletBox.setPrefWidth(333);
+        bulletBox.setPrefHeight(518);
+      //  bulletBox.setStyle("-fx-border-color:red;");
         bulletBox.setPadding(new Insets(0,0,0,20));
+
+        //create Main Menu Button in Play Scene
+        Button mainMenuBtn = new Button("Main Menu");
+        mainMenuBtn.setPrefSize(225,100);
+
+        //set backgr for main menu button
+        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
+        Image btnBackgrImage = new Image(btnInput);
+        BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
+        BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.DEFAULT,
+                btnBackgrSize);
+        mainMenuBtn.setBackground(new Background(btnBackgr));
+        mainMenuBtn.setFont(Font.font(25));
+        mainMenuBtn.setTextFill(Color.rgb(245,214,157));
+
+        mainMenuBtn.setOnAction(e -> {
+            try {
+                timeline.stop();
+                com.company.skyfall.controller.Controller.backToMainMenuFromPlay(e);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        HBox btmHbox = new HBox(500,mainMenuBtn, acBox);
+        root.setBottom(btmHbox);
+        btmHbox.setPrefHeight(120);
+
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225,100);
@@ -120,6 +175,7 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
+
         //set onAction Handler for bullet type 2 button
         bullet2Btn.setOnAction(e->{
             try{
@@ -139,6 +195,7 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
+
         //set onAction Handler for bullet type 3 button
         bullet3Btn.setOnAction(e->{
                try{
@@ -173,8 +230,8 @@ public class PlayLayout  {
             turn++;
 
             //choose type of bullet
-
             while (true) {
+                logList.add(new PlayLog(cell,typeOfBullet));
 
                 if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
@@ -209,6 +266,7 @@ public class PlayLayout  {
                     break;
                 }
             }
+
             if (enemyBoard.getAirCrafts() == 0) {
                 Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
                 winAlert.setTitle("You win");
@@ -237,7 +295,8 @@ public class PlayLayout  {
                     e.printStackTrace();
                 }
             }
-        if (!overGame && enemyTurn) {
+
+            if (!overGame && enemyTurn) {
             centerStack.getChildren().add(etlb);
             boards.setDisable(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
@@ -250,24 +309,54 @@ public class PlayLayout  {
             });
             pause.play();
         };
-
         });
+
         //create player board and set up
         playerBoard = new Board(false, event -> {
             if (running)
                 return;
-
+            airCraftsToPlace = 4;
             Cell cell = (Cell) event.getSource();
-            if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
-                if (--airCraftsToPlace == 1) {
-                    //start the time counter
-                    timeline.setCycleCount(Animation.INDEFINITE);
-                    timeline.play();
-                    startGame();
-                }
+            while (acSet[airCraftsToPlace-2] && airCraftsToPlace >=2 )  airCraftsToPlace--;
+             if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
+                AC[airCraftsToPlace-2] = cell.getAirCraft();
+                 switch (airCraftsToPlace) {
+                     case 4: acHBox.getChildren().removeAll(ACToSet.v4);
+                             acVBox.getChildren().removeAll(ACToSet.h4);
+                             break;
+                     case 3: acHBox.getChildren().removeAll(ACToSet.v3);
+                             acVBox.getChildren().removeAll(ACToSet.h3);
+                             break;
+                     case 2:
+                         acHBox.getChildren().removeAll(ACToSet.v2);
+                            acVBox.getChildren().removeAll(ACToSet.h2);
+                            break;
+
+                 }
+                 acSet[airCraftsToPlace-2] = true;
+                 boolean start = true;
+                 for (int k = 0; k <= 2; k++){
+                     if (!PlayLayout.acSet[k]) start = false;
+                 }
+                 if (start) {
+                     //start the time counter
+                     timeline.setCycleCount(Animation.INDEFINITE);
+                     timeline.play();
+                     startGame();
+                 }
+
             }
         });
+        playerBoard.acToMove = null;
+        enemyBoard.acToMove = null;
         playerBoard.dragEffect();
+        ACToSet.v2.setOnDragDetected(playerBoard.onDragDetected);
+        ACToSet.h2.setOnDragDetected(playerBoard.onDragDetected);
+        ACToSet.v3.setOnDragDetected(playerBoard.onDragDetected);
+        ACToSet.h3.setOnDragDetected(playerBoard.onDragDetected);
+        ACToSet.v4.setOnDragDetected(playerBoard.onDragDetected);
+        ACToSet.h4.setOnDragDetected(playerBoard.onDragDetected);
+
         //create Play Layout
 
         //create Labels
@@ -282,39 +371,17 @@ public class PlayLayout  {
         playerBoardLabel.setLabelFor(playerBoard);
 
         HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
-        labels.setPadding(new Insets(50, 50, 0, 0));
-
-        //create Main Menu Button in Play Scene
-        Button mainMenuBtn = new Button("Main Menu");
-        mainMenuBtn.setPrefSize(225,100);
-        //set backgr for main menu button
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
-        Image btnBackgrImage = new Image(btnInput);
-        BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
-        BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                btnBackgrSize);
-        mainMenuBtn.setBackground(new Background(btnBackgr));
-        mainMenuBtn.setFont(Font.font(25));
-        mainMenuBtn.setTextFill(Color.rgb(245,214,157));
-
-        mainMenuBtn.setOnAction(e -> {
-            try {
-                timeline.stop();
-                com.company.skyfall.controller.Controller.backToMainMenuFromPlay(e);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        labels.setPrefHeight(100);
+       labels.setPadding(new Insets(70, 50, 0, 0));
+       // labels.setStyle("-fx-border-color:red;");
 
         //create Boards
-
         boards = new HBox(100, enemyBoard, playerBoard);
-        boards.setPadding(new Insets(75, 50, 0,0));
+        boards.setPadding(new Insets(0, 0, 0,0));
         VBox centerBox = new VBox(0, labels, boards);
-        centerBox.setPrefHeight(500);
+        centerBox.setPrefWidth(700);
+        centerBox.setPrefHeight(518);
+       // boards.setStyle("-fx-border-color:red;");
 
         //creat turn chaging label
         centerStack.getChildren().add(centerBox);
@@ -337,8 +404,11 @@ public class PlayLayout  {
         subtext.setFont(Font.font(25));
         subtext.setFill(Color.YELLOW);
 
-        HBox timeBox = new HBox(100,subtext, timeText,mainMenuBtn);
-        timeBox.setPadding(new Insets(100,50,0,400));
+        HBox timeBox = new HBox(100,subtext, timeText);
+        timeBox.setPrefHeight(100);
+        timeBox.setPrefWidth(1366);
+        timeBox.setPadding(new Insets(50,50,0,400));
+
 
 
         //set background gif for Play Layout
@@ -354,15 +424,18 @@ public class PlayLayout  {
         //create Play Layout
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
+        //root.getTop().setStyle("-fx-border-color:red;");
         root.setCenter(centerStack);
-        root.setBottom(mainMenuBtn);
         Pane rightPane = new Pane();
-        rightPane.setPrefWidth(280);
+        rightPane.setPrefWidth(300);
         root.setRight(rightPane);
+//        root.getCenter().setStyle("-fx-border-color:red;");
+//        root.getBottom().setStyle("-fx-border-color:red;");
+//        root.getRight().setStyle("-fx-border-color:red;");
         return root;
     }
 
-    private static void enemyMoveEasy() {
+    public static void enemyMoveEasy() {
         if (overGame) return;
         while (enemyTurn) {
             if (playerBoard.getAirCrafts() == 0){
@@ -416,7 +489,7 @@ public class PlayLayout  {
         }
     }
 
-    private static void enemyMoveHard() {
+    public static void enemyMoveHard() {
         if (overGame) return;
         while (enemyTurn) {
 
@@ -435,27 +508,28 @@ public class PlayLayout  {
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
             pause1.setOnFinished(ex -> boards.setDisable(false));
             pause1.play();
-            // check the number of Alive COM aircraft
-            int type = enemyBoard.checkTheNumberOfAliveAirCraft();
-            if (type != 0) {
 
-                enemyBoard.makeNewBoard();
-
-                while (true) {
-                    int x = random.nextInt(10);
-                    int y = random.nextInt(10);
-
-                    if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
-                        break;
+            AirCraft lastAC = enemyBoard.lastAC();
+            if (lastAC != null) {
+                int x = random.nextInt(10);
+                int y = random.nextInt(10);
+                boolean b = enemyBoard.reposAirCraft(lastAC, x, y);
+                if (b) {
+                    enemyTurn = false;
+                    for (int i = 0; i < 10 ; i++) {
+                        for (int j = 0; j < 10; j++) {
+                            Cell cell = enemyBoard.getCell(i, j);
+                            if (cell.getAirCraft() == null)
+                                cell.setFill(Color.TRANSPARENT);
+                        }
                     }
                 }
-                enemyTurn = false;
-                continue;
+
             }
+
 
             //find Alive AC of playerBoard
             Cell cell = playerBoard.findAliveAirCraft();
-
             //found
             if (cell.x != 10){
                 if (cell.equals(playerBoard.preCell)){
@@ -489,8 +563,10 @@ public class PlayLayout  {
             //shot by bullet 2
             if (enemyBoard.getNumBulletType2() > 0){
                 while (true){
-                    int x = random.nextInt(10);
-                    int y = random.nextInt(10);
+                    int x = random.nextInt(9);
+                    int y = random.nextInt(9);
+                    if (x==0) x++;
+                    if (y==0) y++;
                     if (playerBoard.isAbleToShotThisCell(x,y)){
                         Cell cellTmp = playerBoard.getCell(x,y);
                         enemyTurn = cellTmp.shootType2();
@@ -527,7 +603,7 @@ public class PlayLayout  {
         }
     }
 
-    private static void startGame() {
+    public static void startGame() {
         // place enemy air crafts
         int type = 4;
 
