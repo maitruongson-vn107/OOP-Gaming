@@ -41,11 +41,6 @@ public class AirCraft extends Parent {
         return true;
     }
 
-    //AC has lost HP or not
-    public boolean lostHP() {
-        return HP < type*100;
-    }
-
     /** getter and setter */
     public int getType() {
         return type;
@@ -87,18 +82,8 @@ public class AirCraft extends Parent {
         this.head = head;
     }
 
-    //equals overriding
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AirCraft)) return false;
-
-        AirCraft airCraft = (AirCraft) o;
-
-        if (getType() != airCraft.getType()) return false;
-        if (isVertical() != airCraft.isVertical()) return false;
-        return getHead() != null ? getHead().equals(airCraft.getHead()) : airCraft.getHead() == null;
+    public boolean lostHP() {
+        return HP < type*100;
     }
 
 }
