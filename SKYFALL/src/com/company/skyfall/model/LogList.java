@@ -9,6 +9,7 @@ public class LogList {
     }
     public void add(PlayLog playlog){
         arrayLog.add(playlog);
+
     }
 
 }

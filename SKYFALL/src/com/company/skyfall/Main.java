@@ -5,6 +5,7 @@
  */
 package com.company.skyfall;
 
+import com.company.skyfall.model.PlayLog;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,6 +38,7 @@ public class Main extends Application {
         stage.setScene(MainMenuScene);
         stage.setFullScreen(true);
         stage.show();
+
     }
 
 
