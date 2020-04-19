@@ -24,17 +24,15 @@ import javafx.scene.layout.VBox;
             h3.setFitWidth(90);
             h4.setFitWidth(120);
             v4.setFitHeight(120);
-           v2.setPreserveRatio(true);
-           h2.setPreserveRatio(true);
-           v3.setPreserveRatio(true);
-           h3.setPreserveRatio(true);
-           h4.setPreserveRatio(true);
-           v4.setPreserveRatio(true);
-//           h4.setStyle("-fx-border-color:red;-fx-border-size:5;");
+            v2.setPreserveRatio(true);
+            h2.setPreserveRatio(true);
+            v3.setPreserveRatio(true);
+            h3.setPreserveRatio(true);
+            h4.setPreserveRatio(true);
+            v4.setPreserveRatio(true);
             hACVbox.getChildren().addAll(h2,h3,h4);
             vACHbox.getChildren().addAll(v2,v3,v4);
             acVbox.getChildren().addAll(hACVbox,vACHbox);
-            System.out.println(h4.getTranslateX());
             return  acVbox;
         }
     }

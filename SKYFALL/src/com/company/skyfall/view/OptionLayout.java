@@ -5,9 +5,7 @@ import com.company.skyfall.Main;
 import com.company.skyfall.model.Board;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -15,13 +13,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class OptionLayout {
+    private static RadioButton easyBtn = new RadioButton("Easy");
+    private static RadioButton hardBtn = new RadioButton("Hard");
 
+    public static boolean getLevel(){
+        if (easyBtn.isSelected()){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static Parent createOptionLayout(){
 
         //create layout
         BorderPane root = new BorderPane();
 
+
+        // sound & music
         Label soundLabel = new Label("Sound");
         soundLabel.setTextFill(Color.rgb(245, 214, 157));
         soundLabel.setFont(new Font("Arial", 32));
@@ -55,7 +64,33 @@ public class OptionLayout {
         HBox sliders = new HBox(75, soundSlider, musicSlider);
         sliders.setPadding(new Insets(0, 0 ,0 ,550));
 
-        VBox center = new VBox(50, labels, sliders);
+
+        // choose difficulty
+        Label difficultyLabel = new Label("Difficulty");
+        difficultyLabel.setTextFill(Color.rgb(245, 214, 157));
+        difficultyLabel.setFont(new Font("Arial", 32));
+        difficultyLabel.setStyle("-fx-background-color: #521a1a");
+        difficultyLabel.setTranslateX(550);
+        difficultyLabel.setTranslateY(50);
+
+        ToggleGroup difficultyBtns = new ToggleGroup();
+
+        easyBtn.setTextFill(Color.rgb(245, 214, 157));
+        easyBtn.setFont(new Font("Arial", 24));
+        easyBtn.setStyle("-fx-background-color: #521a1a");
+        easyBtn.setToggleGroup(difficultyBtns);
+        easyBtn.setSelected(true);
+
+        hardBtn.setTextFill(Color.rgb(245, 214, 157));
+        hardBtn.setFont(new Font("Arial", 24));
+        hardBtn.setStyle("-fx-background-color: #521a1a");
+        hardBtn.setToggleGroup(difficultyBtns);
+
+        HBox difficultyOption = new HBox(75, easyBtn, hardBtn);
+        difficultyOption.setPadding(new Insets(50, 0, 0,550));
+
+
+        VBox center = new VBox(50, labels, sliders, difficultyLabel, difficultyOption);
 
         Button mainMenuBtn = new Button("Main Menu");
         mainMenuBtn.setId("MainMenuBtn");

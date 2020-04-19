@@ -1,6 +1,8 @@
 package com.company.skyfall.model;
 
+import com.company.skyfall.controller.Controller;
 import com.company.skyfall.view.ACToSet;
+import com.company.skyfall.view.OptionLayout;
 import com.company.skyfall.view.PlayLayout;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
@@ -187,7 +189,7 @@ public class Board extends Parent {
 
             } if (suc) {
                 PlayLayout.enemyTurn = true;
-                if (PlayLayout.easyMode) {
+                if (OptionLayout.getLevel()) {
                     PlayLayout.enemyMoveEasy();
                 }
                 else {
@@ -530,7 +532,7 @@ public class Board extends Parent {
                                 "../view/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
                     } catch (Exception ex){
 
-                    };
+                    }
                     try{
                         head = getCell(head.x, head.y + 1);
                     } catch (Exception ex){

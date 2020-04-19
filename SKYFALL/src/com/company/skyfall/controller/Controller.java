@@ -20,7 +20,8 @@ import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
-    private boolean easyMode = true;
+    public boolean easyMode = OptionLayout.getLevel();
+
 
     //switch to PlayLayout when "Play" button is clicked
     public void play(ActionEvent event) throws Exception{
