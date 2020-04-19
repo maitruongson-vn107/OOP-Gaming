@@ -40,26 +40,25 @@ public class PlayLayout  {
     public static boolean enemyTurn = false;
     private static Random random = new Random();
     private static int time = 0;
-    public static boolean easyMode=false;
     private static int turn = 0;
     private static boolean overGame = false;
     private static Text timeText = new Text("");
     private static byte typeOfBullet = 1;
-    public static StackPane centerStack = new StackPane();
-    public static HBox boards = new HBox();
-    public static Label ytlb = new Label();
-    public static Label etlb = new Label();
-    public static Label stlb = new Label();
+    private static StackPane centerStack = new StackPane();
+    private static HBox boards = new HBox();
+    private static Label ytlb = new Label();
+    private static Label etlb = new Label();
+    private static Label stlb = new Label();
     public static boolean[] acSet = {false,false,false};
     //public static boolean justRepo = false;
     public static AirCraft[] AC = new AirCraft[3];
-    public static HBox acBox = (HBox) ACToSet.acBox();
+    private static HBox acBox = (HBox) ACToSet.acBox();
     public static HBox acHBox = ((HBox) (acBox.getChildren().get(1)));
     public static VBox acVBox = ((VBox) acBox.getChildren().get(0));
 
-    static LogList logList;
+    private static LogList logList;
     //Make time counter appearing in root.top
-    private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
+    private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(0),ev->{
         String min = (time/60<10?"0":"") + String.valueOf(time/60) ;
         String sec = (time%60<10?"0":"") + String.valueOf(time%60);
         timeText.setText(min+":"+sec);
@@ -82,7 +81,6 @@ public class PlayLayout  {
         airCraftsToPlace = 4;
         time = 0;
         timeText.setText("");
-        easyMode = false;
         logList= new LogList();
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
@@ -95,14 +93,13 @@ public class PlayLayout  {
         bulletBox.setAlignment(Pos.CENTER_LEFT);
         bulletBox.setPrefWidth(333);
         bulletBox.setPrefHeight(518);
-      //  bulletBox.setStyle("-fx-border-color:red;");
         bulletBox.setPadding(new Insets(0,0,0,20));
 
         //create Main Menu Button in Play Scene
         Button mainMenuBtn = new Button("Main Menu");
         mainMenuBtn.setPrefSize(225,100);
 
-        //set backgr for main menu button
+        //set back ground for main menu button
         FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
         Image btnBackgrImage = new Image(btnInput);
         BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
@@ -278,14 +275,14 @@ public class PlayLayout  {
                 try {
                     // if player got high score
                     // make a dialog enter player's name
-                    if (isTop(turn, time, easyMode)) {
+                    if (isTop(turn, time, level)) {
                         TextInputDialog dialog = new TextInputDialog();
                         dialog.setTitle("Enter your name");
                         dialog.setHeaderText("You got a high score\nPlease enter your name:");
                         dialog.setContentText("Your name:");
                         dialog.showAndWait();
                         nameField = dialog.getEditor();
-                        if (!easyMode) {
+                        if (!level) {
                             writeHighScoreHard(nameField.getText(), turn, time);
                         } else {
                             writeHighScoreEasy(nameField.getText(), turn, time);
@@ -303,9 +300,10 @@ public class PlayLayout  {
             pause.setOnFinished(ex -> {
                 boards.setDisable(false);
                 centerStack.getChildren().remove(1);
-                if (enemyTurn && easyMode)
+                if (enemyTurn && level)
                     enemyMoveEasy();
-                else if (enemyTurn && !easyMode) enemyMoveHard();
+                else if (enemyTurn && !level)
+                    enemyMoveHard();
             });
             pause.play();
         };
@@ -372,8 +370,7 @@ public class PlayLayout  {
 
         HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
         labels.setPrefHeight(100);
-       labels.setPadding(new Insets(70, 50, 0, 0));
-       // labels.setStyle("-fx-border-color:red;");
+        labels.setPadding(new Insets(70, 50, 0, 0));
 
         //create Boards
         boards = new HBox(100, enemyBoard, playerBoard);
@@ -381,9 +378,8 @@ public class PlayLayout  {
         VBox centerBox = new VBox(0, labels, boards);
         centerBox.setPrefWidth(700);
         centerBox.setPrefHeight(518);
-       // boards.setStyle("-fx-border-color:red;");
 
-        //creat turn chaging label
+        //create turn changing label
         centerStack.getChildren().add(centerBox);
         ytlb.setText("--YOUR TURN--");
         ytlb.setTextFill(Color.YELLOW);
@@ -411,7 +407,7 @@ public class PlayLayout  {
 
 
 
-        //set background gif for Play Layout
+        //set background for Play Layout
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
@@ -424,14 +420,10 @@ public class PlayLayout  {
         //create Play Layout
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
-        //root.getTop().setStyle("-fx-border-color:red;");
         root.setCenter(centerStack);
         Pane rightPane = new Pane();
         rightPane.setPrefWidth(300);
         root.setRight(rightPane);
-//        root.getCenter().setStyle("-fx-border-color:red;");
-//        root.getBottom().setStyle("-fx-border-color:red;");
-//        root.getRight().setStyle("-fx-border-color:red;");
         return root;
     }
 
@@ -505,9 +497,9 @@ public class PlayLayout  {
             if (overGame) break;
 
             boards.setDisable(true);
-            PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
-            pause1.setOnFinished(ex -> boards.setDisable(false));
-            pause1.play();
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
+            pause.setOnFinished(ex -> boards.setDisable(false));
+            pause.play();
 
             AirCraft lastAC = enemyBoard.lastAC();
             if (lastAC != null) {
@@ -515,10 +507,8 @@ public class PlayLayout  {
                 do {
                     x = random.nextInt(10);
                     y = random.nextInt(10);
-                    System.out.println("new head: " + x + ", " + y);
                 } while (!enemyBoard.isOkToSetAirCraft(lastAC,x, y));
                 boolean b = enemyBoard.reposAirCraft(lastAC, x, y);
-                System.out.println(b);
                 if (b) {
                     enemyTurn = false;
                     for (int i = 0; i < 10 ; i++) {
