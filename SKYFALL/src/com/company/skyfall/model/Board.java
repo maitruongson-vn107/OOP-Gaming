@@ -1,6 +1,5 @@
 package com.company.skyfall.model;
 
-import com.company.skyfall.controller.Controller;
 import com.company.skyfall.view.ACToSet;
 import com.company.skyfall.view.OptionLayout;
 import com.company.skyfall.view.PlayLayout;
