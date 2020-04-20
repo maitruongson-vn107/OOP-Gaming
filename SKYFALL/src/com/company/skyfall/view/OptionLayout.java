@@ -17,7 +17,7 @@ public class OptionLayout {
     private static RadioButton hardBtn = new RadioButton("Hard");
 
     public static boolean getLevel(){
-        if (easyBtn.isSelected()){
+        if (hardBtn.isSelected()){
             return true;
         } else {
             return false;
