@@ -1,4 +1,8 @@
 package com.company.skyfall.view;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import org.w3c.dom.ls.LSOutput;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
@@ -82,6 +86,8 @@ public class PlayLayout  {
         time = 0;
         timeText.setText("");
         logList= new LogList();
+        VBox plBox = new VBox();
+        ScrollPane scrollPane = new ScrollPane();
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -195,7 +201,7 @@ public class PlayLayout  {
 
         //set onAction Handler for bullet type 3 button
         bullet3Btn.setOnAction(e->{
-               try{
+            try{
                 if (playerBoard.getNumBulletType3() == 0) return;
                 if (typeOfBullet == 1) {
                     bullet1Btn.setPrefSize(150,66.7);
@@ -228,7 +234,14 @@ public class PlayLayout  {
 
             //choose type of bullet
             while (true) {
-                logList.add(new PlayLog(cell,typeOfBullet));
+                PlayLog playLog = new PlayLog(cell, typeOfBullet);
+                logList.add(playLog);
+
+                Label pl = new Label(playLog.toString()+" "+"Bullet:"+typeOfBullet);
+                plBox.getChildren().add(pl);
+                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+                scrollPane.setContent(plBox);
+                root.setRight(scrollPane);
 
                 if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
@@ -294,19 +307,19 @@ public class PlayLayout  {
             }
 
             if (!overGame && enemyTurn) {
-            centerStack.getChildren().add(etlb);
-            boards.setDisable(true);
-            PauseTransition pause = new PauseTransition(Duration.seconds(1));
-            pause.setOnFinished(ex -> {
-                boards.setDisable(false);
-                centerStack.getChildren().remove(1);
-                if (enemyTurn && level)
-                    enemyMoveEasy();
-                else if (enemyTurn && !level)
-                    enemyMoveHard();
-            });
-            pause.play();
-        };
+                centerStack.getChildren().add(etlb);
+                boards.setDisable(true);
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(ex -> {
+                    boards.setDisable(false);
+                    centerStack.getChildren().remove(1);
+                    if (enemyTurn && level)
+                        enemyMoveEasy();
+                    else if (enemyTurn && !level)
+                        enemyMoveHard();
+                });
+                pause.play();
+            };
         });
 
         //create player board and set up
@@ -316,32 +329,32 @@ public class PlayLayout  {
             airCraftsToPlace = 4;
             Cell cell = (Cell) event.getSource();
             while (acSet[airCraftsToPlace-2] && airCraftsToPlace >=2 )  airCraftsToPlace--;
-             if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
+            if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
                 AC[airCraftsToPlace-2] = cell.getAirCraft();
-                 switch (airCraftsToPlace) {
-                     case 4: acHBox.getChildren().removeAll(ACToSet.v4);
-                             acVBox.getChildren().removeAll(ACToSet.h4);
-                             break;
-                     case 3: acHBox.getChildren().removeAll(ACToSet.v3);
-                             acVBox.getChildren().removeAll(ACToSet.h3);
-                             break;
-                     case 2:
-                         acHBox.getChildren().removeAll(ACToSet.v2);
-                            acVBox.getChildren().removeAll(ACToSet.h2);
-                            break;
+                switch (airCraftsToPlace) {
+                    case 4: acHBox.getChildren().removeAll(ACToSet.v4);
+                        acVBox.getChildren().removeAll(ACToSet.h4);
+                        break;
+                    case 3: acHBox.getChildren().removeAll(ACToSet.v3);
+                        acVBox.getChildren().removeAll(ACToSet.h3);
+                        break;
+                    case 2:
+                        acHBox.getChildren().removeAll(ACToSet.v2);
+                        acVBox.getChildren().removeAll(ACToSet.h2);
+                        break;
 
-                 }
-                 acSet[airCraftsToPlace-2] = true;
-                 boolean start = true;
-                 for (int k = 0; k <= 2; k++){
-                     if (!PlayLayout.acSet[k]) start = false;
-                 }
-                 if (start) {
-                     //start the time counter
-                     timeline.setCycleCount(Animation.INDEFINITE);
-                     timeline.play();
-                     startGame();
-                 }
+                }
+                acSet[airCraftsToPlace-2] = true;
+                boolean start = true;
+                for (int k = 0; k <= 2; k++){
+                    if (!PlayLayout.acSet[k]) start = false;
+                }
+                if (start) {
+                    //start the time counter
+                    timeline.setCycleCount(Animation.INDEFINITE);
+                    timeline.play();
+                    startGame();
+                }
 
             }
         });
@@ -452,7 +465,7 @@ public class PlayLayout  {
             pause1.play();
 
             //choose type of bullet and move
-           while (true) {
+            while (true) {
                 int typeOfBullet = random.nextInt(3) + 1;
 
                 if (typeOfBullet == 1){

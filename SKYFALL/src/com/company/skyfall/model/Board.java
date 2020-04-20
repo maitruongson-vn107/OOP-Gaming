@@ -104,7 +104,7 @@ public class Board extends Parent {
                         if (PlayLayout.AC[k] != null && PlayLayout.AC[k] != acToMove)
                             try{
                                 if (PlayLayout.AC[k].getHP() > 0) changeImagePlayerAlive(PlayLayout.AC[k].getHead());
-                                        else changeImagePlayerDead(PlayLayout.AC[k].getHead());    }
+                                else changeImagePlayerDead(PlayLayout.AC[k].getHead());    }
                             catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -127,7 +127,7 @@ public class Board extends Parent {
                     }
                 }
             }
-        else {
+            else {
                 boolean ver = (dragInfor.charAt(2) == '1');
                 int gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                 int type = Integer.parseInt(String.valueOf(dragInfor.charAt(1)));
@@ -156,7 +156,7 @@ public class Board extends Parent {
                 }
 
             }
-        event.consume();
+            event.consume();
         }
     };
     public EventHandler onDragDropped = new EventHandler<DragEvent>() {
@@ -170,83 +170,83 @@ public class Board extends Parent {
             if (dragInfor.charAt(1) == '0'){
                 if (acToMove != null) {
                     ver = acToMove.isVertical();
-                     gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
+                    gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                     if (ver)
                         suc = reposAirCraft(acToMove, c.x, c.y - gap);
                     else suc = reposAirCraft(acToMove, c.x - gap, c.y);
                 }
-            event.setDropCompleted(true);
-            event.consume();
-            if (!suc) {
-                for (int k = 0; k <= 2;k++){
+                event.setDropCompleted(true);
+                event.consume();
+                if (!suc) {
+                    for (int k = 0; k <= 2;k++){
                         try{
                             if (PlayLayout.AC[k].getHP() > 0) changeImagePlayerAlive(PlayLayout.AC[k].getHead());
                             else changeImagePlayerDead(PlayLayout.AC[k].getHead());    }
                         catch (Exception ex) {
                             ex.printStackTrace();
                         }
-                }
+                    }
 
-            } if (suc) {
-                PlayLayout.enemyTurn = true;
-                if (OptionLayout.getLevel()) {
-                    PlayLayout.enemyMoveEasy();
+                } if (suc) {
+                    PlayLayout.enemyTurn = true;
+                    if (OptionLayout.getLevel()) {
+                        PlayLayout.enemyMoveEasy();
+                    }
+                    else {
+                        PlayLayout.enemyMoveHard();
+                    }
                 }
-                else {
-                    PlayLayout.enemyMoveHard();
-                }
+                for (int k = 0; k <= 9; k++)
+                    for (int h = 0; h <= 9; h++)
+                        if (getCell(k, h).getAirCraft() == null)
+                            getCell(k, h).setFill(Color.TRANSPARENT);
             }
-            for (int k = 0; k <= 9; k++)
-                for (int h = 0; h <= 9; h++)
-                    if (getCell(k, h).getAirCraft() == null)
-                        getCell(k, h).setFill(Color.TRANSPARENT);
-        }
             else {  gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
-                    ver = (dragInfor.charAt(2) == '1');
-                    int type = Integer.parseInt(String.valueOf(dragInfor.charAt(1)));
-                    AirCraft aircr = new AirCraft(type,ver);
-                    if (ver)
+                ver = (dragInfor.charAt(2) == '1');
+                int type = Integer.parseInt(String.valueOf(dragInfor.charAt(1)));
+                AirCraft aircr = new AirCraft(type,ver);
+                if (ver)
+                {
+                    if (isOkToSetAirCraft(aircr,c.x,c.y-gap))
                     {
-                        if (isOkToSetAirCraft(aircr,c.x,c.y-gap))
-                        {
-                            setAirCraft(aircr,c.x,c.y-gap);
-                            PlayLayout.AC[type-2] = getCell(c.x,c.y-gap).getAirCraft();
-                            PlayLayout.acSet[type-2] = true;
-                            switch (type) {
-                                case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
-                                    break;
-                                case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
-                                    break;
-                                case 2:
-                                    PlayLayout.acHBox.getChildren().removeAll(ACToSet.v2);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h2);
-                                    break;
+                        setAirCraft(aircr,c.x,c.y-gap);
+                        PlayLayout.AC[type-2] = getCell(c.x,c.y-gap).getAirCraft();
+                        PlayLayout.acSet[type-2] = true;
+                        switch (type) {
+                            case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
+                                break;
+                            case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
+                                break;
+                            case 2:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v2);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h2);
+                                break;
 
-                            }
-                        }
-                    } else {
-                        if (isOkToSetAirCraft(aircr,c.x-gap,c.y)) {
-                            setAirCraft(aircr,c.x-gap,c.y);
-                            PlayLayout.AC[type-2] = aircr;
-                            PlayLayout.acSet[type-2] = true;
-                            switch (type) {
-                                case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
-                                    break;
-                                case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
-                                    break;
-                                case 2:
-                                    PlayLayout.acHBox.getChildren().removeAll(ACToSet.v2);
-                                    PlayLayout.acVBox.getChildren().removeAll(ACToSet.h2);
-                                    break;
-
-                            }
                         }
                     }
-                 for (int k = 0; k <= 2; k++) {
+                } else {
+                    if (isOkToSetAirCraft(aircr,c.x-gap,c.y)) {
+                        setAirCraft(aircr,c.x-gap,c.y);
+                        PlayLayout.AC[type-2] = aircr;
+                        PlayLayout.acSet[type-2] = true;
+                        switch (type) {
+                            case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
+                                break;
+                            case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
+                                break;
+                            case 2:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v2);
+                                PlayLayout.acVBox.getChildren().removeAll(ACToSet.h2);
+                                break;
+
+                        }
+                    }
+                }
+                for (int k = 0; k <= 2; k++) {
                     if (PlayLayout.AC[k] != null)
                         try {
                             changeImagePlayerAlive(PlayLayout.AC[k].getHead());
@@ -281,12 +281,12 @@ public class Board extends Parent {
 
     // Get position (x,y) on Board
     public Cell getCell(int x, int y) {
-      try{
-          return (Cell) ((HBox) rows.getChildren().get(y)).getChildren().get(x);
-      } catch (Exception ex){
+        try{
+            return (Cell) ((HBox) rows.getChildren().get(y)).getChildren().get(x);
+        } catch (Exception ex){
 
-      }
-      return null;
+        }
+        return null;
     }
 
     // Check validity of point (x,y)
@@ -347,8 +347,8 @@ public class Board extends Parent {
                     Cell cell = getCell(x, j);
                     cell.airCraft = airCraft;
                     if (enemy) {
-                      cell.setFill(Color.TRANSPARENT);
-                       cell.setStroke(Color.WHITE);
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
                     }
                 }
             } else {
@@ -356,8 +356,8 @@ public class Board extends Parent {
                     Cell cell = getCell(i, y);
                     cell.airCraft = airCraft;
                     if (enemy) {
-                      cell.setFill(Color.TRANSPARENT);
-                       cell.setStroke(Color.WHITE);
+                        cell.setFill(Color.TRANSPARENT);
+                        cell.setStroke(Color.WHITE);
                     }
                 }
             }
@@ -455,7 +455,7 @@ public class Board extends Parent {
                 else setStroke(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
                     board.airCrafts--;
-                   if (!this.getBoard().enemy) changeImagePlayerDead(this);
+                    if (!this.getBoard().enemy) changeImagePlayerDead(this);
                     else changeImageEnemyDead(this);
                 }
 
@@ -516,11 +516,25 @@ public class Board extends Parent {
                 setFill(Color.rgb(44, 255, 47));
             return false;
         }
+        // shooted by type 2
+        public int countNumberOfCellHaveAirCraft() {
+            int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+            int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+            int count = 0;
+
+            for (int i = 0; i < 9; i++) {
+                int xx = x + dx[i];
+                int yy = y + dy[i];
+                if (isValidPoint(xx, yy) && (getCell(xx, yy).getAirCraft() != null)) count++;
+
+            }
+            return count;
+        }
     }
     public void changeImagePlayerAlive(int x,int y, boolean vertical,int type){
         Cell head = null;
         try {
-             head = getCell(x,y);
+            head = getCell(x,y);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -1039,16 +1053,16 @@ public class Board extends Parent {
 
         for(int x = 0; x < 10; x++)
             for(int y = 0; y < 10; y++)
-            if (!getCell(x,y).wasShot){
-                int count = 0;
-                for(int i = 0; i < 4; i++) {
-                    int xx = x + dx[i];
-                    int yy = y + dy[i];
-                    if (isValidPoint(xx, yy) && !getCell(xx,yy).wasShot) count ++;
+                if (!getCell(x,y).wasShot){
+                    int count = 0;
+                    for(int i = 0; i < 4; i++) {
+                        int xx = x + dx[i];
+                        int yy = y + dy[i];
+                        if (isValidPoint(xx, yy) && !getCell(xx,yy).wasShot) count ++;
 
+                    }
+                    if (count > max) max = count;
                 }
-                if (count > max) max = count;
-            }
         return max;
     }
 
