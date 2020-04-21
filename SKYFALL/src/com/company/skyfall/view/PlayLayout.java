@@ -530,6 +530,7 @@ public class PlayLayout  {
             pause1.setOnFinished(ex -> boards.setDisable(false));
             pause1.play();
 
+<<<<<<< HEAD
             Cell lastAC = enemyBoard.lastAC();
             if (lastAC != null && !enemyBoard.didRepo) {
                 int x, y;
@@ -552,6 +553,28 @@ public class PlayLayout  {
                     }
                 }
                 break;
+=======
+            AirCraft lastAC = enemyBoard.lastAC();
+            if (lastAC != null) {
+                int x = random.nextInt(10);
+                int y = random.nextInt(10);
+                System.out.println("Thu di chuyen ac"+lastAC.getType()+" den "+x+y);
+                boolean b = enemyBoard.reposAirCraft(lastAC, x, y);
+                // System.out.println(b);
+                if (b) {
+                    enemyTurn = false;
+                    for (int i = 0; i < 10 ; i++) {
+                        for (int j = 0; j < 10; j++) {
+                            Cell cell = enemyBoard.getCell(i, j);
+                            if (cell.getAirCraft() == null)
+                                cell.setFill(Color.TRANSPARENT);
+                        }
+                    }
+                    System.out.println("repo thanh cong den");
+                    return;
+                }
+                System.out.println(" repo k thanh cong");
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
             }
 
 
@@ -560,6 +583,7 @@ public class PlayLayout  {
             Cell cell = playerBoard.findAliveAirCraft();
             //found
             if (cell.x != 10){
+<<<<<<< HEAD
                // System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                 if (cell.equals(playerBoard.preCell)){
                     // shot on edge shared cell
@@ -568,13 +592,27 @@ public class PlayLayout  {
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cellTmp.shootType3();
                     //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
+=======
+                System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                if (cell.equals(playerBoard.preCell)){
+                    // shot on edge shared cell
+                    Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
+                    System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
+                    if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0){
+                        enemyTurn = cellTmp.shootType3();
+                        System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cellTmp;
                     }
                     else{
                         enemyTurn = cellTmp.shootType1();
+<<<<<<< HEAD
                       //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+=======
+                        System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                         updateHP();
                         playerBoard.preCell = cellTmp;
                     }
@@ -583,14 +621,22 @@ public class PlayLayout  {
                     //shot on cell
                     if (enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cell.shootType3();
+<<<<<<< HEAD
                       //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+=======
+                        System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cell;
                     }
                     else {
                         enemyTurn = cell.shootType1();
+<<<<<<< HEAD
                     //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+=======
+                        System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                         updateHP();
                         playerBoard.preCell = cell;
                     }
@@ -606,7 +652,11 @@ public class PlayLayout  {
                     if (x==0) x++;
                     if (y==0) y++;
                     if (playerBoard.isAbleToShotThisCell(x,y)){
+<<<<<<< HEAD
                      //   System.out.println("ban dan 2 vao o "+x+y);
+=======
+                        System.out.println("ban dan 2 vao o "+x+y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                         Cell cellTmp = playerBoard.getCell(x,y);
                         enemyTurn = cellTmp.shootType2();
                         updateHP();
@@ -628,7 +678,11 @@ public class PlayLayout  {
                 if (count == edge){
                     Cell cellTmp = playerBoard.getCell(x, y);
                     enemyTurn = cellTmp.shootType1();
+<<<<<<< HEAD
                 //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
+=======
+                    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
                     updateHP();
                     playerBoard.preCell = cellTmp;
                     break;
@@ -660,7 +714,11 @@ public class PlayLayout  {
 
             if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
                 type--;
+<<<<<<< HEAD
             //    System.out.println(x+" "+ y);
+=======
+                System.out.println(x+" "+ y);
+>>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
             }
         }
         running = true;

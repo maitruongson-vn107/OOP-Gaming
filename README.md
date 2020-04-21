@@ -1,2 +1,2 @@
-# Game *SKYFALL* 
-Air craft battle game, based on JAVA, Javafx and fxml.
+# OOP-Gaming
+A battle ship game, based on Java
