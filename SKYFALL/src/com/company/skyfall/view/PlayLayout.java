@@ -91,6 +91,11 @@ public class PlayLayout  {
         logList= new LogList();
         VBox plBox = new VBox();
         ScrollPane scrollPane = new ScrollPane();
+
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setPrefWidth(300);
+        scrollPane.setContent(plBox);
+
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -242,9 +247,10 @@ public class PlayLayout  {
 
                 Label pl = new Label(playLog.toString()+" "+"Bullet:"+typeOfBullet);
                 plBox.getChildren().add(pl);
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-                scrollPane.setContent(plBox);
-                root.setRight(scrollPane);
+
+//                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+//                scrollPane.setContent(plBox);
+//                root.setRight(scrollPane);
 
                 if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
@@ -316,7 +322,6 @@ public class PlayLayout  {
                 pause.setOnFinished(ex -> {
                     boards.setDisable(false);
                     centerStack.getChildren().remove(1);
-                    
                     if (enemyTurn && easyMode)
                         enemyMoveEasy();
                     else if (enemyTurn && !easyMode) enemyMoveHard();
@@ -354,9 +359,6 @@ public class PlayLayout  {
                     if (!PlayLayout.acSet[k]) start = false;
                 }
                 if (start) {
-                    //start the time counter
-                    timeline.setCycleCount(Animation.INDEFINITE);
-                    timeline.play();
                     startGame();
                 }
 
@@ -440,15 +442,14 @@ public class PlayLayout  {
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
         root.setCenter(centerStack);
-        Pane rightPane = new Pane();
-        rightPane.setPrefWidth(300);
-        root.setRight(rightPane);
+        root.setRight(scrollPane);
 //        root.getTop().setStyle("-fx-border-color:red;");
 //        bulletBox.setStyle("-fx-border-color:red;");
 //        boards.setStyle("-fx-border-color:red;");
 //        root.getCenter().setStyle("-fx-border-color:red;");
 //        root.getBottom().setStyle("-fx-border-color:red;");
 //        root.getRight().setStyle("-fx-border-color:red;");
+       // root.getStylesheets().add("src/com/company/skyfall/view/Style.css");
         return root;
     }
 
@@ -642,6 +643,9 @@ public class PlayLayout  {
     }
 
     public static void startGame() {
+        //start the time counter
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
         btmHbox.getChildren().removeAll(acBox);
         btmHbox.getChildren().addAll(ACHPBox.createHPBox());
         // place enemy air crafts
