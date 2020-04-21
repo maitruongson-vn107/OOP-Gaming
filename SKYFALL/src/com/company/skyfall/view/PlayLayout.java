@@ -1,4 +1,8 @@
 package com.company.skyfall.view;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import org.w3c.dom.ls.LSOutput;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
@@ -85,6 +89,13 @@ public class PlayLayout  {
         timeText.setText("");
         easyMode = level;
         logList= new LogList();
+        VBox plBox = new VBox();
+        ScrollPane scrollPane = new ScrollPane();
+
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setPrefWidth(300);
+        scrollPane.setContent(plBox);
+
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -231,7 +242,15 @@ public class PlayLayout  {
 
             //choose type of bullet
             while (true) {
-                logList.add(new PlayLog(cell,typeOfBullet));
+                PlayLog playLog = new PlayLog(cell, typeOfBullet);
+                logList.add(playLog);
+
+                Label pl = new Label(playLog.toString()+" "+"Bullet:"+typeOfBullet);
+                plBox.getChildren().add(pl);
+
+//                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+//                scrollPane.setContent(plBox);
+//                root.setRight(scrollPane);
 
                 if (typeOfBullet == 1) {
                     enemyTurn = !cell.shootType1();
@@ -306,6 +325,7 @@ public class PlayLayout  {
                     if (enemyTurn && easyMode)
                         enemyMoveEasy();
                     else if (enemyTurn && !easyMode) enemyMoveHard();
+
                 });
                 pause.play();
             };
@@ -339,9 +359,6 @@ public class PlayLayout  {
                     if (!PlayLayout.acSet[k]) start = false;
                 }
                 if (start) {
-                    //start the time counter
-                    timeline.setCycleCount(Animation.INDEFINITE);
-                    timeline.play();
                     startGame();
                 }
 
@@ -425,15 +442,14 @@ public class PlayLayout  {
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
         root.setCenter(centerStack);
-        Pane rightPane = new Pane();
-        rightPane.setPrefWidth(300);
-        root.setRight(rightPane);
+        root.setRight(scrollPane);
 //        root.getTop().setStyle("-fx-border-color:red;");
 //        bulletBox.setStyle("-fx-border-color:red;");
 //        boards.setStyle("-fx-border-color:red;");
 //        root.getCenter().setStyle("-fx-border-color:red;");
 //        root.getBottom().setStyle("-fx-border-color:red;");
 //        root.getRight().setStyle("-fx-border-color:red;");
+       // root.getStylesheets().add("src/com/company/skyfall/view/Style.css");
         return root;
     }
 
@@ -521,7 +537,6 @@ public class PlayLayout  {
                     x = random.nextInt(10);
                     y = random.nextInt(10);
                     if (enemyBoard.isOkToSetAirCraft(lastAC.getAirCraft(), x, y)) break;
-                    System.out.println("Thu di chuyen ac " + lastAC.getAirCraft().getType() + " den " + x + y);
                 }
 
                 enemyBoard.reposAirCraft(lastAC.getAirCraft(), x, y);
@@ -536,27 +551,30 @@ public class PlayLayout  {
                         }
                     }
                 }
+                break;
             }
+
+
 
             //find Alive AC of playerBoard
             Cell cell = playerBoard.findAliveAirCraft();
             //found
             if (cell.x != 10){
-                System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+               // System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                 if (cell.equals(playerBoard.preCell)){
                     // shot on edge shared cell
                     Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
-                    System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
+                  //  System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cellTmp.shootType3();
-                        System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
+                    //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cellTmp;
                     }
                     else{
                         enemyTurn = cellTmp.shootType1();
-                        System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+                      //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
                         updateHP();
                         playerBoard.preCell = cellTmp;
                     }
@@ -565,14 +583,14 @@ public class PlayLayout  {
                     //shot on cell
                     if (enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cell.shootType3();
-                        System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                      //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cell;
                     }
                     else {
                         enemyTurn = cell.shootType1();
-                        System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                    //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                         updateHP();
                         playerBoard.preCell = cell;
                     }
@@ -588,7 +606,7 @@ public class PlayLayout  {
                     if (x==0) x++;
                     if (y==0) y++;
                     if (playerBoard.isAbleToShotThisCell(x,y)){
-                        System.out.println("ban dan 2 vao o "+x+y);
+                     //   System.out.println("ban dan 2 vao o "+x+y);
                         Cell cellTmp = playerBoard.getCell(x,y);
                         enemyTurn = cellTmp.shootType2();
                         updateHP();
@@ -610,7 +628,7 @@ public class PlayLayout  {
                 if (count == edge){
                     Cell cellTmp = playerBoard.getCell(x, y);
                     enemyTurn = cellTmp.shootType1();
-                    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
+                //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
                     updateHP();
                     playerBoard.preCell = cellTmp;
                     break;
@@ -628,6 +646,9 @@ public class PlayLayout  {
     }
 
     public static void startGame() {
+        //start the time counter
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
         btmHbox.getChildren().removeAll(acBox);
         btmHbox.getChildren().addAll(ACHPBox.createHPBox());
         // place enemy air crafts
@@ -639,7 +660,7 @@ public class PlayLayout  {
 
             if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
                 type--;
-                System.out.println(x+" "+ y);
+            //    System.out.println(x+" "+ y);
             }
         }
         running = true;
