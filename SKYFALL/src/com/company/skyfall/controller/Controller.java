@@ -20,12 +20,10 @@ import java.util.ResourceBundle;
 
 
 public class Controller implements Initializable {
-    private boolean easyMode = true;
-
     //switch to PlayLayout when "Play" button is clicked
     public void play(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(PlayLayout.createContent(easyMode));
+        Scene scene = new Scene(PlayLayout.createContent(!OptionLayout.getLevel()));
         stage.setTitle("Play");
         stage.setScene(scene);
         stage.setFullScreen(true);
