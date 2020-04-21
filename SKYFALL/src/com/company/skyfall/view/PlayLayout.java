@@ -91,9 +91,11 @@ public class PlayLayout  {
         logList= new LogList();
         VBox plBox = new VBox();
         ScrollPane scrollPane = new ScrollPane();
+
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setPrefWidth(300);
         scrollPane.setContent(plBox);
+
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -245,6 +247,7 @@ public class PlayLayout  {
 
                 Label pl = new Label(playLog.toString()+" "+"Bullet:"+typeOfBullet);
                 plBox.getChildren().add(pl);
+
 //                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
 //                scrollPane.setContent(plBox);
 //                root.setRight(scrollPane);
@@ -319,7 +322,6 @@ public class PlayLayout  {
                 pause.setOnFinished(ex -> {
                     boards.setDisable(false);
                     centerStack.getChildren().remove(1);
-
                     if (enemyTurn && easyMode)
                         enemyMoveEasy();
                     else if (enemyTurn && !easyMode) enemyMoveHard();
