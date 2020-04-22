@@ -199,19 +199,12 @@ public class Board extends Parent {
                         PlayLayout.enemyMoveHard();
                     }
                 }
-<<<<<<< HEAD
                 for (int k = 0; k < 10;k++)
                     for (int h = 0; h < 10; h++)
                         if (getCell(k,h).getAirCraft() == null ) {
                             getCell(k, h).setFill(Color.TRANSPARENT);
                             getCell(k, h).wasShot = false;
                         }
-=======
-                for (int k = 0; k <= 9; k++)
-                    for (int h = 0; h <= 9; h++)
-                        if (getCell(k, h).getAirCraft() == null)
-                            getCell(k, h).setFill(Color.TRANSPARENT);
->>>>>>> ece816d2cb64e9ab4ac0ae633e297e8b136986f3
             }
             else {  gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                 ver = (dragInfor.charAt(2) == '1');
