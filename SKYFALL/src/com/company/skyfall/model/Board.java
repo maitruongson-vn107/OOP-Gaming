@@ -57,7 +57,7 @@ public class Board extends Parent {
         }
         getChildren().add(rows);
     }
-    public   EventHandler onDragDetected = new EventHandler<MouseEvent>() {
+    public EventHandler onDragDetected = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
             Dragboard db;
@@ -78,18 +78,18 @@ public class Board extends Parent {
                 db = imgv.startDragAndDrop(TransferMode.ANY);
                 String dragInfor = "";
                 if (imgv == ACToSet.v2) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"2"+"1";
-                if (imgv == ACToSet.h2) dragInfor = String.valueOf((int )(event.getSceneX()-725)/30)+"2"+"0";
+                if (imgv == ACToSet.h2) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"2"+"0";
                 if (imgv == ACToSet.v3) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"3"+"1";
-                if (imgv == ACToSet.h3) dragInfor = String.valueOf((int )(event.getSceneX()-725)/30)+"3"+"0";
+                if (imgv == ACToSet.h3) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"3"+"0";
                 if (imgv == ACToSet.v4) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"4"+"1";
-                if (imgv == ACToSet.h4) dragInfor = String.valueOf((int )(event.getSceneX()-725)/30)+"4"+"0";
+                if (imgv == ACToSet.h4) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"4"+"0";
                 ct.putString(dragInfor);
                 db.setContent(ct);
                 event.consume();
             }
         }
     };
-    public  EventHandler onDragOver = new EventHandler<DragEvent>() {
+    public EventHandler onDragOver = new EventHandler<DragEvent>() {
         @Override
         public void handle(DragEvent event) {
             Cell c = (Cell) event.getSource();
@@ -199,12 +199,14 @@ public class Board extends Parent {
                         PlayLayout.enemyMoveHard();
                     }
                 }
+
                 for (int k = 0; k < 10;k++)
                     for (int h = 0; h < 10; h++)
                         if (getCell(k,h).getAirCraft() == null ) {
                             getCell(k, h).setFill(Color.TRANSPARENT);
                             getCell(k, h).wasShot = false;
                         }
+
             }
             else {  gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                 ver = (dragInfor.charAt(2) == '1');

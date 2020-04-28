@@ -1,9 +1,7 @@
 package com.company.skyfall.view;
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-import org.w3c.dom.ls.LSOutput;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputControl;
 
+import javafx.event.EventHandler;
+import javafx.scene.control.TextField;
 import com.company.skyfall.model.AirCraft;
 import com.company.skyfall.model.Board;
 import com.company.skyfall.model.Board.Cell;
@@ -19,7 +17,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
@@ -60,7 +57,7 @@ public class PlayLayout  {
     public static HBox acHBox = ((HBox) (acBox.getChildren().get(1)));
     public static VBox acVBox = ((VBox) acBox.getChildren().get(0));
     private static HBox btmHbox;
-
+    public static HBox[] acHP = new HBox[3];
     static LogList logList;
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),ev->{
@@ -73,6 +70,7 @@ public class PlayLayout  {
     }));
 
     public static Parent createContent(boolean level) throws Exception {
+        // set up status variables to default value
         for (int i = 0;i < 3;i++)
             acSet[i] = false;
         centerStack = new StackPane();
@@ -89,13 +87,16 @@ public class PlayLayout  {
         timeText.setText("");
         easyMode = level;
         logList= new LogList();
+        for (int i = 0; i <= 2; i++){
+            acHP[i] = (HBox) ACHPBox.createHPBox(i+2);
+        }
         VBox plBox = new VBox();
         ScrollPane scrollPane = new ScrollPane();
-
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setPrefWidth(300);
         scrollPane.setContent(plBox);
-
+        plBox.setStyle("-fx-background-color:transparent;");
+        scrollPane.setStyle("-fx-background-color:transparent;");
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -135,7 +136,7 @@ public class PlayLayout  {
             }
         });
 
-        btmHbox = new HBox(500,mainMenuBtn, acBox);
+        btmHbox = new HBox(300,mainMenuBtn, acBox);
         root.setBottom(btmHbox);
         btmHbox.setPrefHeight(120);
 
@@ -144,8 +145,6 @@ public class PlayLayout  {
         bullet1Btn.setPrefSize(225,100);
         String  bullet1Imgae = PlayLayout.class.getResource("bullet1.png").toExternalForm();
         bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
-
-
         //create bullet type 2 button
         Button bullet2Btn = new Button();
         bullet2Btn.setPrefSize(150,66.7);
@@ -156,7 +155,6 @@ public class PlayLayout  {
         bullet2Label.setFont(Font.font(50));
         bullet2Label.setTextFill(Color.YELLOW);
         bullet2Hbox.getChildren().addAll(bullet2Btn,bullet2Label);
-
         //creat bullet type 3 button
         Button bullet3Btn = new Button();
         bullet3Btn.setPrefSize(150,66.7);
@@ -167,7 +165,6 @@ public class PlayLayout  {
         bullet3Label.setFont(Font.font(50));
         bullet3Label.setTextFill(Color.YELLOW);
         bullet3Hbox.getChildren().addAll(bullet3Btn,bullet3Label);
-
         //set onAction Handler for bullet type 1 button
         bullet1Btn.setOnAction(e->{
             try{
@@ -186,7 +183,6 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
-
         //set onAction Handler for bullet type 2 button
         bullet2Btn.setOnAction(e->{
             try{
@@ -206,7 +202,6 @@ public class PlayLayout  {
                 ex.printStackTrace();
             }
         });
-
         //set onAction Handler for bullet type 3 button
         bullet3Btn.setOnAction(e->{
             try{
@@ -230,7 +225,7 @@ public class PlayLayout  {
 
         bulletBox.getChildren().addAll(bullet1Btn,bullet2Hbox,bullet3Hbox);
         root.setLeft(bulletBox);
-
+        //create enemy board
         enemyBoard = new Board(true, event -> {
             if (!running)
                 return;
@@ -330,7 +325,6 @@ public class PlayLayout  {
                 pause.play();
             };
         });
-
         //create player board and set up
         playerBoard = new Board(false, event -> {
             if (running)
@@ -366,7 +360,11 @@ public class PlayLayout  {
         });
         playerBoard.acToMove = null;
         enemyBoard.acToMove = null;
-        playerBoard.dragEffect();
+        playerBoard.dragEffect(); //add drag-repo drag-setup affect for cell
+        mouseOver(playerBoard);
+        mouseExit(playerBoard);
+
+        //add drag-setup affect for imageview
         ACToSet.v2.setOnDragDetected(playerBoard.onDragDetected);
         ACToSet.h2.setOnDragDetected(playerBoard.onDragDetected);
         ACToSet.v3.setOnDragDetected(playerBoard.onDragDetected);
@@ -388,20 +386,52 @@ public class PlayLayout  {
         playerBoardLabel.setLabelFor(playerBoard);
 
         HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
-        labels.setPrefHeight(100);
+        labels.setPrefHeight(130);
+        labels.setAlignment(Pos.BOTTOM_CENTER);
         labels.setPadding(new Insets(70, 50, 0, 0));
-        // labels.setStyle("-fx-border-color:red;");
-
+        //create row name Vbox
+        VBox rowLabels = new VBox(0);
+        HBox rowNameLabels[] = new HBox[10];
+        for (int i = 0; i <= 9; i++){
+            rowNameLabels[i] = new HBox();
+            rowNameLabels[i].setPrefHeight(31);
+            rowNameLabels[i].setPrefWidth(100);
+            Label rowName = new Label("0"+String.valueOf(i+1));
+            if (i == 9) rowName.setText("10");
+            rowName.setFont(Font.font(15));
+            rowName.setTextFill(Color.YELLOW);
+            rowNameLabels[i].getChildren().add(rowName);
+            rowNameLabels[i].setAlignment(Pos.CENTER);
+            rowLabels.getChildren().add(rowNameLabels[i]);
+        }
+        rowLabels.setPrefWidth(100);
         //create Boards
-        boards = new HBox(100, enemyBoard, playerBoard);
+        boards = new HBox( enemyBoard,rowLabels, playerBoard);
+        //create column name HBox
+        HBox colLabels = new HBox(100);
+        HBox colLabelsLeft = new HBox();  HBox colLabelsRight = new HBox();
+        HBox[] colNameLabels1 = new HBox[10];  HBox[] colNameLabels2 = new HBox[10];
+        for(int i = 0; i <= 9; i++){
+            Label colName1 = new Label();   Label colName2 = new Label();
+            colNameLabels1[i] = new HBox(); colNameLabels2[i] = new HBox();
+            colNameLabels1[i].setPrefWidth(31); colNameLabels2[i].setPrefWidth(31);
+            colNameLabels1[i].setAlignment(Pos.CENTER); colNameLabels2[i].setAlignment(Pos.CENTER);
+            colName1.setText(Character.toString((char) (i+65))); colName2.setText(Character.toString((char) (i+65)));
+            colName1.setFont(Font.font(15)); colName2.setFont(Font.font(15));
+            colName1.setTextFill(Color.YELLOW); colName2.setTextFill(Color.YELLOW);
+            colNameLabels1[i].getChildren().add(colName1);
+            colLabelsLeft.getChildren().add(colNameLabels1[i]);
+            colNameLabels2[i].getChildren().add(colName2);
+            colLabelsRight.getChildren().add(colNameLabels2[i]);
+        }
+        colLabels.getChildren().addAll(colLabelsLeft,colLabelsRight);
+
         boards.setPadding(new Insets(0, 0, 0,0));
-        VBox centerBox = new VBox(0, labels, boards);
+        VBox centerBox = new VBox(0, labels,colLabels, boards);
         centerBox.setPrefWidth(700);
-        centerBox.setPrefHeight(518);
-
-
-        //create turn changing label
+        centerBox.setPrefHeight(548);
         centerStack.getChildren().add(centerBox);
+        //create turn changing label
         ytlb.setText("--YOUR TURN--");
         ytlb.setTextFill(Color.YELLOW);
         ytlb.setFont(Font.font("Arial Black", FontWeight.LIGHT,50));
@@ -413,7 +443,6 @@ public class PlayLayout  {
         stlb.setText("--START GAME--");
         stlb.setTextFill(Color.YELLOW);
         stlb.setFont(Font.font("Arial Black",FontWeight.LIGHT,50));
-
         //create Time counter
         timeText.setFont(Font.font(25));
         timeText.setFill(Color.YELLOW);
@@ -424,10 +453,7 @@ public class PlayLayout  {
         HBox timeBox = new HBox(100,subtext, timeText);
         timeBox.setPrefHeight(100);
         timeBox.setPrefWidth(1366);
-        timeBox.setPadding(new Insets(50,50,0,400));
-
-
-
+        timeBox.setPadding(new Insets(50,50,0,570));
         //set background gif for Play Layout
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
@@ -437,7 +463,6 @@ public class PlayLayout  {
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT,
                 playBackgrSize);
-
         //create Play Layout
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
@@ -449,7 +474,7 @@ public class PlayLayout  {
 //        root.getCenter().setStyle("-fx-border-color:red;");
 //        root.getBottom().setStyle("-fx-border-color:red;");
 //        root.getRight().setStyle("-fx-border-color:red;");
-       // root.getStylesheets().add("src/com/company/skyfall/view/Style.css");
+        // root.getStylesheets().add("src/com/company/skyfall/view/Style.css");
         return root;
     }
 
@@ -509,7 +534,6 @@ public class PlayLayout  {
             }
         }
     }
-
     public static void enemyMoveHard() {
         if (overGame) return;
         while (enemyTurn) {
@@ -529,6 +553,7 @@ public class PlayLayout  {
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
             pause1.setOnFinished(ex -> boards.setDisable(false));
             pause1.play();
+
 
             Cell lastAC = enemyBoard.lastAC();
             if (lastAC != null && !enemyBoard.didRepo) {
@@ -560,21 +585,22 @@ public class PlayLayout  {
             Cell cell = playerBoard.findAliveAirCraft();
             //found
             if (cell.x != 10){
-               // System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                // System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                 if (cell.equals(playerBoard.preCell)){
                     // shot on edge shared cell
                     Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
-                  //  System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
+                    //  System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cellTmp.shootType3();
-                    //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
+                        //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cellTmp;
                     }
                     else{
                         enemyTurn = cellTmp.shootType1();
-                      //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+                        //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+
                         updateHP();
                         playerBoard.preCell = cellTmp;
                     }
@@ -583,14 +609,14 @@ public class PlayLayout  {
                     //shot on cell
                     if (enemyBoard.getNumBulletType3() > 0){
                         enemyTurn = cell.shootType3();
-                      //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                        //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cell;
                     }
                     else {
                         enemyTurn = cell.shootType1();
-                    //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                        //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                         updateHP();
                         playerBoard.preCell = cell;
                     }
@@ -606,7 +632,7 @@ public class PlayLayout  {
                     if (x==0) x++;
                     if (y==0) y++;
                     if (playerBoard.isAbleToShotThisCell(x,y)){
-                     //   System.out.println("ban dan 2 vao o "+x+y);
+                        //   System.out.println("ban dan 2 vao o "+x+y);
                         Cell cellTmp = playerBoard.getCell(x,y);
                         enemyTurn = cellTmp.shootType2();
                         updateHP();
@@ -628,7 +654,8 @@ public class PlayLayout  {
                 if (count == edge){
                     Cell cellTmp = playerBoard.getCell(x, y);
                     enemyTurn = cellTmp.shootType1();
-                //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
+
+                    //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
                     updateHP();
                     playerBoard.preCell = cellTmp;
                     break;
@@ -644,13 +671,12 @@ public class PlayLayout  {
             pause.play();
         }
     }
-
     public static void startGame() {
         //start the time counter
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
         btmHbox.getChildren().removeAll(acBox);
-        btmHbox.getChildren().addAll(ACHPBox.createHPBox());
+        btmHbox.setSpacing(208);
         // place enemy air crafts
         int type = 4;
 
@@ -660,7 +686,6 @@ public class PlayLayout  {
 
             if (enemyBoard.setAirCraft(new AirCraft(type, Math.random() < 0.5), x, y)) {
                 type--;
-            //    System.out.println(x+" "+ y);
             }
         }
         running = true;
@@ -671,14 +696,47 @@ public class PlayLayout  {
         pause.play();
     }
     public static void updateHP(){
-            String hp2 = String.valueOf(PlayLayout.AC[0].getHP());
-            String hp3 = String.valueOf(PlayLayout.AC[1].getHP());
-            String hp4 = String.valueOf(PlayLayout.AC[2].getHP());
-            hp2 = (hp2.length()>2)?hp2:((hp2.length()>1)?" "+hp2:"  "+hp2);
-            hp3 = (hp3.length()>2)?hp3:((hp3.length()>1)?" "+hp3:"  "+hp3);
-            hp4 = (hp4.length()>2)?hp4:((hp4.length()>1)?" "+hp4:"  "+hp4);
-            ACHPBox.hp2.setText("     "+hp2+" HP");
-            ACHPBox.hp3.setText("     "+hp3+" HP");
-            ACHPBox.hp4.setText("     "+hp4+" HP");
+        String[] hp = new String[3];
+        String[] status = new String[3];
+        for (int i = 0; i <= 2; i++){
+            hp[i] = String.valueOf(PlayLayout.AC[i].getHP());
+            hp[i] = (hp[i].length()>2)?hp[i]:((hp[i].length()>1)?"  "+hp[i]:"    "+hp[i]);
+            hp[i] = "  HP:             "+hp[i]+"/"+(i+2)+"00  ";
+            status[i] = "  STATUS:       "+(PlayLayout.AC[i].getHP()>0?"ALIVE  ":" DEAD  ");
+            ((Label) ((VBox) acHP[i].getChildren().get(2)).getChildren().get(1)).setText(hp[i]);
+            ((Label) ((VBox) acHP[i].getChildren().get(2)).getChildren().get(0)).setText(status[i]);
+        }
+    }
+    public static void mouseOver(Board board){
+        for(int i = 0; i <= 9; i++)
+            for (int j = 0; j <= 9; j++){
+                Cell c = board.getCell(i,j);
+                c.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (!running) return;
+                        if (btmHbox.getChildren().size() > 1 ) btmHbox.getChildren().remove(1);
+                        if (c.getAirCraft() != null) try {
+                            btmHbox.getChildren().addAll(acHP[c.getAirCraft().getType()-2]);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                    }
+                });
+            }
+    }
+    public static void mouseExit(Board board){
+        for(int i = 0; i <= 9; i++)
+            for (int j = 0; j <= 9; j++) {
+                Cell c = board.getCell(i, j);
+                c.setOnMouseExited(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (!running) return;
+                        if (btmHbox.getChildren().size() > 1 ) btmHbox.getChildren().remove(1);
+                    }
+                });
+            }
     }
 }
