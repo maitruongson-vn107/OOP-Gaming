@@ -26,8 +26,8 @@ public class Board extends Parent {
     private int airCrafts = 3;
     private int numBulletType2 = 3;
     private int numBulletType3 = 1;
-    public  boolean didRepo = false;
-    public  AirCraft acToMove = null;
+    public boolean didRepo = false;
+    public AirCraft acToMove = null;
     public Cell preCell = new Cell(10, 10, this);
 
     private static MediaPlayer soundPlayer = new MediaPlayer(new Media(
@@ -39,6 +39,7 @@ public class Board extends Parent {
         soundPlayer.play();
         soundPlayer.setVolume(Board.soundLevel);
     }
+
     /**
      * Setting up and checking condition for Board
      */
@@ -57,6 +58,7 @@ public class Board extends Parent {
         }
         getChildren().add(rows);
     }
+
     public EventHandler onDragDetected = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
@@ -66,23 +68,24 @@ public class Board extends Parent {
                 Cell c = (Cell) (event.getSource());
                 if (!PlayLayout.running) return;
                 db = c.startDragAndDrop(TransferMode.ANY);
-                if (!didRepo && c.airCraft != null && c.airCraft.getHP()<c.airCraft.getType()*100 && c.airCraft.getHP()>0) {
-                    int gap = (c.airCraft.isVertical())?(c.y-c.airCraft.getHead().y):(c.x-c.airCraft.getHead().x);
-                    ct.putString(String.valueOf(gap)+"00");
+                if (!didRepo && c.airCraft != null && c.airCraft.getHP() < c.airCraft.getType() * 100 && c.airCraft.getHP() > 0) {
+                    int gap = (c.airCraft.isVertical()) ? (c.y - c.airCraft.getHead().y) : (c.x - c.airCraft.getHead().x);
+                    ct.putString(String.valueOf(gap) + "00");
                     acToMove = c.airCraft;
                     db.setContent(ct);
                     event.consume();
-                } } catch (Exception ex){
+                }
+            } catch (Exception ex) {
                 if (PlayLayout.running) return;
                 ImageView imgv = (ImageView) (event.getSource());
                 db = imgv.startDragAndDrop(TransferMode.ANY);
                 String dragInfor = "";
-                if (imgv == ACToSet.v2) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"2"+"1";
-                if (imgv == ACToSet.h2) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"2"+"0";
-                if (imgv == ACToSet.v3) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"3"+"1";
-                if (imgv == ACToSet.h3) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"3"+"0";
-                if (imgv == ACToSet.v4) dragInfor = String.valueOf((int )(event.getSceneY()-648)/30)+"4"+"1";
-                if (imgv == ACToSet.h4) dragInfor = String.valueOf((int )(event.getSceneX()-525)/30)+"4"+"0";
+                if (imgv == ACToSet.v2) dragInfor = String.valueOf((int) (event.getSceneY() - 648) / 30) + "2" + "1";
+                if (imgv == ACToSet.h2) dragInfor = String.valueOf((int) (event.getSceneX() - 525) / 30) + "2" + "0";
+                if (imgv == ACToSet.v3) dragInfor = String.valueOf((int) (event.getSceneY() - 648) / 30) + "3" + "1";
+                if (imgv == ACToSet.h3) dragInfor = String.valueOf((int) (event.getSceneX() - 525) / 30) + "3" + "0";
+                if (imgv == ACToSet.v4) dragInfor = String.valueOf((int) (event.getSceneY() - 648) / 30) + "4" + "1";
+                if (imgv == ACToSet.h4) dragInfor = String.valueOf((int) (event.getSceneX() - 525) / 30) + "4" + "0";
                 ct.putString(dragInfor);
                 db.setContent(ct);
                 event.consume();
@@ -95,64 +98,66 @@ public class Board extends Parent {
             Cell c = (Cell) event.getSource();
             event.acceptTransferModes(TransferMode.ANY);
             String dragInfor = event.getDragboard().getString();
-            if (dragInfor.charAt(1) == '0'){
+            if (dragInfor.charAt(1) == '0') {
                 if (acToMove != null) {
                     boolean ver = acToMove.isVertical();
                     int gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
-                    for (int k = 0; k <= 2;k++){
+                    for (int k = 0; k <= 2; k++) {
                         if (PlayLayout.AC[k] != null && PlayLayout.AC[k] != acToMove)
-                            try{
+                            try {
                                 if (PlayLayout.AC[k].getHP() > 0) changeImagePlayerAlive(PlayLayout.AC[k].getHead());
-                                else changeImagePlayerDead(PlayLayout.AC[k].getHead());    }
-                            catch (Exception ex) {
+                                else changeImagePlayerDead(PlayLayout.AC[k].getHead());
+                            } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
                     }
                     for (int k = 0; k < 10; k++)
                         for (int h = 0; h < 10; h++)
-                            if (getCell(k,h).getAirCraft() == null || getCell(k,h).getAirCraft() == acToMove) {
+                            if (getCell(k, h).getAirCraft() == null || getCell(k, h).getAirCraft() == acToMove) {
                                 getCell(k, h).setFill(Color.TRANSPARENT);
                                 getCell(k, h).wasShot = false;
                             }
                     if (ver)
-                        try {changeImagePlayerAlive( c.x, c.y-gap,true,acToMove.getType());}
-                        catch (Exception ex){
+                        try {
+                            changeImagePlayerAlive(c.x, c.y - gap, true, acToMove.getType());
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     else {
                         try {
-                            changeImagePlayerAlive(c.x-gap,c.y,false,acToMove.getType());
+                            changeImagePlayerAlive(c.x - gap, c.y, false, acToMove.getType());
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 boolean ver = (dragInfor.charAt(2) == '1');
                 int gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                 int type = Integer.parseInt(String.valueOf(dragInfor.charAt(1)));
-                for (int k = 0; k <= 2; k++){
-                    if (PlayLayout.AC[k] != null && PlayLayout.AC[k] !=acToMove )
-                        try{  changeImagePlayerAlive(PlayLayout.AC[k].getHead()); }
-                        catch (Exception ex) {
+                for (int k = 0; k <= 2; k++) {
+                    if (PlayLayout.AC[k] != null && PlayLayout.AC[k] != acToMove)
+                        try {
+                            changeImagePlayerAlive(PlayLayout.AC[k].getHead());
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                 }
-                for (int k = 0; k < 10;k++)
+                for (int k = 0; k < 10; k++)
                     for (int h = 0; h < 10; h++)
-                        if (getCell(k,h).getAirCraft() == null ) {
+                        if (getCell(k, h).getAirCraft() == null) {
                             getCell(k, h).setFill(Color.TRANSPARENT);
                             getCell(k, h).wasShot = false;
                         }
                 if (ver)
-                    try {changeImagePlayerAlive( c.x, c.y-gap,true,type);}
-                    catch (Exception ex){
+                    try {
+                        changeImagePlayerAlive(c.x, c.y - gap, true, type);
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 else {
                     try {
-                        changeImagePlayerAlive(c.x-gap,c.y,false,type);
+                        changeImagePlayerAlive(c.x - gap, c.y, false, type);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -170,7 +175,7 @@ public class Board extends Parent {
             boolean ver = true;
             int gap;
             String dragInfor = event.getDragboard().getString();
-            if (dragInfor.charAt(1) == '0'){
+            if (dragInfor.charAt(1) == '0') {
                 if (acToMove != null) {
                     ver = acToMove.isVertical();
                     gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
@@ -181,49 +186,49 @@ public class Board extends Parent {
                 event.setDropCompleted(true);
                 event.consume();
                 if (!suc) {
-                    for (int k = 0; k <= 2;k++){
-                        try{
+                    for (int k = 0; k <= 2; k++) {
+                        try {
                             if (PlayLayout.AC[k].getHP() > 0) changeImagePlayerAlive(PlayLayout.AC[k].getHead());
-                            else changeImagePlayerDead(PlayLayout.AC[k].getHead());    }
-                        catch (Exception ex) {
+                            else changeImagePlayerDead(PlayLayout.AC[k].getHead());
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
 
-                } if (suc) {
+                }
+                if (suc) {
                     PlayLayout.enemyTurn = true;
                     if (OptionLayout.getLevel()) {
                         PlayLayout.enemyMoveEasy();
-                    }
-                    else {
+                    } else {
                         PlayLayout.enemyMoveHard();
                     }
                 }
 
-                for (int k = 0; k < 10;k++)
+                for (int k = 0; k < 10; k++)
                     for (int h = 0; h < 10; h++)
-                        if (getCell(k,h).getAirCraft() == null ) {
+                        if (getCell(k, h).getAirCraft() == null) {
                             getCell(k, h).setFill(Color.TRANSPARENT);
                             getCell(k, h).wasShot = false;
                         }
 
-            }
-            else {  gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
+            } else {
+                gap = Integer.parseInt(String.valueOf(dragInfor.charAt(0)));
                 ver = (dragInfor.charAt(2) == '1');
                 int type = Integer.parseInt(String.valueOf(dragInfor.charAt(1)));
-                AirCraft aircr = new AirCraft(type,ver);
-                if (ver)
-                {
-                    if (isOkToSetAirCraft(aircr,c.x,c.y-gap))
-                    {
-                        setAirCraft(aircr,c.x,c.y-gap);
-                        PlayLayout.AC[type-2] = getCell(c.x,c.y-gap).getAirCraft();
-                        PlayLayout.acSet[type-2] = true;
+                AirCraft aircr = new AirCraft(type, ver);
+                if (ver) {
+                    if (isOkToSetAirCraft(aircr, c.x, c.y - gap)) {
+                        setAirCraft(aircr, c.x, c.y - gap);
+                        PlayLayout.AC[type - 2] = getCell(c.x, c.y - gap).getAirCraft();
+                        PlayLayout.acSet[type - 2] = true;
                         switch (type) {
-                            case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
+                            case 4:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
                                 PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
                                 break;
-                            case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
+                            case 3:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
                                 PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
                                 break;
                             case 2:
@@ -234,15 +239,17 @@ public class Board extends Parent {
                         }
                     }
                 } else {
-                    if (isOkToSetAirCraft(aircr,c.x-gap,c.y)) {
-                        setAirCraft(aircr,c.x-gap,c.y);
-                        PlayLayout.AC[type-2] = aircr;
-                        PlayLayout.acSet[type-2] = true;
+                    if (isOkToSetAirCraft(aircr, c.x - gap, c.y)) {
+                        setAirCraft(aircr, c.x - gap, c.y);
+                        PlayLayout.AC[type - 2] = aircr;
+                        PlayLayout.acSet[type - 2] = true;
                         switch (type) {
-                            case 4: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
+                            case 4:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v4);
                                 PlayLayout.acVBox.getChildren().removeAll(ACToSet.h4);
                                 break;
-                            case 3: PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
+                            case 3:
+                                PlayLayout.acHBox.getChildren().removeAll(ACToSet.v3);
                                 PlayLayout.acVBox.getChildren().removeAll(ACToSet.h3);
                                 break;
                             case 2:
@@ -261,14 +268,14 @@ public class Board extends Parent {
                             ex.printStackTrace();
                         }
                 }
-                for (int k = 0; k < 10;k++)
+                for (int k = 0; k < 10; k++)
                     for (int h = 0; h < 10; h++)
-                        if (getCell(k,h).getAirCraft() == null ) {
+                        if (getCell(k, h).getAirCraft() == null) {
                             getCell(k, h).setFill(Color.TRANSPARENT);
                             getCell(k, h).wasShot = false;
                         }
                 boolean start = true;
-                for (int k = 0; k <= 2; k++){
+                for (int k = 0; k <= 2; k++) {
                     if (!PlayLayout.acSet[k]) start = false;
                 }
                 if (start) PlayLayout.startGame();
@@ -277,11 +284,12 @@ public class Board extends Parent {
             }
         }
     };
+
     //add dragged and dropped ability to cell
-    public void dragEffect(){
+    public void dragEffect() {
         for (int i = 0; i <= 9; i++)
-            for (int j = 0; j <= 9; j++){
-                Cell c = getCell(i,j);
+            for (int j = 0; j <= 9; j++) {
+                Cell c = getCell(i, j);
                 c.setOnDragDetected(onDragDetected);
                 c.setOnDragOver(onDragOver);
                 c.setOnDragDropped(onDragDropped);
@@ -290,16 +298,16 @@ public class Board extends Parent {
 
     // Get position (x,y) on Board
     public Cell getCell(int x, int y) {
-        try{
+        try {
             return (Cell) ((HBox) rows.getChildren().get(y)).getChildren().get(x);
-        } catch (Exception ex){
+        } catch (Exception ex) {
 
         }
         return null;
     }
 
     // Check validity of point (x,y)
-    private boolean isValidPoint(int x, int y) {
+    public boolean isValidPoint(int x, int y) {
         return 0 <= x && x < 10 && 0 <= y && y < 10;
     }
 
@@ -347,7 +355,7 @@ public class Board extends Parent {
     }
 
     // Set AC on point (x,y)
-    public boolean  setAirCraft(AirCraft airCraft, int x, int y) {
+    public boolean setAirCraft(AirCraft airCraft, int x, int y) {
         if (isOkToSetAirCraft(airCraft, x, y)) {
             int type = airCraft.getType();
             airCraft.setHead(getCell(x, y));
@@ -370,11 +378,12 @@ public class Board extends Parent {
                     }
                 }
             }
-            if (!this.enemy) changeImagePlayerAlive(getCell(x,y));
+            if (!this.enemy) changeImagePlayerAlive(getCell(x, y));
             return true;
         }
         return false;
     }
+
     //reposition aircraft
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
         //AC being shot && difference of head position && reposition
@@ -386,7 +395,7 @@ public class Board extends Parent {
 
                 //turn current position's aircraft to null
                 if (airCraft.isVertical()) {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
+                    for (int i = 0; i < airCraft.getType(); i++) {
                         Cell cell = getCell(airCraft.getHead().x, airCraft.getHead().y + i);
                         cell.airCraft = null;
                         cell.wasShot = false;
@@ -396,11 +405,10 @@ public class Board extends Parent {
                         Cell cellTmp = getCell(x, y + i);
                         cellTmp.wasShot = false;
                     }
-                }
-                else {
-                    for (int i = 0; i < airCraft.getType() ; i++) {
+                } else {
+                    for (int i = 0; i < airCraft.getType(); i++) {
                         Cell cell = getCell(airCraft.getHead().x + i, airCraft.getHead().y);
-                        cell.airCraft =null;
+                        cell.airCraft = null;
                         cell.wasShot = false;
                         cell.setFill(Color.TRANSPARENT);
                         cell.setStroke(Color.WHITE);
@@ -419,6 +427,7 @@ public class Board extends Parent {
         }
         return false;
     }
+
     public Cell lastAC() {
         if (airCrafts == 1) {
             for (int i = 0; i < 10; i++) {
@@ -468,7 +477,8 @@ public class Board extends Parent {
             if (airCraft != null) {
                 if (airCraft.isDie()) return false;
                 airCraft.hitType1();
-                if (this.getBoard().enemy )
+
+                if (this.getBoard().enemy)
                     setFill(Color.rgb(255, 74, 54));
                 else setStroke(Color.rgb(255, 74, 54));
                 if (!airCraft.isAlive()) {
@@ -534,8 +544,10 @@ public class Board extends Parent {
                 setFill(Color.rgb(44, 255, 47));
             return false;
         }
+
         // shooted by type 2
-        public int countNumberOfCellHaveAirCraft() {
+        public int
+        countNumberOfCellHaveAirCraft() {
             int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
             int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
             int count = 0;
@@ -543,37 +555,39 @@ public class Board extends Parent {
             for (int i = 0; i < 9; i++) {
                 int xx = x + dx[i];
                 int yy = y + dy[i];
-                if (isValidPoint(xx, yy) && (getCell(xx, yy).getAirCraft() != null)) count++;
+                if (isValidPoint(xx, yy) && getCell(xx, yy).getAirCraft() != null && getCell(xx, yy).airCraft.getHP() > 0)
+                    count++;
 
             }
             return count;
         }
     }
-    public void changeImagePlayerAlive(int x,int y, boolean vertical,int type){
+
+    public void changeImagePlayerAlive(int x, int y, boolean vertical, int type) {
         Cell head = null;
         try {
-            head = getCell(x,y);
+            head = getCell(x, y);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         if (vertical) {
             switch (type) {
                 case 2:
-                    try{
+                    try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
-                    try{
+                    try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
-                    try{
+                    try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
@@ -581,29 +595,29 @@ public class Board extends Parent {
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
@@ -611,40 +625,40 @@ public class Board extends Parent {
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
@@ -655,48 +669,48 @@ public class Board extends Parent {
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
                 case 3:
-                    try{
+                    try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
-                    }catch (Exception ex){
-
-                    }
-                    try{
-                        head = getCell(head.x + 1, head.y);
-                    }catch (Exception ex){
-
-                    }
-                    try{
-                        head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
-                    try{
+                    try {
+                        head.setFill(new ImagePattern(new Image((getClass().getResource(
+                                "../view/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
+                    } catch (Exception ex) {
+
+                    }
+                    try {
+                        head = getCell(head.x + 1, head.y);
+                    } catch (Exception ex) {
+
+                    }
+                    try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
@@ -704,40 +718,40 @@ public class Board extends Parent {
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../view/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
 
                     }
                     break;
@@ -818,8 +832,9 @@ public class Board extends Parent {
             }
         }
     }
+
     private void changeImagePlayerAlive(Cell cell) {
-        if(cell.airCraft != null) {
+        if (cell.airCraft != null) {
 
             Cell head = cell.airCraft.getHead();
             if (cell.airCraft.isVertical()) {
@@ -891,6 +906,7 @@ public class Board extends Parent {
             }
         }
     }
+
     private void changeImagePlayerDead(Cell cell) {
         if (cell.airCraft != null) {
             Cell head = cell.airCraft.getHead();
@@ -965,7 +981,7 @@ public class Board extends Parent {
     }
 
     // check the 3*3 block on (x,y) to shot by bullet 3
-    public  boolean isAbleToShotThisCell(int x, int y) {
+    public boolean isAbleToShotThisCell(int x, int y) {
         int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
         int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
 
@@ -982,17 +998,17 @@ public class Board extends Parent {
     }
 
     // find Alive AC and Was shot
-    public Cell findAliveAirCraft(){
-        for(int i = 0; i < 10; i++)
-            for(int j = 0; j < 10; j++){
-                Cell cell = getCell(i,j);
+    public Cell findAliveAirCraft() {
+        for (int i = 0; i < 10; i++)
+            for (int j = 0; j < 10; j++) {
+                Cell cell = getCell(i, j);
                 if (cell.airCraft != null && cell.wasShot && !cell.airCraft.isDie()) return cell;
             }
-        Cell cell = new Cell(10,10,this);
+        Cell cell = new Cell(10, 10, this);
         return cell;
     }
 
-    public Cell findEdgeSharedCell(int x, int y){
+    public Cell findEdgeSharedCell(int x, int y) {
         Random random = new Random();
 
         int[] dx = {0, 0, 1, -1};
@@ -1001,18 +1017,18 @@ public class Board extends Parent {
         for (int i = 0; i < 4; i++) {
             int xx = x + dx[i];
             int yy = y + dy[i];
-            if (isValidPoint(xx,yy)){
-                Cell cell = getCell(xx,yy);
+            if (isValidPoint(xx, yy)) {
+                Cell cell = getCell(xx, yy);
                 if (cell.airCraft != null && cell.wasShot)
                     return cell;
             }
         }
-        while (true){
+        while (true) {
             int tmp = random.nextInt(4);
             int xx = x + dx[tmp];
             int yy = y + dy[tmp];
-            if (isValidPoint(xx,yy)){
-                Cell cell = getCell(xx,yy);
+            if (isValidPoint(xx, yy)) {
+                Cell cell = getCell(xx, yy);
                 return cell;
             }
         }
@@ -1032,19 +1048,19 @@ public class Board extends Parent {
         return count;
     }
 
-    public int findMaxNumberOfEdgeShared(){
+    public int findMaxNumberOfEdgeShared() {
         int max = 0;
         int[] dx = {0, 0, 1, -1};
         int[] dy = {1, -1, 0, 0};
 
-        for(int x = 0; x < 10; x++)
-            for(int y = 0; y < 10; y++)
-                if (!getCell(x,y).wasShot){
+        for (int x = 0; x < 10; x++)
+            for (int y = 0; y < 10; y++)
+                if (!getCell(x, y).wasShot) {
                     int count = 0;
-                    for(int i = 0; i < 4; i++) {
+                    for (int i = 0; i < 4; i++) {
                         int xx = x + dx[i];
                         int yy = y + dy[i];
-                        if (isValidPoint(xx, yy) && !getCell(xx,yy).wasShot) count ++;
+                        if (isValidPoint(xx, yy) && !getCell(xx, yy).wasShot) count++;
 
                     }
                     if (count > max) max = count;
