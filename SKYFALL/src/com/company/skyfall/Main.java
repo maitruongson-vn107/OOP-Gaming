@@ -35,7 +35,6 @@ public class Main extends Application {
         Scene MainMenuScene = new Scene(MainMenuLayout);
         MainMenuScene.getStylesheets().add(getClass().getResource("view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene);
-        stage.setFullScreen(true);
         stage.show();
     }
 
