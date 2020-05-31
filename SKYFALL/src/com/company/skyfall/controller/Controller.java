@@ -26,7 +26,6 @@ public class Controller implements Initializable {
         Scene scene = new Scene(PlayLayout.createContent(!OptionLayout.getLevel()));
         stage.setTitle("Play");
         stage.setScene(scene);
-        stage.setFullScreen(true);
         stage.show();
     }
 
@@ -39,7 +38,6 @@ public class Controller implements Initializable {
         Scene HowToPlayScene = new Scene(parent);
         HowToPlayScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(HowToPlayScene);
-        stage.setFullScreen(true);
     }
 
 
@@ -49,7 +47,6 @@ public class Controller implements Initializable {
         Scene scene = new Scene(OptionLayout.createOptionLayout());
         scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(scene);
-        stage.setFullScreen(true);
     }
 
     //switch to HighScoreLayout when "High score" button is clicked
@@ -58,7 +55,6 @@ public class Controller implements Initializable {
         Scene scene = new Scene(HighScoreLayout.createHighScoreLayout());
         stage.setTitle("HIGH SCORE");
         stage.setScene(scene);
-        stage.setFullScreen(true);
         stage.show();
     }
 
@@ -87,7 +83,6 @@ public class Controller implements Initializable {
         Scene MainMenuScene = new Scene(parent);
         MainMenuScene.getStylesheets().add(Controller.class.getResource("../view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene);
-        stage.setFullScreen(true);
     }
     public void backToMainMenu(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -97,7 +92,6 @@ public class Controller implements Initializable {
         Scene MainMenuScene = new Scene(parent);
         MainMenuScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene);
-        stage.setFullScreen(true);
     }
 
     @Override
