@@ -134,6 +134,7 @@ public class PlayLayout {
         soundBtn.setStyle("-fx-background-color: #ffe957");
         HBox musicAndSound = new HBox(musicBtn, soundBtn);
 
+
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefWidth(300);
         Label txt = new Label("Turn\t\t" + "Player/Enemy");
@@ -190,6 +191,7 @@ public class PlayLayout {
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225, 100);
+
         String bullet1Image = PlayLayout.class.getResource("bullet1.png").toExternalForm();
         bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
         //create bullet type 2 button
@@ -197,16 +199,19 @@ public class PlayLayout {
         bullet2Btn.setPrefSize(150, 66.7);
         String bullet2Image = PlayLayout.class.getResource("bullet2.png").toExternalForm();
         bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
         HBox bullet2Hbox = new HBox();
         Label bullet2Label = new Label("x3");
         bullet2Label.setFont(Font.font(50));
         bullet2Label.setTextFill(Color.YELLOW);
         bullet2Hbox.getChildren().addAll(bullet2Btn, bullet2Label);
+
         //create bullet type 3 button
         Button bullet3Btn = new Button();
         bullet3Btn.setPrefSize(150, 66.7);
         String bullet3Image = PlayLayout.class.getResource("bullet3.png").toExternalForm();
         bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
         HBox bullet3Hbox = new HBox();
         Label bullet3Label = new Label("x1");
         bullet3Label.setFont(Font.font(50));
@@ -507,7 +512,7 @@ public class PlayLayout {
         timeBox.setPrefHeight(100);
         timeBox.setPrefWidth(1366);
         timeBox.setPadding(new Insets(50, 50, 0, 570));
-        //set background for Play Layout
+
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280, 720, true, true, true, true);
