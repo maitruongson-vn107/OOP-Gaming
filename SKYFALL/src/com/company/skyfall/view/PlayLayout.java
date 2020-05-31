@@ -1,5 +1,7 @@
 package com.company.skyfall.view;
 
+import com.company.skyfall.Main;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import com.company.skyfall.model.AirCraft;
@@ -107,8 +109,33 @@ public class PlayLayout {
         Label pl = new Label("Turn"+"\t\t"+"Player/Enemy"+"\t\t"+"Cell"+"\t\t"+"Bullet Type"+"\t\t"+"Damage"+"\t\t"+"Status"+"\n-------------------------");
         plBox.getChildren().add(pl);
 
+        //sound and music in game
+        Button musicBtn = new Button("Music: On");
+        musicBtn.setOnAction(event -> {
+            if (Main.musicPlayer.getVolume() == 0) {
+                Main.musicPlayer.setVolume(1);
+                musicBtn.setText("Music: On");
+            } else {
+                Main.musicPlayer.setVolume(0);
+                musicBtn.setText("Music: Off");
+            }
+        });
+        musicBtn.setStyle("-fx-background-color: #ffe957");
+        Button soundBtn = new Button("Sound: On");
+        soundBtn.setOnAction(event -> {
+            if (Board.soundLevel == 0) {
+                Board.soundLevel = 1;
+                soundBtn.setText("Sound: On");
+            } else {
+                Board.soundLevel = 0;
+                soundBtn.setText("Sound: Off");
+            }
+        });
+        soundBtn.setStyle("-fx-background-color: #ffe957");
+        HBox musicAndSound = new HBox(musicBtn, soundBtn);
+
+
         ScrollPane scrollPane = new ScrollPane();
-        //scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         scrollPane.setPrefWidth(300);
         Label txt = new Label("Turn\t\t" + "Player/Enemy");
         scrollPane.setContent(txt);
@@ -120,6 +147,9 @@ public class PlayLayout {
         acHBox.getChildren().clear();
         acVBox.getChildren().addAll(ACToSet.h2, ACToSet.h3, ACToSet.h4);
         acHBox.getChildren().addAll(ACToSet.v2, ACToSet.v3, ACToSet.v4);
+
+        VBox rightPane = new VBox(musicAndSound, scrollPane);
+        rightPane.setSpacing(50);
 
         BorderPane root = new BorderPane();
         VBox bulletBox = new VBox(50);
@@ -161,23 +191,27 @@ public class PlayLayout {
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225, 100);
-        String bullet1Imgae = PlayLayout.class.getResource("bullet1.png").toExternalForm();
-        bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
+        String bullet1Image = PlayLayout.class.getResource("bullet1.png").toExternalForm();
+        bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
         //create bullet type 2 button
         Button bullet2Btn = new Button();
         bullet2Btn.setPrefSize(150, 66.7);
-        String bullet2Imgae = PlayLayout.class.getResource("bullet2.png").toExternalForm();
-        bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+        String bullet2Image = PlayLayout.class.getResource("bullet2.png").toExternalForm();
+        bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
         HBox bullet2Hbox = new HBox();
         Label bullet2Label = new Label("x3");
         bullet2Label.setFont(Font.font(50));
         bullet2Label.setTextFill(Color.YELLOW);
         bullet2Hbox.getChildren().addAll(bullet2Btn, bullet2Label);
-        //creat bullet type 3 button
+
+        //create bullet type 3 button
         Button bullet3Btn = new Button();
         bullet3Btn.setPrefSize(150, 66.7);
-        String bullet3Imgae = PlayLayout.class.getResource("bullet3.png").toExternalForm();
-        bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Imgae + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+        String bullet3Image = PlayLayout.class.getResource("bullet3.png").toExternalForm();
+        bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
         HBox bullet3Hbox = new HBox();
         Label bullet3Label = new Label("x1");
         bullet3Label.setFont(Font.font(50));
@@ -478,7 +512,7 @@ public class PlayLayout {
         timeBox.setPrefHeight(100);
         timeBox.setPrefWidth(1366);
         timeBox.setPadding(new Insets(50, 50, 0, 570));
-        //set background gif for Play Layout
+
         FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280, 720, true, true, true, true);
@@ -491,14 +525,7 @@ public class PlayLayout {
         root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
         root.setCenter(centerStack);
-        root.setRight(scrollPane);
-//        root.getTop().setStyle("-fx-border-color:red;");
-//        bulletBox.setStyle("-fx-border-color:red;");
-//        boards.setStyle("-fx-border-color:red;");
-//        root.getCenter().setStyle("-fx-border-color:red;");
-//        root.getBottom().setStyle("-fx-border-color:red;");
-//        root.getRight().setStyle("-fx-border-color:red;");
-        // root.getStylesheets().add("src/com/company/skyfall/view/Style.css");
+        root.setRight(rightPane);
         return root;
     }
 
