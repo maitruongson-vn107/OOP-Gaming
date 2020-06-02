@@ -2,6 +2,7 @@ package com.company.skyfall.view;
 
 
 import com.company.skyfall.Main;
+import com.company.skyfall.controller.MainMenuController;
 import com.company.skyfall.model.Board;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -94,12 +95,7 @@ public class OptionLayout {
 
         Button mainMenuBtn = new Button("Main Menu");
         mainMenuBtn.setId("MainMenuBtn");
-        mainMenuBtn.setOnAction(e -> {
-            try {
-                com.company.skyfall.controller.Controller.backToMainMenuFromPlay(e);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        mainMenuBtn.setOnAction(e -> { MainMenuController.backToMainMenuFromPlay(e);
         });
 
 

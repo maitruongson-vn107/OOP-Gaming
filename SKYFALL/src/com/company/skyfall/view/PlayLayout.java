@@ -1,7 +1,9 @@
 package com.company.skyfall.view;
 
 import com.company.skyfall.Main;
-import javafx.event.ActionEvent;
+import com.company.skyfall.controller.BoardController;
+import com.company.skyfall.controller.BulletController;
+import com.company.skyfall.controller.MainMenuController;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import com.company.skyfall.model.AirCraft;
@@ -40,15 +42,15 @@ public class PlayLayout {
     public static boolean running = false;
     private static Board enemyBoard;
     private static Board playerBoard;
-    private static int airCraftsToPlace = 4;
+    public static int airCraftsToPlace = 4;
     public static boolean enemyTurn = false;
     private static Random random = new Random();
-    private static int time = 0;
+    public static int time = 0;
     public static boolean easyMode = false;
-    private static int usedBullets = 0;
+    public static int usedBullets = 0;
     private static boolean overGame = false;
     private static Text timeText = new Text("");
-    private static byte typeOfBullet = 1;
+    public static byte typeOfBullet = 1;
     public static StackPane centerStack = new StackPane();
     public static HBox boards = new HBox();
     public static Label ytlb = new Label();
@@ -56,11 +58,11 @@ public class PlayLayout {
     public static Label stlb = new Label();
     public static boolean[] acSet = {false, false, false};
     public static AirCraft[] AC = new AirCraft[3];
-    public static HBox acBox = (HBox) ACToSet.acBox();
-    public static HBox acHBox = ((HBox) (acBox.getChildren().get(1)));
-    public static VBox acVBox = ((VBox) acBox.getChildren().get(0));
+    public static StackPane  acBox = (StackPane) ACToSet.acBox();
+    public static VBox acVBox = (VBox)  ((HBox) acBox.getChildren().get(1)).getChildren().get(0);
+    public static HBox acHBox = (HBox)  ((HBox) acBox.getChildren().get(1)).getChildren().get(1);
     private static HBox btmHbox;
-    public static HBox[] acHP = new HBox[3];
+    public static StackPane[] acHP = new StackPane[3];
     static LogList logList;
     static int turn;
     static VBox plBox;
@@ -103,7 +105,7 @@ public class PlayLayout {
         easyMode = level;
         logList = new LogList();
         for (int i = 0; i <= 2; i++) {
-            acHP[i] = (HBox) ACHPBox.createHPBox(i + 2);
+            acHP[i] = (StackPane) ACHPBox.createHPBox(i + 2);
         }
         plBox = new VBox();
         Label pl = new Label("Turn"+"\t\t"+"Player/Enemy"+"\t\t"+"Cell"+"\t\t"+"Bullet Type"+"\t\t"+"Damage"+"\t\t"+"Status"+"\n-------------------------");
@@ -163,7 +165,7 @@ public class PlayLayout {
         mainMenuBtn.setPrefSize(225, 100);
 
         //set backgr for main menu button
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png");
+        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/resources/images/BackToMainMenuButtonBackgr.png");
         Image btnBackgrImage = new Image(btnInput);
         BackgroundSize btnBackgrSize = new BackgroundSize(200, 100, false, false, false, false);
         BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
@@ -178,27 +180,29 @@ public class PlayLayout {
         mainMenuBtn.setOnAction(e -> {
             try {
                 timeline.stop();
-                com.company.skyfall.controller.Controller.backToMainMenuFromPlay(e);
+                MainMenuController.backToMainMenuFromPlay(e);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
-        btmHbox = new HBox(300, mainMenuBtn, acBox);
+        btmHbox = new HBox(273, mainMenuBtn, acBox);
         root.setBottom(btmHbox);
-        btmHbox.setPrefHeight(120);
-
+        btmHbox.setPrefHeight(150);
+        btmHbox.setAlignment(Pos.BOTTOM_LEFT);
         //create bullet type 1 button
         Button bullet1Btn = new Button();
         bullet1Btn.setPrefSize(225, 100);
 
-        String bullet1Image = PlayLayout.class.getResource("bullet1.png").toExternalForm();
+        String bullet1Image = PlayLayout.class.getResource("../resources/images/bullet1.png").toExternalForm();
         bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
         //create bullet type 2 button
         Button bullet2Btn = new Button();
         bullet2Btn.setPrefSize(150, 66.7);
-        String bullet2Image = PlayLayout.class.getResource("bullet2.png").toExternalForm();
+        String bullet2Image = PlayLayout.class.getResource("../resources/images/bullet2.png").toExternalForm();
         bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
+
+        
 
         HBox bullet2Hbox = new HBox();
         Label bullet2Label = new Label("x3");
@@ -209,7 +213,7 @@ public class PlayLayout {
         //create bullet type 3 button
         Button bullet3Btn = new Button();
         bullet3Btn.setPrefSize(150, 66.7);
-        String bullet3Image = PlayLayout.class.getResource("bullet3.png").toExternalForm();
+        String bullet3Image = PlayLayout.class.getResource("../resources/images/bullet3.png").toExternalForm();
         bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
 
         HBox bullet3Hbox = new HBox();
@@ -218,195 +222,20 @@ public class PlayLayout {
         bullet3Label.setTextFill(Color.YELLOW);
         bullet3Hbox.getChildren().addAll(bullet3Btn, bullet3Label);
         //set onAction Handler for bullet type 1 button
-        bullet1Btn.setOnAction(e -> {
-            try {
-                if (typeOfBullet == 2) {
-                    bullet2Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet == 3) {
-                    bullet3Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet != 1) {
-                    bullet1Btn.setPrefSize(225, 100);
-                }
-                typeOfBullet = 1;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        bullet1Btn.setOnAction(e ->  BulletController.enlargeBulletButton1(e,typeOfBullet));
         //set onAction Handler for bullet type 2 button
-        bullet2Btn.setOnAction(e -> {
-            try {
-                if (playerBoard.getNumBulletType2() == 0) return;
-                if (typeOfBullet == 1) {
-                    bullet1Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet == 3) {
-                    bullet3Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet != 2) {
-                    bullet2Btn.setPrefSize(225, 100);
-                }
-                typeOfBullet = 2;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        bullet2Btn.setOnAction(e -> BulletController.enlargeBulletButton2(e,typeOfBullet,(byte) playerBoard.getNumBulletType2()));
         //set onAction Handler for bullet type 3 button
-        bullet3Btn.setOnAction(e -> {
-            try {
-                if (playerBoard.getNumBulletType3() == 0) return;
-                if (typeOfBullet == 1) {
-                    bullet1Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet == 2) {
-                    bullet2Btn.setPrefSize(150, 66.7);
-                }
-                if (typeOfBullet != 3) {
-                    bullet3Btn.setPrefSize(225, 100);
-                }
-                typeOfBullet = 3;
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        bullet3Btn.setOnAction(e -> BulletController.enlargeBulletButton3(e,typeOfBullet,(byte) playerBoard.getNumBulletType3()));
 
         bulletBox.getChildren().addAll(bullet1Btn, bullet2Hbox, bullet3Hbox);
         root.setLeft(bulletBox);
         //create enemy board
-        enemyBoard = new Board(true, event -> {
-            if (!running)
-                return;
-            if (overGame) return;
-            Cell cell = (Cell) event.getSource();
-            if (enemyBoard.preCell.equals(cell)) return;
-            enemyBoard.preCell = cell;
-            usedBullets++;
-            logging(cell);
-            //choose type of bullet
-            while (true) {
-//                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-//                scrollPane.setContent(plBox);
-//                root.setRight(scrollPane);
-
-                if (typeOfBullet == 1) {
-                    enemyTurn = !cell.shootType1();
-//                    PlayLog playLog = cell.shoot1(turn, "player");
-//                    Label pl = new Label(playLog.getPlayer() + ">>\t" + playLog.convertCellName(cell) + "\t" + playLog.getDamage() + "\t" + "Bullet:" + typeOfBullet + "\t" + playLog.getTurn() + "\t" + playLog.status());
-//                    plBox.getChildren().add(pl);
-//                    enemyTurn = playLog.getDamage() > 0 ? false : true;
-                    break;
-                }
-                if (typeOfBullet == 2) {
-                    enemyTurn = !cell.shootType2();
-                    playerBoard.setNumBulletType2(playerBoard.getNumBulletType2() - 1);
-                    bullet2Label.setText("x" + String.valueOf(playerBoard.getNumBulletType2()));
-                    //set bullet type to 1 as default
-                    try {
-                        bullet1Btn.setPrefSize(225, 100);
-                        bullet2Btn.setPrefSize(150, 66.7);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    typeOfBullet = 1;
-                    break;
-                }
-                if (typeOfBullet == 3) {
-                    enemyTurn = !cell.shootType3();
-                    playerBoard.setNumBulletType3(playerBoard.getNumBulletType3() - 1);
-                    bullet3Label.setText("x" + String.valueOf(playerBoard.getNumBulletType3()));
-                    //set bullet type to 1 as default
-                    try {
-                        bullet1Btn.setPrefSize(225, 100);
-                        bullet3Btn.setPrefSize(150, 66.7);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    typeOfBullet = 1;
-                    break;
-                }
-            }
-
-            if (enemyBoard.getAirCrafts() == 0) {
-                Alert winAlert = new Alert(Alert.AlertType.INFORMATION);
-                winAlert.setTitle("You win");
-                winAlert.setHeaderText("Congrats!");
-                winAlert.setContentText("YOU WIN!");
-                winAlert.showAndWait();
-                TextField nameField;
-                overGame = true;
-                try {
-                    // if player got high score
-                    // make a dialog enter player's name
-                    if (isTop(usedBullets, time, easyMode)) {
-                        TextInputDialog dialog = new TextInputDialog();
-                        dialog.setTitle("Enter your name");
-                        dialog.setHeaderText("You got a high score\nPlease enter your name:");
-                        dialog.setContentText("Your name:");
-                        dialog.showAndWait();
-                        nameField = dialog.getEditor();
-                        if (!easyMode) {
-                            writeHighScoreHard(nameField.getText(), usedBullets, time);
-                        } else {
-                            writeHighScoreEasy(nameField.getText(), usedBullets, time);
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (!overGame && enemyTurn) {
-                centerStack.getChildren().add(etlb);
-                boards.setDisable(true);
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
-                pause.setOnFinished(ex -> {
-                    boards.setDisable(false);
-                    centerStack.getChildren().remove(1);
-                    if (enemyTurn && easyMode)
-                        enemyMoveEasy();
-                    else if (enemyTurn && !easyMode) enemyMoveHard();
-
-                });
-                pause.play();
-            }
-            ;
-        });
+        enemyBoard = new Board(true, event -> BoardController.enemyCellClick(event,running,overGame,enemyBoard,playerBoard,typeOfBullet,
+                bullet2Label,bullet3Label,bullet1Btn,bullet2Btn,bullet3Btn));
         //create player board and set up
-        playerBoard = new Board(false, event -> {
-            if (running)
-                return;
-            airCraftsToPlace = 4;
-            Cell cell = (Cell) event.getSource();
-            while (acSet[airCraftsToPlace - 2] && airCraftsToPlace >= 2) airCraftsToPlace--;
-            if (playerBoard.setAirCraft(new AirCraft(airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
-                AC[airCraftsToPlace - 2] = cell.getAirCraft();
-                switch (airCraftsToPlace) {
-                    case 4:
-                        acHBox.getChildren().removeAll(ACToSet.v4);
-                        acVBox.getChildren().removeAll(ACToSet.h4);
-                        break;
-                    case 3:
-                        acHBox.getChildren().removeAll(ACToSet.v3);
-                        acVBox.getChildren().removeAll(ACToSet.h3);
-                        break;
-                    case 2:
-                        acHBox.getChildren().removeAll(ACToSet.v2);
-                        acVBox.getChildren().removeAll(ACToSet.h2);
-                        break;
+        playerBoard = new Board(false, event -> BoardController.clickSetUp(event,running,enemyBoard,playerBoard));
 
-                }
-                acSet[airCraftsToPlace - 2] = true;
-                boolean start = true;
-                for (int k = 0; k <= 2; k++) {
-                    if (!PlayLayout.acSet[k]) start = false;
-                }
-                if (start) {
-                    startGame();
-                }
-
-            }
-        });
         playerBoard.acToMove = null;
         enemyBoard.acToMove = null;
         playerBoard.dragEffect(); //add drag-repo drag-setup affect for cell
@@ -484,7 +313,7 @@ public class PlayLayout {
         }
         colLabels.getChildren().addAll(colLabelsLeft, colLabelsRight);
 
-        boards.setPadding(new Insets(0, 0, 0, 0));
+        //boards.setPadding(new Insets(0, 0, 0, 0));
         VBox centerBox = new VBox(0, labels, colLabels, boards);
         centerBox.setPrefWidth(700);
         centerBox.setPrefHeight(548);
@@ -513,7 +342,7 @@ public class PlayLayout {
         timeBox.setPrefWidth(1366);
         timeBox.setPadding(new Insets(50, 50, 0, 570));
 
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/PlayBackgr.jpg");
+        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/resources/images/PlayBackgr.jpg");
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280, 720, true, true, true, true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
@@ -769,8 +598,8 @@ public class PlayLayout {
             hp[i] = (hp[i].length() > 2) ? hp[i] : ((hp[i].length() > 1) ? "  " + hp[i] : "    " + hp[i]);
             hp[i] = "  HP:             " + hp[i] + "/" + (i + 2) + "00  ";
             status[i] = "  STATUS:       " + (PlayLayout.AC[i].getHP() > 0 ? "ALIVE  " : " DEAD  ");
-            ((Label) ((VBox) acHP[i].getChildren().get(2)).getChildren().get(1)).setText(hp[i]);
-            ((Label) ((VBox) acHP[i].getChildren().get(2)).getChildren().get(0)).setText(status[i]);
+            ((Label) ((VBox) ((HBox) acHP[i].getChildren().get(1)).getChildren().get(2)).getChildren().get(1)).setText(hp[i]);
+            ((Label) ((VBox) ((HBox) acHP[i].getChildren().get(1)).getChildren().get(2)).getChildren().get(0)).setText(status[i]);
         }
     }
 

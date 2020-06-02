@@ -26,7 +26,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         musicPlayer = new MediaPlayer(new Media(
-                new File(new File("src/com/company/skyfall/view/music.mp3").getAbsolutePath()).toURI().toString()
+                new File(new File("src/com/company/skyfall/resources/music_and_sound/music.mp3").getAbsolutePath()).toURI().toString()
         ));
         musicPlayer.play();
         stage.setTitle("Sky Fall");

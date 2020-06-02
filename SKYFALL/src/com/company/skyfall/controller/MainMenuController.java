@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -19,13 +20,14 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class Controller implements Initializable {
+public class MainMenuController implements Initializable {
     //switch to PlayLayout when "Play" button is clicked
     public void play(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(PlayLayout.createContent(!OptionLayout.getLevel()));
+        Scene scene = new Scene(PlayLayout.createContent(!OptionLayout.getLevel()),1366,768);
         stage.setTitle("Play");
         stage.setScene(scene);
+        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         stage.show();
     }
 
@@ -75,14 +77,18 @@ public class Controller implements Initializable {
 
 
     //switch back to MainMenuLayout when "Main Menu" button is clicked
-    public static void backToMainMenuFromPlay(ActionEvent event) throws Exception{
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    public static void backToMainMenuFromPlay(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Controller.class.getResource("../View/MainMenuLayout.fxml"));
+        loader.setLocation(MainMenuController.class.getResource("../View/MainMenuLayout.fxml"));
         Parent parent = loader.load();
         Scene MainMenuScene = new Scene(parent);
-        MainMenuScene.getStylesheets().add(Controller.class.getResource("../view/Style.css").toExternalForm());
-        stage.setScene(MainMenuScene);
+        MainMenuScene.getStylesheets().add(MainMenuController.class.getResource("../view/Style.css").toExternalForm());
+        stage.setScene(MainMenuScene); }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
     public void backToMainMenu(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -31,7 +31,7 @@ public class Board extends Parent {
     public Cell preCell = new Cell(10, 10, this);
 
     private static MediaPlayer soundPlayer = new MediaPlayer(new Media(
-            new File(new File("src/com/company/skyfall/view/explosion.mp3").getAbsolutePath()).toURI().toString()
+            new File(new File("src/com/company/skyfall/resources/music_and_sound/explosion.mp3").getAbsolutePath()).toURI().toString()
     ));
 
     public static void playSound() {
@@ -575,7 +575,7 @@ public class Board extends Parent {
                 case 2:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -586,7 +586,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -594,7 +594,7 @@ public class Board extends Parent {
                 case 3:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -605,7 +605,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -616,7 +616,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -624,7 +624,7 @@ public class Board extends Parent {
                 case 4:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -635,7 +635,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -646,7 +646,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -657,7 +657,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -668,7 +668,7 @@ public class Board extends Parent {
                 case 2:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -679,7 +679,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -687,7 +687,7 @@ public class Board extends Parent {
                 case 3:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -698,7 +698,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -709,7 +709,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -717,7 +717,7 @@ public class Board extends Parent {
                 case 4:
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -728,7 +728,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -739,7 +739,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -750,7 +750,7 @@ public class Board extends Parent {
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
                     } catch (Exception ex) {
 
                     }
@@ -767,66 +767,66 @@ public class Board extends Parent {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/2/v2.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/2/v2.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/2/v2.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/2/v2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/v3.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/v3.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/v3.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/v3.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/v3.3.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/v3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/v4.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/v4.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/v4.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/v4.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/v4.3.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/v4.3.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/v4.4.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/v4.4.png").toString()))));
                         break;
                 }
             } else {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/2/h2.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/2/h2.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/2/h2.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/2/h2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/h3.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/h3.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/h3.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/h3.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/3/h3.3.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/3/h3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/h4.1.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/h4.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/h4.2.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/h4.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/h4.3.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/h4.3.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Enemy AC/Enemy AC dead/4/h4.4.png").toString()))));
+                                "../resources/images/aircraft/Enemy AC/Enemy AC dead/4/h4.4.png").toString()))));
                         break;
                 }
             }
@@ -841,66 +841,66 @@ public class Board extends Parent {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
                         break;
                 }
             } else {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
                         break;
                 }
             }
@@ -914,66 +914,66 @@ public class Board extends Parent {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/2/v2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/2/v2.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/2/v2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/2/v2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/v3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/v3.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/v3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/v3.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/v3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/v3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/v4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/v4.1.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/v4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/v4.2.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/v4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/v4.3.png").toString()))));
                         head = getCell(head.x, head.y + 1);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/v4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/v4.4.png").toString()))));
                         break;
                 }
             } else {
                 switch (cell.airCraft.getType()) {
                     case 2:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/2/h2.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/2/h2.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/2/h2.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/2/h2.2.png").toString()))));
                         break;
                     case 3:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/h3.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/h3.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/h3.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/h3.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/3/h3.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/3/h3.3.png").toString()))));
                         break;
                     case 4:
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/h4.1.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/h4.1.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/h4.2.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/h4.2.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/h4.3.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/h4.3.png").toString()))));
                         head = getCell(head.x + 1, head.y);
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
-                                "../view/aircraft/Player AC/Player AC dead/4/h4.4.png").toString()))));
+                                "../resources/images/aircraft/Player AC/Player AC dead/4/h4.4.png").toString()))));
                         break;
                 }
             }

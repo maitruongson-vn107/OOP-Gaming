@@ -6,7 +6,7 @@ public class HighScoreHandler  {
     //Take high score infor from hard-level-high-score file
     public static String[][] hardReader() throws  Exception{
         String[][] topDet = new String[5][3];
-        BufferedReader bufReader = new BufferedReader(new FileReader("src/com/company/skyfall/view/hard_high_score.txt"));
+        BufferedReader bufReader = new BufferedReader(new FileReader("src/com/company/skyfall/resources/highscorefiles/hard_high_score.txt"));
         for (int i = 0;i<=4;i++) {
             for (int j = 0; j <= 2; j++)
                 topDet[i][j] = bufReader.readLine();
@@ -17,7 +17,7 @@ public class HighScoreHandler  {
     //Take high score infor from easy-level-high-score file
     public static String[][] easyReader()throws  Exception{
         String[][] topDet = new String[5][3];
-        BufferedReader br = new BufferedReader(new FileReader("src/com/company/skyfall/view/easy_high_score.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("src/com/company/skyfall/resources/highscorefiles/easy_high_score.txt"));
         for (int i = 0;i<=4;i++) {
             for (int j = 0; j <= 2; j++)
                 topDet[i][j] = br.readLine();
@@ -45,7 +45,7 @@ public class HighScoreHandler  {
     //save the high score infor into file
     public static void writeHighScoreHard(String name,int turn,int time)throws  Exception{
         String[][] topDet = hardReader();
-        BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/com/company/skyfall/view/hard_high_score.txt"));
+        BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/com/company/skyfall/resources/highscorefiles/hard_high_score.txt"));
         for(int i = 0; i <= 4; i++){
             int cmpTurn = Integer.parseInt(topDet[i][1]);
             int cmpTime = Integer.parseInt(topDet[i][2]);
@@ -72,7 +72,7 @@ public class HighScoreHandler  {
     //save the high score infor into file
     public static void writeHighScoreEasy(String name,int turn,int time)throws  Exception{
         String[][] topDet = easyReader();
-        BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/com/company/skyfall/view/easy_high_score.txt"));
+        BufferedWriter bufWriter = new BufferedWriter(new FileWriter("src/com/company/skyfall/resources/highscorefiles/easy_high_score.txt"));
         for(int i = 0; i <= 4; i++){
             int cmpTurn = Integer.parseInt(topDet[i][1]);
             int cmpTime = Integer.parseInt(topDet[i][2]);

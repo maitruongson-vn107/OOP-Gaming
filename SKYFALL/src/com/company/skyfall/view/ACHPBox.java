@@ -1,22 +1,22 @@
 
 package com.company.skyfall.view;
 
-import com.company.skyfall.view.ACToSet;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class ACHPBox {
     public static Parent createHPBox(int acType){
-        ImageView h2 = new ImageView(new Image("com/company/skyfall/view/aircraft/Player AC/Player AC alive/2/h2 full.png"));
-        ImageView h3 = new ImageView(new Image("com/company/skyfall/view/aircraft/Player AC/Player AC alive/3/h3 full.png"));
-        ImageView h4 = new ImageView(new Image("com/company/skyfall/view/aircraft/Player AC/Player AC alive/4/h4 full.png"));
+        ImageView h2 = new ImageView(new Image("com/company/skyfall/resources/images/aircraft/Player AC/Player AC alive/2/h2 full.png"));
+        ImageView h3 = new ImageView(new Image("com/company/skyfall/resources/images/aircraft/Player AC/Player AC alive/3/h3 full.png"));
+        ImageView h4 = new ImageView(new Image("com/company/skyfall/resources/images/aircraft/Player AC/Player AC alive/4/h4 full.png"));
         Label[] hp = new Label[3];
         hp[0] =   new Label("  HP:             200/200  ");
         hp[1] =   new Label("  HP:             300/300  ");
@@ -33,7 +33,14 @@ public class ACHPBox {
         status[0] = new Label("  STATUS:       ALIVE  ");
         status[1] = new Label("  STATUS:       ALIVE  ");
         status[2] = new Label("  STATUS:       ALIVE  ");
+        StackPane stackPane = new StackPane();
+        stackPane.setPrefSize(500,150);
+        ImageView imgv = new ImageView(new Image("com/company/skyfall/resources/images/border.png"));
+        imgv.setFitWidth(500);
+        imgv.setFitHeight(150);
         HBox hbox = new HBox();
+        stackPane.getChildren().addAll(imgv,hbox);
+        // stackPane.setStyle("-fx-background-color: rgba(255,0,255, 0.2);");
         VBox vBox1 = new VBox(10);
         VBox vBox2 = new VBox(10);
         h2.setFitWidth(80);
@@ -67,7 +74,6 @@ public class ACHPBox {
         }
         hbox.setAlignment(Pos.CENTER);
         hbox.setPrefWidth(500);
-        hbox.setStyle("-fx-border-color: rgb(255,0,255);-fx-background-color: rgba(255,0,255, 0.2);");
-        return hbox;
+        return stackPane;
     }
 }

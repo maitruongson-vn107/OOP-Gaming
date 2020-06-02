@@ -1,6 +1,7 @@
 package com.company.skyfall.view;
 
 
+import com.company.skyfall.controller.MainMenuController;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -30,7 +31,7 @@ public class HighScoreLayout {
         HBox e_h_hbox = new HBox(300);
         Button mainMenuBtn = new Button("Main Menu");
 
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/view/BackToMainMenuButtonBackgr.png"  );
+        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/resources/images/BackToMainMenuButtonBackgr.png"  );
         Image btnBackgrImage = new Image(btnInput);
         BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
         BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
@@ -45,7 +46,7 @@ public class HighScoreLayout {
 
         mainMenuBtn.setOnAction(e -> {
             try {
-                com.company.skyfall.controller.Controller.backToMainMenuFromPlay(e);
+                MainMenuController.backToMainMenuFromPlay(e);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -142,7 +143,7 @@ public class HighScoreLayout {
         LLabel time25 = new LLabel((Integer.parseInt(hardTop[4][2])/60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])/60) +":" +(Integer.parseInt(hardTop[4][2])%60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])%60));
         hatimevbox.getChildren().addAll(time2,time21,time22,time23,time24,time25);
 
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/view/HighScoreBackgr.jpg"  );
+        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/resources/images/HighScoreBackgr.jpg"  );
         Image playBackgrImage = new Image(playBackgrInput);
         BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
         BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
