@@ -58,9 +58,9 @@ public class PlayLayout {
     public static Label stlb = new Label();
     public static boolean[] acSet = {false, false, false};
     public static AirCraft[] AC = new AirCraft[3];
-    public static StackPane  acBox = (StackPane) ACToSet.acBox();
-    public static VBox acVBox = (VBox)  ((HBox) acBox.getChildren().get(1)).getChildren().get(0);
-    public static HBox acHBox = (HBox)  ((HBox) acBox.getChildren().get(1)).getChildren().get(1);
+    public static StackPane acBox = (StackPane) ACToSet.acBox();
+    public static VBox acVBox = (VBox) ((HBox) acBox.getChildren().get(1)).getChildren().get(0);
+    public static HBox acHBox = (HBox) ((HBox) acBox.getChildren().get(1)).getChildren().get(1);
     private static HBox btmHbox;
     public static StackPane[] acHP = new StackPane[3];
     static LogList logList;
@@ -68,10 +68,10 @@ public class PlayLayout {
     static VBox plBox;
 
 
-    private static void logging(Cell cell) {
-        PlayLog playLog = new PlayLog(cell, typeOfBullet, turn, "player");
+    public static void logging(Cell cell) {
+        PlayLog playLog = new PlayLog(cell, typeOfBullet, turn, "Player");
         logList.add(playLog);
-        Label pl = new Label(playLog.getTurn() + "\t\t" + playLog.getPlayer() + "\t\t\t " +   playLog.convertCellName(cell) + "\t\t\t"  +  typeOfBullet+ "\t\t\t\t"  +  playLog.getDamage()+ "\t\t" +  playLog.status());
+        Label pl = new Label(playLog.getTurn() + "\t\t" + playLog.getPlayer() + "\t\t\t " + playLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + playLog.getDamage() + "\t\t" + playLog.status());
         plBox.getChildren().add(pl);
     }
 
@@ -108,7 +108,7 @@ public class PlayLayout {
             acHP[i] = (StackPane) ACHPBox.createHPBox(i + 2);
         }
         plBox = new VBox();
-        Label pl = new Label("Turn"+"\t\t"+"Player/Enemy"+"\t\t"+"Cell"+"\t\t"+"Bullet Type"+"\t\t"+"Damage"+"\t\t"+"Status"+"\n-------------------------");
+        Label pl = new Label("Turn" + "\t\t" + "Player/Enemy" + "\t\t" + "Cell" + "\t\t" + "Bullet Type" + "\t\t" + "Damage" + "\t\t" + "Status" + "\n-------------------------");
         plBox.getChildren().add(pl);
 
         //sound and music in game
@@ -202,7 +202,6 @@ public class PlayLayout {
         String bullet2Image = PlayLayout.class.getResource("../resources/images/bullet2.png").toExternalForm();
         bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
 
-        
 
         HBox bullet2Hbox = new HBox();
         Label bullet2Label = new Label("x3");
@@ -222,19 +221,20 @@ public class PlayLayout {
         bullet3Label.setTextFill(Color.YELLOW);
         bullet3Hbox.getChildren().addAll(bullet3Btn, bullet3Label);
         //set onAction Handler for bullet type 1 button
-        bullet1Btn.setOnAction(e ->  BulletController.enlargeBulletButton1(e,typeOfBullet));
+        bullet1Btn.setOnAction(e -> BulletController.enlargeBulletButton1(e, typeOfBullet));
         //set onAction Handler for bullet type 2 button
-        bullet2Btn.setOnAction(e -> BulletController.enlargeBulletButton2(e,typeOfBullet,(byte) playerBoard.getNumBulletType2()));
+        bullet2Btn.setOnAction(e -> BulletController.enlargeBulletButton2(e, typeOfBullet, (byte) playerBoard.getNumBulletType2()));
         //set onAction Handler for bullet type 3 button
-        bullet3Btn.setOnAction(e -> BulletController.enlargeBulletButton3(e,typeOfBullet,(byte) playerBoard.getNumBulletType3()));
+        bullet3Btn.setOnAction(e -> BulletController.enlargeBulletButton3(e, typeOfBullet, (byte) playerBoard.getNumBulletType3()));
 
         bulletBox.getChildren().addAll(bullet1Btn, bullet2Hbox, bullet3Hbox);
         root.setLeft(bulletBox);
         //create enemy board
-        enemyBoard = new Board(true, event -> BoardController.enemyCellClick(event,running,overGame,enemyBoard,playerBoard,typeOfBullet,
-                bullet2Label,bullet3Label,bullet1Btn,bullet2Btn,bullet3Btn));
+        enemyBoard = new Board(true, event -> BoardController.enemyCellClick(event, running, overGame, enemyBoard, playerBoard, typeOfBullet,
+                bullet2Label, bullet3Label, bullet1Btn, bullet2Btn, bullet3Btn));
+
         //create player board and set up
-        playerBoard = new Board(false, event -> BoardController.clickSetUp(event,running,enemyBoard,playerBoard));
+        playerBoard = new Board(false, event -> BoardController.clickSetUp(event, running, enemyBoard, playerBoard));
 
         playerBoard.acToMove = null;
         enemyBoard.acToMove = null;
@@ -407,7 +407,7 @@ public class PlayLayout {
                 }
             }
             PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
-            Label pl = new Label(enemyLog.getTurn() + "\t\t" + enemyLog.getPlayer() + "\t\t\t " +   enemyLog.convertCellName(cell) + "\t\t\t"  +  typeOfBullet+ "\t\t\t\t"  +  enemyLog.getDamage()+ "\t\t" +  enemyLog.status());
+            Label pl = new Label(enemyLog.getTurn() + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
             plBox.getChildren().add(pl);
             if (!overGame) {
                 centerStack.getChildren().add(ytlb);
@@ -440,6 +440,7 @@ public class PlayLayout {
             }
             if (overGame) break;
 
+
             boards.setDisable(true);
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
             pause1.setOnFinished(ex -> boards.setDisable(false));
@@ -452,7 +453,9 @@ public class PlayLayout {
                 while (true) {
                     x = random.nextInt(10);
                     y = random.nextInt(10);
+
                     if (enemyBoard.isOkToSetAirCraft(lastAC.getAirCraft(), x, y)) break;
+
                 }
 
                 enemyBoard.reposAirCraft(lastAC.getAirCraft(), x, y);
@@ -481,31 +484,53 @@ public class PlayLayout {
                     Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
                     //  System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0) {
+                        PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 3, turn, "Enemy");
+                        Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 3 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        plBox.getChildren().add(pl);
+
                         enemyTurn = cellTmp.shootType3();
+
                         //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cellTmp;
+
                     } else {
                         enemyTurn = cellTmp.shootType1();
+
                         //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
+                        PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
+                        Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        plBox.getChildren().add(pl);
 
                         updateHP();
                         playerBoard.preCell = cellTmp;
+
                     }
                 } else {
                     //shot on cell
                     if (enemyBoard.getNumBulletType3() > 0) {
+                        PlayLog enemyLogHard = new PlayLog(cell, (byte) 3, turn, "Enemy");
+                        Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cell) + "\t\t\t" + 3 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        plBox.getChildren().add(pl);
                         enemyTurn = cell.shootType3();
+
                         //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cell;
+
                     } else {
                         enemyTurn = cell.shootType1();
+
                         //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
+                        PlayLog enemyLogHard = new PlayLog(cell, (byte) 1, turn, "Enemy");
+                        Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cell) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        plBox.getChildren().add(pl);
                         updateHP();
                         playerBoard.preCell = cell;
+
                     }
                 }
                 continue;
@@ -522,9 +547,14 @@ public class PlayLayout {
                         //   System.out.println("ban dan 2 vao o "+x+y);
                         Cell cellTmp = playerBoard.getCell(x, y);
                         enemyTurn = cellTmp.shootType2();
+
+                        PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 2, turn, "Enemy");
+                        Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 2 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        plBox.getChildren().add(pl);
                         updateHP();
                         enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
                         playerBoard.preCell = cellTmp;
+
                         break;
                     }
                 }
@@ -542,19 +572,26 @@ public class PlayLayout {
                     Cell cellTmp = playerBoard.getCell(x, y);
                     enemyTurn = cellTmp.shootType1();
 
+
                     //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
+                    PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
+                    Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                    plBox.getChildren().add(pl);
                     updateHP();
                     playerBoard.preCell = cellTmp;
+
                     break;
                 }
             }
 
         }
+
         if (!overGame) {
             centerStack.getChildren().add(ytlb);
             boards.setDisable(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(ex -> {
+                turn++;
                 boards.setDisable(false);
                 centerStack.getChildren().remove(1);
             });

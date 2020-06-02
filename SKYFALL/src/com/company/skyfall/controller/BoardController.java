@@ -16,14 +16,13 @@ import javafx.util.Duration;
 import javafx.scene.control.*;
 
 
-
 import static com.company.skyfall.model.HighScoreHandler.*;
 
 public class BoardController {
     public static void enemyCellClick(MouseEvent event, boolean running,
                                       boolean overGame, Board enemyBoard,
                                       Board playerBoard, byte typeOfBullet, Label bullet2Label,
-                                      Label bullet3Label, Button bullet1Btn, Button bullet2Btn, Button bullet3Btn ){
+                                      Label bullet3Label, Button bullet1Btn, Button bullet2Btn, Button bullet3Btn) {
         if (!running)
             return;
         if (overGame) return;
@@ -32,6 +31,7 @@ public class BoardController {
         enemyBoard.preCell = cell;
         PlayLayout.usedBullets++;
         //logging(cell); running,overGame,preCell,typeOfBullet
+        PlayLayout.logging(cell);
         //choose type of bullet
         while (true) {
             if (typeOfBullet == 1) {
@@ -114,12 +114,14 @@ public class BoardController {
             pause.play();
         }
     }
-    public static void clickSetUp(MouseEvent event,boolean running,Board enemyBorad,Board playerBoard){
+
+    public static void clickSetUp(MouseEvent event, boolean running, Board enemyBorad, Board playerBoard) {
         if (running)
             return;
         PlayLayout.airCraftsToPlace = 4;
         Board.Cell cell = (Board.Cell) event.getSource();
-        while (PlayLayout.acSet[PlayLayout.airCraftsToPlace - 2] && PlayLayout.airCraftsToPlace >= 2) PlayLayout.airCraftsToPlace--;
+        while (PlayLayout.acSet[PlayLayout.airCraftsToPlace - 2] && PlayLayout.airCraftsToPlace >= 2)
+            PlayLayout.airCraftsToPlace--;
         if (playerBoard.setAirCraft(new AirCraft(PlayLayout.airCraftsToPlace, event.getButton() == MouseButton.PRIMARY), cell.x, cell.y)) {
             PlayLayout.AC[PlayLayout.airCraftsToPlace - 2] = cell.getAirCraft();
             switch (PlayLayout.airCraftsToPlace) {
