@@ -33,17 +33,10 @@ public class OptionLayout {
 
         // sound & music
         Label soundLabel = new Label("Sound");
-        soundLabel.setTextFill(Color.rgb(245, 214, 157));
-        soundLabel.setFont(new Font("Arial", 32));
-        soundLabel.setStyle("-fx-background-color: #521a1a");
 
         Label musicLabel = new Label("Music");
-        musicLabel.setTextFill(Color.rgb(245, 214, 157));
-        musicLabel.setFont(new Font("Arial", 32));
-        musicLabel.setStyle("-fx-background-color: #521a1a");
 
-        HBox labels = new HBox(125, soundLabel, musicLabel);
-        labels.setPadding(new Insets(200, 0, 0,550));
+        HBox labels = new HBox( soundLabel, musicLabel);
 
         Slider soundSlider = new Slider();
         soundSlider.setMax(1);
@@ -62,45 +55,47 @@ public class OptionLayout {
         );
 
 
-        HBox sliders = new HBox(75, soundSlider, musicSlider);
-        sliders.setPadding(new Insets(0, 0 ,0 ,550));
-
+      HBox sliders = new HBox( soundSlider, musicSlider);
 
         // choose difficulty
+
         Label difficultyLabel = new Label("Difficulty");
-        difficultyLabel.setTextFill(Color.rgb(245, 214, 157));
-        difficultyLabel.setFont(new Font("Arial", 32));
-        difficultyLabel.setStyle("-fx-background-color: #521a1a");
-        difficultyLabel.setTranslateX(550);
-        difficultyLabel.setTranslateY(50);
+        HBox hbox = new HBox(difficultyLabel);
 
         ToggleGroup difficultyBtns = new ToggleGroup();
 
-        easyBtn.setTextFill(Color.rgb(245, 214, 157));
-        easyBtn.setFont(new Font("Arial", 24));
-        easyBtn.setStyle("-fx-background-color: #521a1a");
+
         easyBtn.setToggleGroup(difficultyBtns);
         easyBtn.setSelected(true);
 
-        hardBtn.setTextFill(Color.rgb(245, 214, 157));
-        hardBtn.setFont(new Font("Arial", 24));
-        hardBtn.setStyle("-fx-background-color: #521a1a");
         hardBtn.setToggleGroup(difficultyBtns);
 
-        HBox difficultyOption = new HBox(75, easyBtn, hardBtn);
-        difficultyOption.setPadding(new Insets(50, 0, 0,550));
+        HBox difficultyOption = new HBox(easyBtn, hardBtn);
 
-
-        VBox center = new VBox(50, labels, sliders, difficultyLabel, difficultyOption);
+        VBox center = new VBox( labels, sliders, hbox, difficultyOption);
 
         Button mainMenuBtn = new Button("Main Menu");
-        mainMenuBtn.setId("MainMenuBtn");
+
         mainMenuBtn.setOnAction(e -> { MainMenuController.backToMainMenuFromPlay(e);
         });
 
-
         root.setCenter(center);
         root.setBottom(mainMenuBtn);
+
+        root.getStyleClass().setAll("OptionLayout");
+        mainMenuBtn.setId("mainMenuBtn");
+        difficultyOption.getStyleClass().add("Slider_DifficultyOption");
+        easyBtn.getStyleClass().add("TextLabel");
+        easyBtn.setId("levelBtn");
+        hardBtn.getStyleClass().add("TextLabel");
+        hardBtn.setId("levelBtn");
+        difficultyLabel.getStyleClass().add("TextLabel");
+        hbox.getStyleClass().add("Hbox");
+        sliders.getStyleClass().add("Slider_DifficultyOption");
+        musicLabel.getStyleClass().add("TextLabel");
+        soundLabel.getStyleClass().add("TextLabel");
+        labels.getStyleClass().add("Labels");
+        center.getStyleClass().add("Center");
         return root;
     }
 }

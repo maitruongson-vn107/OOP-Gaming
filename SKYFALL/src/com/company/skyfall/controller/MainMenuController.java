@@ -28,6 +28,7 @@ public class MainMenuController implements Initializable {
         stage.setTitle("Play");
         stage.setScene(scene);
         if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
+        scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.show();
     }
 

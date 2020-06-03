@@ -1,9 +1,7 @@
 package com.company.skyfall.view;
 
 import com.company.skyfall.Main;
-import com.company.skyfall.controller.BoardController;
-import com.company.skyfall.controller.BulletController;
-import com.company.skyfall.controller.MainMenuController;
+import com.company.skyfall.controller.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import com.company.skyfall.model.AirCraft;
@@ -110,40 +108,21 @@ public class PlayLayout {
         plBox = new VBox();
         Label pl = new Label("Turn" + "\t\t" + "Player/Enemy" + "\t\t" + "Cell" + "\t\t" + "Bullet Type" + "\t\t" + "Damage" + "\t\t" + "Status" + "\n-------------------------");
         plBox.getChildren().add(pl);
-
         //sound and music in game
-        Button musicBtn = new Button("Music: On");
-        musicBtn.setOnAction(event -> {
-            if (Main.musicPlayer.getVolume() == 0) {
-                Main.musicPlayer.setVolume(1);
-                musicBtn.setText("Music: On");
-            } else {
-                Main.musicPlayer.setVolume(0);
-                musicBtn.setText("Music: Off");
-            }
-        });
-        musicBtn.setStyle("-fx-background-color: #ffe957");
-        Button soundBtn = new Button("Sound: On");
-        soundBtn.setOnAction(event -> {
-            if (Board.soundLevel == 0) {
-                Board.soundLevel = 1;
-                soundBtn.setText("Sound: On");
-            } else {
-                Board.soundLevel = 0;
-                soundBtn.setText("Sound: Off");
-            }
-        });
-        soundBtn.setStyle("-fx-background-color: #ffe957");
-        HBox musicAndSound = new HBox(musicBtn, soundBtn);
+        Button musicBtn = new Button(Main.musicPlayer.getVolume() == 0?"Music: Off":"Music: On");
+        musicBtn.setOnAction(event -> MediaController.musicControl(musicBtn));
 
+        Button soundBtn = new Button(Board.soundLevel == 0?"Sound: Off":"Sound: On");
+        soundBtn.setOnAction(event -> MediaController.soundControl(soundBtn));
+
+        HBox musicAndSound = new HBox(musicBtn, soundBtn);
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setPrefWidth(300);
         Label txt = new Label("Turn\t\t" + "Player/Enemy");
         scrollPane.setContent(txt);
         scrollPane.setContent(plBox);
-        plBox.setStyle("-fx-background-color:transparent;");
-        scrollPane.setStyle("-fx-background-color:transparent;");
+
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -151,74 +130,37 @@ public class PlayLayout {
         acHBox.getChildren().addAll(ACToSet.v2, ACToSet.v3, ACToSet.v4);
 
         VBox rightPane = new VBox(musicAndSound, scrollPane);
-        rightPane.setSpacing(50);
 
         BorderPane root = new BorderPane();
-        VBox bulletBox = new VBox(50);
-        bulletBox.setAlignment(Pos.CENTER_LEFT);
-        bulletBox.setPrefWidth(333);
-        bulletBox.setPrefHeight(518);
-        bulletBox.setPadding(new Insets(0, 0, 0, 20));
+        VBox bulletBox = new VBox();
 
         //create Main Menu Button in Play Scene
         Button mainMenuBtn = new Button("Main Menu");
-        mainMenuBtn.setPrefSize(225, 100);
 
         //set backgr for main menu button
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/resources/images/BackToMainMenuButtonBackgr.png");
-        Image btnBackgrImage = new Image(btnInput);
-        BackgroundSize btnBackgrSize = new BackgroundSize(200, 100, false, false, false, false);
-        BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                btnBackgrSize);
-        mainMenuBtn.setBackground(new Background(btnBackgr));
-        mainMenuBtn.setFont(Font.font(25));
-        mainMenuBtn.setTextFill(Color.rgb(245, 214, 157));
-
         mainMenuBtn.setOnAction(e -> {
-            try {
                 timeline.stop();
-                MainMenuController.backToMainMenuFromPlay(e);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+                MainMenuController.backToMainMenuFromPlay(e); });
 
-        btmHbox = new HBox(273, mainMenuBtn, acBox);
+        btmHbox = new HBox( mainMenuBtn, acBox);
         root.setBottom(btmHbox);
-        btmHbox.setPrefHeight(150);
-        btmHbox.setAlignment(Pos.BOTTOM_LEFT);
+
         //create bullet type 1 button
         Button bullet1Btn = new Button();
-        bullet1Btn.setPrefSize(225, 100);
 
-        String bullet1Image = PlayLayout.class.getResource("../resources/images/bullet1.png").toExternalForm();
-        bullet1Btn.setStyle("-fx-background-image: url('" + bullet1Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
         //create bullet type 2 button
         Button bullet2Btn = new Button();
-        bullet2Btn.setPrefSize(150, 66.7);
-        String bullet2Image = PlayLayout.class.getResource("../resources/images/bullet2.png").toExternalForm();
-        bullet2Btn.setStyle("-fx-background-image: url('" + bullet2Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
-
+        Label bullet2Label = new Label("x3");
 
         HBox bullet2Hbox = new HBox();
-        Label bullet2Label = new Label("x3");
-        bullet2Label.setFont(Font.font(50));
-        bullet2Label.setTextFill(Color.YELLOW);
+        HBox bullet3Hbox = new HBox();
+        Label bullet3Label = new Label("x1");
+
         bullet2Hbox.getChildren().addAll(bullet2Btn, bullet2Label);
 
         //create bullet type 3 button
         Button bullet3Btn = new Button();
-        bullet3Btn.setPrefSize(150, 66.7);
-        String bullet3Image = PlayLayout.class.getResource("../resources/images/bullet3.png").toExternalForm();
-        bullet3Btn.setStyle("-fx-background-image: url('" + bullet3Image + "');-fx-background-color:transparent; -fx-background-size:100% 100%;");
 
-        HBox bullet3Hbox = new HBox();
-        Label bullet3Label = new Label("x1");
-        bullet3Label.setFont(Font.font(50));
-        bullet3Label.setTextFill(Color.YELLOW);
         bullet3Hbox.getChildren().addAll(bullet3Btn, bullet3Label);
         //set onAction Handler for bullet type 1 button
         bullet1Btn.setOnAction(e -> BulletController.enlargeBulletButton1(e, typeOfBullet));
@@ -243,30 +185,18 @@ public class PlayLayout {
         mouseExit(playerBoard);
 
         //add drag-setup affect for imageview
-        ACToSet.v2.setOnDragDetected(playerBoard.onDragDetected);
-        ACToSet.h2.setOnDragDetected(playerBoard.onDragDetected);
-        ACToSet.v3.setOnDragDetected(playerBoard.onDragDetected);
-        ACToSet.h3.setOnDragDetected(playerBoard.onDragDetected);
-        ACToSet.v4.setOnDragDetected(playerBoard.onDragDetected);
-        ACToSet.h4.setOnDragDetected(playerBoard.onDragDetected);
+        AirCraftController.dragEffect(ACToSet.v2,ACToSet.v3,ACToSet.v4,ACToSet.h2,ACToSet.h3,ACToSet.h4);
 
         //create Play Layout
 
         //create Labels
         Label enemyBoardLabel = new Label("Computer Board");
-        enemyBoardLabel.setTextFill(Color.YELLOW);
-        enemyBoardLabel.setFont(Font.font(25));
         enemyBoardLabel.setLabelFor(enemyBoard);
 
         Label playerBoardLabel = new Label("Player Board");
-        playerBoardLabel.setTextFill(Color.YELLOW);
-        playerBoardLabel.setFont(Font.font(25));
         playerBoardLabel.setLabelFor(playerBoard);
 
-        HBox labels = new HBox(225, enemyBoardLabel, playerBoardLabel);
-        labels.setPrefHeight(130);
-        labels.setAlignment(Pos.BOTTOM_CENTER);
-        labels.setPadding(new Insets(70, 50, 0, 0));
+        HBox labels = new HBox( enemyBoardLabel, playerBoardLabel);
         //create row name Vbox
         VBox rowLabels = new VBox(0);
         HBox rowNameLabels[] = new HBox[10];
@@ -313,48 +243,46 @@ public class PlayLayout {
         }
         colLabels.getChildren().addAll(colLabelsLeft, colLabelsRight);
 
-        //boards.setPadding(new Insets(0, 0, 0, 0));
         VBox centerBox = new VBox(0, labels, colLabels, boards);
-        centerBox.setPrefWidth(700);
-        centerBox.setPrefHeight(548);
         centerStack.getChildren().add(centerBox);
         //create turn changing label
         ytlb.setText("--YOUR TURN--");
-        ytlb.setTextFill(Color.YELLOW);
-        ytlb.setFont(Font.font("Arial Black", FontWeight.LIGHT, 50));
-
         etlb.setText("--ENEMY'S TURN--");
-        etlb.setTextFill(Color.YELLOW);
-        etlb.setFont(Font.font("Arial Black", FontWeight.LIGHT, 50));
-
         stlb.setText("--START GAME--");
-        stlb.setTextFill(Color.YELLOW);
-        stlb.setFont(Font.font("Arial Black", FontWeight.LIGHT, 50));
         //create Time counter
-        timeText.setFont(Font.font(25));
-        timeText.setFill(Color.YELLOW);
         Text subtext = new Text("TIME:");
-        subtext.setFont(Font.font(25));
-        subtext.setFill(Color.YELLOW);
+        HBox timeBox = new HBox( subtext, timeText);
 
-        HBox timeBox = new HBox(100, subtext, timeText);
-        timeBox.setPrefHeight(100);
-        timeBox.setPrefWidth(1366);
-        timeBox.setPadding(new Insets(50, 50, 0, 570));
-
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/resources/images/PlayBackgr.jpg");
-        Image playBackgrImage = new Image(playBackgrInput);
-        BackgroundSize playBackgrSize = new BackgroundSize(1280, 720, true, true, true, true);
-        BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                playBackgrSize);
-        //create Play Layout
-        root.setBackground(new Background(playBackgr));
         root.setTop(timeBox);
         root.setCenter(centerStack);
         root.setRight(rightPane);
+
+        plBox.setStyle("-fx-background-color:transparent;");
+        scrollPane.setStyle("-fx-background-color:transparent;");
+
+        bulletBox.getStyleClass().add("BulletBox");
+        rightPane.getStyleClass().add("RightPane");
+        bullet1Btn.getStyleClass().add("Bullet1Btn");
+        bullet2Btn.getStyleClass().add("Bullet2Btn");
+        bullet3Btn.getStyleClass().add("Bullet3Btn");
+        mainMenuBtn.setId("mainMenuBtn");
+        root.getStyleClass().setAll("PlayLayout");
+        soundBtn.getStyleClass().add("Music_Sound_Btn");
+        musicBtn.getStyleClass().add("Music_Sound_Btn");
+        bullet2Label.getStyleClass().add("BulletLabel");
+        bullet3Label.getStyleClass().add("BulletLabel");
+        enemyBoardLabel.getStyleClass().add("EnemyBoardLabel");
+        playerBoardLabel.getStyleClass().add("EnemyBoardLabel");
+        btmHbox.getStyleClass().add("BtmHbox");
+        timeBox.getStyleClass().add("TimeBox");
+        labels.getStyleClass().add("Labels");
+        centerBox.getStyleClass().add("CenterBox");
+        timeText.getStyleClass().add("TimeText");
+        subtext.getStyleClass().add("TimeText");
+        stlb.getStyleClass().add("TurnLabel");
+        ytlb.getStyleClass().add("TurnLabel");
+        etlb.getStyleClass().add("TurnLabel");
+
         return root;
     }
 

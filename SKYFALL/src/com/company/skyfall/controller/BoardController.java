@@ -18,7 +18,7 @@ import javafx.scene.control.*;
 
 import static com.company.skyfall.model.HighScoreHandler.*;
 
-public class BoardController {
+    public class BoardController {
     public static void enemyCellClick(MouseEvent event, boolean running,
                                       boolean overGame, Board enemyBoard,
                                       Board playerBoard, byte typeOfBullet, Label bullet2Label,
@@ -150,5 +150,4 @@ public class BoardController {
 
         }
     }
-
 }
