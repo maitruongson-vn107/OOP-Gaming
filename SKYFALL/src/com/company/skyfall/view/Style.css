@@ -30,6 +30,14 @@
     -fx-background-size: 200px 100px;
     -fx-background-color:transparent;
 }
+.Hsbox{
+    -fx-background-image:url("../resources/images/border.png");
+    -fx-background-size: 100% 100%;
+}
+ #highScoreLayout{
+    -fx-background-image:url("../resources/images/HighScoreBackgr.jpg");
+    -fx-background-size:cover;
+ }
 .PlayLayout{
     -fx-background-image:url("../resources/images/PlayBackgr.jpg");
     -fx-background-size:cover;
@@ -44,8 +52,17 @@
 .PlayLayout .scrollPane{
     -fx-background-color: transparent;
 }
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+.scroll-pane{
+    -fx-background-color:transparent;
+}
 .PlayLayout .RightPane{
     -fx-spacing:50px;
+}
+.scroll-pane .label{
+    -fx-text-fill:yellow;
 }
 .PlayLayout .BulletBox{
     -fx-pref-width:333;

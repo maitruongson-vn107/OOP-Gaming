@@ -30,6 +30,7 @@ import javafx.util.Duration;
 
 
 import java.io.FileInputStream;
+import java.security.Policy;
 import java.util.Random;
 
 import static com.company.skyfall.model.HighScoreHandler.*;
@@ -128,6 +129,8 @@ public class PlayLayout {
         scrollPane.setPrefWidth(300);
         Label txt = new Label("Turn\t\t" + "Player/Enemy");
         scrollPane.setContent(txt);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setContent(plBox);
 
         VBox rightPane = new VBox(musicAndSound, scrollPane);

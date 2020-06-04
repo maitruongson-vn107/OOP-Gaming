@@ -31,19 +31,7 @@ public class HighScoreLayout {
         HBox e_h_hbox = new HBox(300);
         Button mainMenuBtn = new Button("Main Menu");
 
-        FileInputStream btnInput = new FileInputStream("src/com/company/skyfall/resources/images/BackToMainMenuButtonBackgr.png"  );
-        Image btnBackgrImage = new Image(btnInput);
-        BackgroundSize btnBackgrSize = new BackgroundSize(200,100,false,false,false,false);
-        BackgroundImage btnBackgr = new BackgroundImage(btnBackgrImage,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                btnBackgrSize);
-        mainMenuBtn.setPrefSize(225,100);
-        mainMenuBtn.setBackground(new Background(btnBackgr));
-        mainMenuBtn.setFont(Font.font(25));
-        mainMenuBtn.setTextFill(Color.rgb(245,214,157));
-
+        mainMenuBtn.setId("mainMenuBtn");
         mainMenuBtn.setOnAction(e -> {
             try {
                 MainMenuController.backToMainMenuFromPlay(e);
@@ -60,7 +48,11 @@ public class HighScoreLayout {
         VBox hardvbox = new VBox();
         hardvbox.setAlignment(Pos.CENTER);
         e_h_hbox.getChildren().addAll(easyvbox,hardvbox);
-
+        e_h_hbox.setSpacing(100);
+        easyvbox.getStyleClass().add("Hsbox");
+        hardvbox.getStyleClass().add("Hsbox");
+        easyvbox.setPrefSize(600,200);
+        hardvbox.setPrefSize(600,200);
         LLabel ealabel = new LLabel();
         ealabel.setText("Easy");
         ealabel.setFont(Font.font(50));
@@ -143,15 +135,7 @@ public class HighScoreLayout {
         LLabel time25 = new LLabel((Integer.parseInt(hardTop[4][2])/60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])/60) +":" +(Integer.parseInt(hardTop[4][2])%60<10?"0":"") + String.valueOf(Integer.parseInt(hardTop[4][2])%60));
         hatimevbox.getChildren().addAll(time2,time21,time22,time23,time24,time25);
 
-        FileInputStream playBackgrInput = new FileInputStream("src/com/company/skyfall/resources/images/HighScoreBackgr.jpg"  );
-        Image playBackgrImage = new Image(playBackgrInput);
-        BackgroundSize playBackgrSize = new BackgroundSize(1280,720,true,true,true,true);
-        BackgroundImage playBackgr = new BackgroundImage(playBackgrImage,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.DEFAULT,
-                playBackgrSize);
-        root.setBackground(new Background(playBackgr));
+        root.setId("highScoreLayout");
         return root;
     }
 }
