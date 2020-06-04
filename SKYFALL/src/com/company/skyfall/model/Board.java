@@ -1,13 +1,9 @@
 package com.company.skyfall.model;
 
 import com.company.skyfall.controller.AirCraftController;
-import com.company.skyfall.view.ACToSet;
-import com.company.skyfall.view.OptionLayout;
-import com.company.skyfall.view.PlayLayout;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -74,7 +70,8 @@ public class Board extends Parent {
     public Cell getCell(int x, int y) {
         try {
             return (Cell) ((HBox) rows.getChildren().get(y)).getChildren().get(x);
-        } catch (Exception ex) {
+        }
+        catch (Exception ignored) {
 
         }
         return null;
@@ -107,7 +104,7 @@ public class Board extends Parent {
         int type = airCraft.getType();
 
         if (airCraft.isVertical()) {
-            for (int j = y; j < y + type; j++) {
+            for (int j=y; j < y+type; j++) {
                 if (!isValidPoint(x, j)) return false;
 
                 Cell cell = getCell(x, j);
@@ -116,7 +113,7 @@ public class Board extends Parent {
                 if (!checkFourDirection(x, j)) return false;
             }
         } else {
-            for (int i = x; i < x + type; i++) {
+            for (int i=x; i < x+type; i++) {
                 if (!isValidPoint(i, y)) return false;
 
                 Cell cell = getCell(i, y);
@@ -348,91 +345,94 @@ public class Board extends Parent {
             switch (type) {
                 case 2:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/2/v2.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/2/v2.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
                 case 3:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/v3.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/v3.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/v3.3.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
                 case 4:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/v4.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/v4.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/v4.3.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x, head.y + 1);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/v4.4.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
@@ -441,91 +441,94 @@ public class Board extends Parent {
             switch (type) {
                 case 2:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/2/h2.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/2/h2.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
                 case 3:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/h3.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/h3.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/3/h3.3.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
                 case 4:
                     try {
+                        assert head != null;
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/h4.1.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/h4.2.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/h4.3.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored){
 
                     }
                     try {
                         head = getCell(head.x + 1, head.y);
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     try {
                         head.setFill(new ImagePattern(new Image((getClass().getResource(
                                 "../resources/images/aircraft/Player AC/Player AC alive/4/h4.4.png").toString()))));
-                    } catch (Exception ex) {
+                    } catch (Exception ignored) {
 
                     }
                     break;
@@ -765,7 +768,7 @@ public class Board extends Parent {
 
             if ((isValidPoint(xx, yy))) {
                 Cell cell = getCell(xx, yy);
-                if (cell.wasShot == true) return false;
+                if (cell.wasShot) return false;
             }
         }
         return true;
@@ -778,8 +781,7 @@ public class Board extends Parent {
                 Cell cell = getCell(i, j);
                 if (cell.airCraft != null && cell.wasShot && !cell.airCraft.isDie()) return cell;
             }
-        Cell cell = new Cell(10, 10, this);
-        return cell;
+        return new Cell(10, 10, this);
     }
 
     public Cell findEdgeSharedCell(int x, int y) {
@@ -802,8 +804,7 @@ public class Board extends Parent {
             int xx = x + dx[tmp];
             int yy = y + dy[tmp];
             if (isValidPoint(xx, yy)) {
-                Cell cell = getCell(xx, yy);
-                return cell;
+                return getCell(xx, yy);
             }
         }
     }

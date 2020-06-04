@@ -15,7 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import javafx.scene.control.*;
 
-
 import static com.company.skyfall.model.HighScoreHandler.*;
 
     public class BoardController {

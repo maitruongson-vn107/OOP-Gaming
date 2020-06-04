@@ -1,7 +1,5 @@
 package com.company.skyfall.model;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 public class PlayLog {
     private Board.Cell cell;
     private int turn;
@@ -83,14 +81,6 @@ public class PlayLog {
         }
     }
 
-    //    @Override
-//    public String toString() {
-//        {
-//            if (damage==0){
-//                return "Shoot {cell: "  "} damage: " + damage+ " "+"Miss";
-//            }
-//            else  return "Shoot {cell: " + cell.  + cell.y +"} damage: " + damage+" "+"On target";
-//        }
     public int getDamage() {
         return damage;
     }

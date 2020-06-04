@@ -34,7 +34,7 @@ public class AirCraft extends Parent {
     //AC was really ALive or not
     public boolean isAlive(){
         if (HP > 0 ) return true;
-        if (die == false) {
+        if (!die) {
             die = true;
             return false;
         }
@@ -46,24 +46,12 @@ public class AirCraft extends Parent {
         return type;
     }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
     public boolean isVertical() {
         return vertical;
     }
 
-    public void setVertical(boolean vertical) {
-        this.vertical = vertical;
-    }
-
     public int getHP() {
         return HP;
-    }
-
-    public void setHP(int HP) {
-        this.HP = HP;
     }
 
     public boolean isDie() {
