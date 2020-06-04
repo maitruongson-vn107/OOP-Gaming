@@ -75,15 +75,15 @@ public class PlayLayout {
 
     //Make time counter appearing in root.top
     private static Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-        String min = (time / 60 < 10 ? "0" : "") + String.valueOf(time / 60);
-        String sec = (time % 60 < 10 ? "0" : "") + String.valueOf(time % 60);
+        String min = (time / 60 < 10 ? "0" : "") + time / 60;
+        String sec = (time % 60 < 10 ? "0" : "") + time % 60;
         timeText.setText(min + ":" + sec);
         timeText.setFont(Font.font(25));
         timeText.setFill(Color.YELLOW);
         time++;
     }));
 
-    public static Parent createContent(boolean level) throws Exception {
+    public static Parent createContent(boolean level) {
         // set up status variables to default value
         for (int i = 0; i < 3; i++)
             acSet[i] = false;
@@ -199,12 +199,12 @@ public class PlayLayout {
         HBox labels = new HBox( enemyBoardLabel, playerBoardLabel);
         //create row name Vbox
         VBox rowLabels = new VBox(0);
-        HBox rowNameLabels[] = new HBox[10];
+        HBox[] rowNameLabels = new HBox[10];
         for (int i = 0; i <= 9; i++) {
             rowNameLabels[i] = new HBox();
             rowNameLabels[i].setPrefHeight(31);
             rowNameLabels[i].setPrefWidth(100);
-            Label rowName = new Label("0" + String.valueOf(i + 1));
+            Label rowName = new Label("0" + (i + 1));
             if (i == 9) rowName.setText("10");
             rowName.setFont(Font.font(15));
             rowName.setTextFill(Color.YELLOW);
@@ -343,7 +343,6 @@ public class PlayLayout {
                 PauseTransition pause = new PauseTransition(Duration.seconds(1));
                 pause.setOnFinished(ex -> {
                     turn++;
-
                     boards.setDisable(false);
                     centerStack.getChildren().remove(1);
                 });
@@ -368,26 +367,19 @@ public class PlayLayout {
             }
             if (overGame) break;
 
-
             boards.setDisable(true);
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
             pause1.setOnFinished(ex -> boards.setDisable(false));
             pause1.play();
 
-
             Cell lastAC = enemyBoard.lastAC();
             if (lastAC != null && !enemyBoard.didRepo) {
                 int x, y;
-                while (true) {
+                do {
                     x = random.nextInt(10);
                     y = random.nextInt(10);
-
-                    if (enemyBoard.isOkToSetAirCraft(lastAC.getAirCraft(), x, y)) break;
-
-                }
-
+                } while (!enemyBoard.isOkToSetAirCraft(lastAC.getAirCraft(), x, y));
                 enemyBoard.reposAirCraft(lastAC.getAirCraft(), x, y);
-
                 enemyTurn = false;
                 for (int i = 0; i < 10; i++) {
                     for (int j = 0; j < 10; j++) {
@@ -406,11 +398,9 @@ public class PlayLayout {
             Cell cell = playerBoard.findAliveAirCraft();
             //found
             if (cell.x != 10) {
-                // System.out.println("Tim dc thang con song,bi thuong la ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                 if (cell.equals(playerBoard.preCell)) {
                     // shot on edge shared cell
                     Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
-                    //  System.out.println("tim dc thang ben canh la"+cellTmp.x+cellTmp.y);
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0) {
                         PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 3, turn, "Enemy");
                         Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 3 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
@@ -418,15 +408,12 @@ public class PlayLayout {
 
                         enemyTurn = cellTmp.shootType3();
 
-                        //    System.out.println("ban dan 3 vao ac"+cellTmp.getAirCraft().getType()+" o "+cellTmp.x+cellTmp.y);
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         playerBoard.preCell = cellTmp;
 
                     } else {
                         enemyTurn = cellTmp.shootType1();
-
-                        //  System.out.println("ban dan 1 vao ac"+" o "+cellTmp.x+cellTmp.y);
                         PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
                         Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
                         plBox.getChildren().add(pl);
@@ -442,24 +429,18 @@ public class PlayLayout {
                         Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cell) + "\t\t\t" + 3 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
                         plBox.getChildren().add(pl);
                         enemyTurn = cell.shootType3();
-
-                        //  System.out.println("ban dan 3 vao ac"+ cell.getAirCraft().getType()+" o "+cell.x+cell.y);
-
                         updateHP();
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
-                        playerBoard.preCell = cell;
 
                     } else {
                         enemyTurn = cell.shootType1();
-
-                        //    System.out.println("ban dan 1 vao ac"+cell.getAirCraft().getType()+" o "+cell.x+cell.y);
                         PlayLog enemyLogHard = new PlayLog(cell, (byte) 1, turn, "Enemy");
                         Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cell) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
                         plBox.getChildren().add(pl);
                         updateHP();
-                        playerBoard.preCell = cell;
 
                     }
+                    playerBoard.preCell = cell;
                 }
                 continue;
             }
@@ -472,7 +453,6 @@ public class PlayLayout {
                     if (x == 0) x++;
                     if (y == 0) y++;
                     if (playerBoard.isAbleToShotThisCell(x, y)) {
-                        //   System.out.println("ban dan 2 vao o "+x+y);
                         Cell cellTmp = playerBoard.getCell(x, y);
                         enemyTurn = cellTmp.shootType2();
 
@@ -499,9 +479,6 @@ public class PlayLayout {
                 if (count == edge) {
                     Cell cellTmp = playerBoard.getCell(x, y);
                     enemyTurn = cellTmp.shootType1();
-
-
-                    //    System.out.println("ban dan 1 vao "+" o "+cellTmp.x+cellTmp.y);
                     PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
                     Label pl = new Label(enemyLogHard.getTurn() + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
                     plBox.getChildren().add(pl);
@@ -572,18 +549,15 @@ public class PlayLayout {
         for (int i = 0; i <= 9; i++)
             for (int j = 0; j <= 9; j++) {
                 Cell c = board.getCell(i, j);
-                c.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (!running) return;
-                        if (btmHbox.getChildren().size() > 1) btmHbox.getChildren().remove(1);
-                        if (c.getAirCraft() != null) try {
-                            btmHbox.getChildren().addAll(acHP[c.getAirCraft().getType() - 2]);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-
+                c.setOnMouseEntered(event -> {
+                    if (!running) return;
+                    if (btmHbox.getChildren().size() > 1) btmHbox.getChildren().remove(1);
+                    if (c.getAirCraft() != null) try {
+                        btmHbox.getChildren().addAll(acHP[c.getAirCraft().getType() - 2]);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
+
                 });
             }
     }
@@ -592,12 +566,9 @@ public class PlayLayout {
         for (int i = 0; i <= 9; i++)
             for (int j = 0; j <= 9; j++) {
                 Cell c = board.getCell(i, j);
-                c.setOnMouseExited(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (!running) return;
-                        if (btmHbox.getChildren().size() > 1) btmHbox.getChildren().remove(1);
-                    }
+                c.setOnMouseExited(event -> {
+                    if (!running) return;
+                    if (btmHbox.getChildren().size() > 1) btmHbox.getChildren().remove(1);
                 });
             }
     }
