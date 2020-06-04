@@ -96,6 +96,7 @@ public class OptionLayout {
         soundLabel.getStyleClass().add("TextLabel");
         labels.getStyleClass().add("Labels");
         center.getStyleClass().add("Center");
+
         return root;
     }
 }

@@ -38,7 +38,8 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../view/HowToPlayLayout.fxml"));
         Parent parent = loader.load();
-        Scene HowToPlayScene = new Scene(parent);
+        Scene HowToPlayScene = new Scene(parent,1366,768);
+        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         HowToPlayScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(HowToPlayScene);
     }
@@ -47,17 +48,19 @@ public class MainMenuController implements Initializable {
     //switch to "OptionLayout" when "Option" button is clicked
     public void option(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(OptionLayout.createOptionLayout());
+        Scene scene = new Scene(OptionLayout.createOptionLayout(),1366,768);
         scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
+        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         stage.setScene(scene);
     }
 
     //switch to HighScoreLayout when "High score" button is clicked
     public void highScore(ActionEvent event) throws  Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(HighScoreLayout.createHighScoreLayout());
+        Scene scene = new Scene(HighScoreLayout.createHighScoreLayout(),1366,768);
         stage.setTitle("HIGH SCORE");
         stage.setScene(scene);
+        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         stage.show();
     }
 
@@ -84,7 +87,8 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainMenuController.class.getResource("../View/MainMenuLayout.fxml"));
         Parent parent = loader.load();
-        Scene MainMenuScene = new Scene(parent);
+        Scene MainMenuScene = new Scene(parent,1366,768);
+            if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         MainMenuScene.getStylesheets().add(MainMenuController.class.getResource("../view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene); }
         catch (Exception ex){
@@ -96,7 +100,8 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../View/MainMenuLayout.fxml"));
         Parent parent = loader.load();
-        Scene MainMenuScene = new Scene(parent);
+        Scene MainMenuScene = new Scene(parent,1366,768);
+        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         MainMenuScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene);
     }

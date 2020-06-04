@@ -158,7 +158,7 @@ public class Board extends Parent {
     //reposition aircraft
     public boolean reposAirCraft(AirCraft airCraft, int x, int y) {
         //AC being shot && difference of head position && reposition
-        if (!airCraft.isDie() && airCraft.lostHP() && !didRepo
+        if (airCraft.getHP() >0  && airCraft.lostHP() && !didRepo
                 && !airCraft.getHead().equals(getCell(x, y))) {
 
             //check new position's conditions
@@ -204,7 +204,7 @@ public class Board extends Parent {
             for (int i = 0; i < 10; i++) {
                 for (int j = 0; j < 10; j++) {
                     Cell cell = getCell(i, j);
-                    if (cell.airCraft != null && cell.airCraft.lostHP() && !cell.airCraft.isDie()) {
+                    if (cell.airCraft != null && cell.airCraft.lostHP() && cell.airCraft.getHP() >0) {
                         return cell.airCraft.getHead();
                     }
                 }
@@ -246,13 +246,13 @@ public class Board extends Parent {
             Board.playSound();
             wasShot = true;
             if (airCraft != null) {
-                if (airCraft.isDie()) return false;
+                if (airCraft.getHP() <= 0) return false;
                 airCraft.hitType1();
 
                 if (this.getBoard().enemy)
                     setFill(Color.rgb(255, 74, 54));
                 else setStroke(Color.rgb(255, 74, 54));
-                if (!airCraft.isAlive()) {
+                if (airCraft.getHP() <= 0) {
                     board.airCrafts--;
                     if (!this.getBoard().enemy) changeImagePlayerDead(this);
                     else changeImageEnemyDead(this);
@@ -281,13 +281,13 @@ public class Board extends Parent {
 
                     cell.wasShot = true;
                     if (cell.airCraft != null) {
-                        if (cell.airCraft.isDie()) continue;
+                        if (cell.airCraft.getHP() <= 0) continue;
                         tmp = true;
                         cell.airCraft.hitType2();
                         if (cell.getBoard().enemy)
                             cell.setFill(Color.rgb(255, 233, 33));
                         else cell.setStroke(Color.rgb(255, 233, 33));
-                        if (!cell.airCraft.isAlive()) {
+                        if (cell.airCraft.getHP() <= 0) {
                             board.airCrafts--;
                             if (!this.getBoard().enemy) changeImagePlayerDead(this);
                             else changeImageEnemyDead(this);
@@ -304,7 +304,7 @@ public class Board extends Parent {
             Board.playSound();
             wasShot = true;
             if (airCraft != null) {
-                if (airCraft.isDie()) return false;
+                if (airCraft.getHP() <= 0) return false;
                 airCraft.setDie(true);
                 board.airCrafts--;
                 airCraft.hitType3();
@@ -779,7 +779,7 @@ public class Board extends Parent {
         for (int i = 0; i < 10; i++)
             for (int j = 0; j < 10; j++) {
                 Cell cell = getCell(i, j);
-                if (cell.airCraft != null && cell.wasShot && !cell.airCraft.isDie()) return cell;
+                if (cell.airCraft != null && cell.wasShot && cell.getAirCraft().getHP() > 0) return cell;
             }
         return new Cell(10, 10, this);
     }

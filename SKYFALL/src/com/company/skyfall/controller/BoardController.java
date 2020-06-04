@@ -97,14 +97,15 @@ import static com.company.skyfall.model.HighScoreHandler.*;
         }
 
         if (!overGame && PlayLayout.enemyTurn) {
-            PlayLayout.centerStack.getChildren().add(PlayLayout.etlb);
+            PlayLayout.turn_label.getChildren().add(PlayLayout.etlb);
             enemyBoard.setDisable(true);
             playerBoard.setDisable(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(ex -> {
                 enemyBoard.setDisable(false);
                 playerBoard.setDisable(false);
-                PlayLayout.centerStack.getChildren().remove(1);
+                if (!PlayLayout.turn_label.getChildren().isEmpty()) PlayLayout.turn_label.getChildren().clear();
+
                 if (PlayLayout.enemyTurn && PlayLayout.easyMode)
                     PlayLayout.enemyMoveEasy();
                 else if (PlayLayout.enemyTurn && !PlayLayout.easyMode) PlayLayout.enemyMoveHard();

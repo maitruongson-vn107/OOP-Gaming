@@ -64,7 +64,7 @@ public class PlayLayout {
     static LogList logList;
     static int turn;
     static VBox plBox;
-
+    public static StackPane turn_label;
 
     public static void logging(Cell cell) {
         PlayLog playLog = new PlayLog(cell, typeOfBullet, turn, "Player");
@@ -82,9 +82,7 @@ public class PlayLayout {
         timeText.setFill(Color.YELLOW);
         time++;
     }));
-
-    public static Parent createContent(boolean level) {
-        // set up status variables to default value
+    public static void resetStatusVariable(boolean level){
         for (int i = 0; i < 3; i++)
             acSet[i] = false;
         centerStack = new StackPane();
@@ -108,6 +106,15 @@ public class PlayLayout {
         plBox = new VBox();
         Label pl = new Label("Turn" + "\t\t" + "Player/Enemy" + "\t\t" + "Cell" + "\t\t" + "Bullet Type" + "\t\t" + "Damage" + "\t\t" + "Status" + "\n-------------------------");
         plBox.getChildren().add(pl);
+        AC[0] = AC[1] = AC[2] = null;
+        acVBox.getChildren().clear();
+        acHBox.getChildren().clear();
+        acVBox.getChildren().addAll(ACToSet.h2, ACToSet.h3, ACToSet.h4);
+        acHBox.getChildren().addAll(ACToSet.v2, ACToSet.v3, ACToSet.v4);
+    }
+    public static Parent createContent(boolean level) {
+        // set up status variables to default value
+        resetStatusVariable(level);
         //sound and music in game
         Button musicBtn = new Button(Main.musicPlayer.getVolume() == 0?"Music: Off":"Music: On");
         musicBtn.setOnAction(event -> MediaController.musicControl(musicBtn));
@@ -123,12 +130,6 @@ public class PlayLayout {
         scrollPane.setContent(txt);
         scrollPane.setContent(plBox);
 
-        AC[0] = AC[1] = AC[2] = null;
-        acVBox.getChildren().clear();
-        acHBox.getChildren().clear();
-        acVBox.getChildren().addAll(ACToSet.h2, ACToSet.h3, ACToSet.h4);
-        acHBox.getChildren().addAll(ACToSet.v2, ACToSet.v3, ACToSet.v4);
-
         VBox rightPane = new VBox(musicAndSound, scrollPane);
 
         BorderPane root = new BorderPane();
@@ -143,13 +144,14 @@ public class PlayLayout {
                 MainMenuController.backToMainMenuFromPlay(e); });
 
         btmHbox = new HBox( mainMenuBtn, acBox);
-        root.setBottom(btmHbox);
+
 
         //create bullet type 1 button
         Button bullet1Btn = new Button();
-
+        bullet1Btn.setPrefSize(225,100);
         //create bullet type 2 button
         Button bullet2Btn = new Button();
+        bullet2Btn.setPrefSize(150,66.7);
         Label bullet2Label = new Label("x3");
 
         HBox bullet2Hbox = new HBox();
@@ -160,7 +162,7 @@ public class PlayLayout {
 
         //create bullet type 3 button
         Button bullet3Btn = new Button();
-
+        bullet3Btn.setPrefSize(150,66.7);
         bullet3Hbox.getChildren().addAll(bullet3Btn, bullet3Label);
         //set onAction Handler for bullet type 1 button
         bullet1Btn.setOnAction(e -> BulletController.enlargeBulletButton1(e, typeOfBullet));
@@ -170,7 +172,7 @@ public class PlayLayout {
         bullet3Btn.setOnAction(e -> BulletController.enlargeBulletButton3(e, typeOfBullet, (byte) playerBoard.getNumBulletType3()));
 
         bulletBox.getChildren().addAll(bullet1Btn, bullet2Hbox, bullet3Hbox);
-        root.setLeft(bulletBox);
+
         //create enemy board
         enemyBoard = new Board(true, event -> BoardController.enemyCellClick(event, running, overGame, enemyBoard, playerBoard, typeOfBullet,
                 bullet2Label, bullet3Label, bullet1Btn, bullet2Btn, bullet3Btn));
@@ -196,20 +198,20 @@ public class PlayLayout {
         Label playerBoardLabel = new Label("Player Board");
         playerBoardLabel.setLabelFor(playerBoard);
 
+        turn_label = new StackPane();
+
         HBox labels = new HBox( enemyBoardLabel, playerBoardLabel);
+
+
         //create row name Vbox
         VBox rowLabels = new VBox(0);
         HBox[] rowNameLabels = new HBox[10];
         for (int i = 0; i <= 9; i++) {
             rowNameLabels[i] = new HBox();
-            rowNameLabels[i].setPrefHeight(31);
-            rowNameLabels[i].setPrefWidth(100);
-            Label rowName = new Label("0" + (i + 1));
+            rowNameLabels[i].getStyleClass().add("RowNameBox");
+            Label rowName = new Label("0" + String.valueOf(i + 1));
             if (i == 9) rowName.setText("10");
-            rowName.setFont(Font.font(15));
-            rowName.setTextFill(Color.YELLOW);
             rowNameLabels[i].getChildren().add(rowName);
-            rowNameLabels[i].setAlignment(Pos.CENTER);
             rowLabels.getChildren().add(rowNameLabels[i]);
         }
         rowLabels.setPrefWidth(100);
@@ -226,16 +228,10 @@ public class PlayLayout {
             Label colName2 = new Label();
             colNameLabels1[i] = new HBox();
             colNameLabels2[i] = new HBox();
-            colNameLabels1[i].setPrefWidth(31);
-            colNameLabels2[i].setPrefWidth(31);
-            colNameLabels1[i].setAlignment(Pos.CENTER);
-            colNameLabels2[i].setAlignment(Pos.CENTER);
+            colNameLabels1[i].getStyleClass().add("ColNameBox");
+            colNameLabels2[i].getStyleClass().add("ColNameBox");
             colName1.setText(Character.toString((char) (i + 65)));
             colName2.setText(Character.toString((char) (i + 65)));
-            colName1.setFont(Font.font(15));
-            colName2.setFont(Font.font(15));
-            colName1.setTextFill(Color.YELLOW);
-            colName2.setTextFill(Color.YELLOW);
             colNameLabels1[i].getChildren().add(colName1);
             colLabelsLeft.getChildren().add(colNameLabels1[i]);
             colNameLabels2[i].getChildren().add(colName2);
@@ -243,7 +239,7 @@ public class PlayLayout {
         }
         colLabels.getChildren().addAll(colLabelsLeft, colLabelsRight);
 
-        VBox centerBox = new VBox(0, labels, colLabels, boards);
+        VBox centerBox = new VBox(0,turn_label,labels, colLabels, boards);
         centerStack.getChildren().add(centerBox);
         //create turn changing label
         ytlb.setText("--YOUR TURN--");
@@ -256,10 +252,13 @@ public class PlayLayout {
         root.setTop(timeBox);
         root.setCenter(centerStack);
         root.setRight(rightPane);
+        root.setLeft(bulletBox);
+        root.setBottom(btmHbox);
 
-        plBox.setStyle("-fx-background-color:transparent;");
-        scrollPane.setStyle("-fx-background-color:transparent;");
+//        plBox.setStyle("-fx-background-color:transparent;");
+//        scrollPane.setStyle("-fx-background-color:transparent;");
 
+        turn_label.getStyleClass().add("TurnLabelSTPane");
         bulletBox.getStyleClass().add("BulletBox");
         rightPane.getStyleClass().add("RightPane");
         bullet1Btn.getStyleClass().add("Bullet1Btn");
@@ -306,9 +305,13 @@ public class PlayLayout {
             if (playerBoard.preCell.equals(cell)) continue;
             playerBoard.preCell = cell;
 
-            boards.setDisable(true);
+            boards.getChildren().get(0).setDisable(true);
+            boards.getChildren().get(2).setDisable(true);
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
-            pause1.setOnFinished(ex -> boards.setDisable(false));
+            pause1.setOnFinished(ex -> {
+                boards.getChildren().get(0).setDisable(false);
+                boards.getChildren().get(2).setDisable(false);
+            });
             pause1.play();
 
             //choose type of bullet and move
@@ -338,13 +341,15 @@ public class PlayLayout {
             Label pl = new Label(enemyLog.getTurn() + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
             plBox.getChildren().add(pl);
             if (!overGame) {
-                centerStack.getChildren().add(ytlb);
-                boards.setDisable(true);
+                turn_label.getChildren().add(ytlb);
+                boards.getChildren().get(0).setDisable(true);
+                boards.getChildren().get(2).setDisable(true);
                 PauseTransition pause = new PauseTransition(Duration.seconds(1));
                 pause.setOnFinished(ex -> {
                     turn++;
-                    boards.setDisable(false);
-                    centerStack.getChildren().remove(1);
+                    boards.getChildren().get(0).setDisable(false);
+                    boards.getChildren().get(2).setDisable(false);
+                    if (!turn_label.getChildren().isEmpty()) turn_label.getChildren().clear();
                 });
                 pause.play();
             }
@@ -367,9 +372,13 @@ public class PlayLayout {
             }
             if (overGame) break;
 
-            boards.setDisable(true);
+            boards.getChildren().get(0).setDisable(true);
+            boards.getChildren().get(2).setDisable(true);
             PauseTransition pause1 = new PauseTransition(Duration.seconds(1));
-            pause1.setOnFinished(ex -> boards.setDisable(false));
+            pause1.setOnFinished(ex -> {
+                boards.getChildren().get(0).setDisable(false);
+                boards.getChildren().get(2).setDisable(false);
+            });
             pause1.play();
 
             Cell lastAC = enemyBoard.lastAC();
@@ -492,13 +501,15 @@ public class PlayLayout {
         }
 
         if (!overGame) {
-            centerStack.getChildren().add(ytlb);
-            boards.setDisable(true);
+            turn_label.getChildren().add(ytlb);
+            boards.getChildren().get(0).setDisable(true);
+            boards.getChildren().get(2).setDisable(true);
             PauseTransition pause = new PauseTransition(Duration.seconds(1));
             pause.setOnFinished(ex -> {
                 turn++;
-                boards.setDisable(false);
-                centerStack.getChildren().remove(1);
+                boards.getChildren().get(0).setDisable(false);
+                boards.getChildren().get(2).setDisable(false);
+                if (!turn_label.getChildren().isEmpty()) turn_label.getChildren().clear();
             });
             pause.play();
         }
@@ -522,12 +533,14 @@ public class PlayLayout {
             }
         }
         running = true;
-        centerStack.getChildren().add(stlb);
-        boards.setDisable(true);
+        turn_label.getChildren().add(stlb);
+        boards.getChildren().get(0).setDisable(true);
+        boards.getChildren().get(2).setDisable(true);
         PauseTransition pause = new PauseTransition(Duration.seconds(1));
         pause.setOnFinished(ex -> {
-            boards.setDisable(false);
-            centerStack.getChildren().removeAll(stlb);
+            boards.getChildren().get(0).setDisable(false);
+            boards.getChildren().get(2).setDisable(false);
+            if (!turn_label.getChildren().isEmpty()) turn_label.getChildren().clear();
         });
         pause.play();
     }

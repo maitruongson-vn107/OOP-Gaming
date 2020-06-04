@@ -55,22 +55,16 @@
     -fx-padding: 0 0 0 20;
 }
 .PlayLayout .Bullet1Btn{
-    -fx-pref-width:225;
-    -fx-pref-height:100;
     -fx-background-image: url("../resources/images/bullet1.png");
     -fx-background-color:transparent;
     -fx-background-size:100% 100%;
 }
 .PlayLayout .Bullet2Btn{
-    -fx-pref-width:150;
-    -fx-pref-height:66,7;
     -fx-background-image: url("../resources/images/bullet2.png");
     -fx-background-color:transparent;
     -fx-background-size:100% 100%;
 }
 .PlayLayout .Bullet3Btn{
-    -fx-pref-width:150;
-    -fx-pref-height:66,7;
     -fx-background-image: url("../resources/images/bullet3.png");
     -fx-background-color:transparent;
     -fx-background-size:100% 100%;
@@ -78,6 +72,24 @@
 .PlayLayout .BulletLabel{
     -fx-text-fill: #ffff00;
     -fx-font-size:50;
+}
+.PlayLayout .RowNameBox{
+    -fx-pref-width:100;
+    -fx-pref-height:31;
+    -fx-alignment:center;
+}
+.PlayLayout .ColNameBox{
+    -fx-pref-width:31;
+    -fx-pref-height:31;
+    -fx-alignment:center;
+}
+.PlayLayout .RowNameBox .label{
+    -fx-font-size:15;
+    -fx-text-fill:yellow;
+}
+.PlayLayout .ColNameBox .label{
+    -fx-font-size:15;
+    -fx-text-fill:yellow;
 }
 .PlayLayout .TurnLabel{
     -fx-text-fill:yellow;
@@ -102,11 +114,14 @@
     -fx-font-size: 25px;
     -fx-text-fill: yellow;
 }
+.PlayLayout .TurnLabelSTPane{
+    -fx-pref-height:100px;
+}
 .PlayLayout .Labels{
     -fx-spacing:225;
-    -fx-pref-height: 130px;
+    -fx-pref-height: 30px;
     -fx-alignment: bottom-center;
-    -fx-padding: 70 50 0 0;
+    -fx-padding: 0 50 0 0;
 }
 .PlayLayout .RowNameLabels{
     -fx-pref-height: 31px;
