@@ -803,8 +803,9 @@ public class Board extends Parent {
             int tmp = random.nextInt(4);
             int xx = x + dx[tmp];
             int yy = y + dy[tmp];
-            if (isValidPoint(xx, yy)) {
-                return getCell(xx, yy);
+            if (isValidPoint(xx, yy) ) {
+                Cell cell = getCell(xx,yy);
+                if  (!cell.wasShot) return getCell(xx, yy);
             }
         }
     }
