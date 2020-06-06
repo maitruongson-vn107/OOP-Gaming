@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -71,6 +72,7 @@ public class PlayLayout {
         PlayLog playLog = new PlayLog(cell, typeOfBullet, turn, "Player");
         logList.add(playLog);
         Label pl = new Label((currentTurn != turn ? playLog.getTurn() : "") + "\t\t" + playLog.getPlayer() + "\t\t\t " + playLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + playLog.getDamage() + "\t\t" + playLog.status());
+        pl.setTextFill(Color.ORANGE);
         if (currentTurn != turn){
             currentTurn = turn;
         }
@@ -111,6 +113,7 @@ public class PlayLayout {
         plBox = new VBox();
         Label pl = new Label("Turn" + "\t\t" + "Player/Enemy" + "\t\t" + "Cell" + "\t\t" + "Bullet Type" + "\t\t" + "Damage" + "\t\t" + "Status" + "\n-------------------------");
         plBox.getChildren().add(pl);
+        pl.setTextFill(Color.ORANGE);
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();
@@ -330,8 +333,6 @@ public class PlayLayout {
                     int[] status = cell.dealDame1();
                     enemyTurn = (status[1] == 1);
                     pause.setOnFinished(ex -> {
-//                      boards.getChildren().get(0).setDisable(false);
-//                      boards.getChildren().get(2).setDisable(false);
                         cell.shootEffect1(status);
                         updateHP();
                     });
@@ -343,8 +344,6 @@ public class PlayLayout {
                     enemyTurn = (status[9] == 1);
                     enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
                     pause.setOnFinished(e -> {
-//                      boards.getChildren().get(0).setDisable(false);
-//                      boards.getChildren().get(2).setDisable(false);
                         cell.shootEffect2(status);
                         updateHP();
                     });
@@ -365,6 +364,7 @@ public class PlayLayout {
             }
             PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
             Label pl = new Label((currentTurn != turn ? enemyLog.getTurn() : "") + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
+            pl.setTextFill(Color.YELLOW);
             plBox.getChildren().add(pl);
             }
             if (!overGame) {
@@ -449,6 +449,7 @@ public class PlayLayout {
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         pause.setOnFinished(e->{
                             cellTmp.shootEffect3(status);
+                            pl.setTextFill(Color.YELLOW);
                             plBox.getChildren().add(pl);
                         });
                         pause.play();
@@ -461,6 +462,7 @@ public class PlayLayout {
                         playerBoard.preCell = cellTmp;
                         pause.setOnFinished(e->{
                             cellTmp.shootEffect1(status);
+                            pl.setTextFill(Color.YELLOW);
                             plBox.getChildren().add(pl);
 
                         });
@@ -477,6 +479,7 @@ public class PlayLayout {
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
                         pause.setOnFinished(e->{
                             cell.shootEffect3(status);
+                            pl.setTextFill(Color.YELLOW);
                             plBox.getChildren().add(pl);
                         });
                         pause.play();
@@ -488,6 +491,7 @@ public class PlayLayout {
                         updateHP();
                         pause.setOnFinished(e->{
                             cell.shootEffect1(status);
+                            pl.setTextFill(Color.YELLOW);
                             plBox.getChildren().add(pl);
                         });
                         pause.play();
@@ -515,6 +519,7 @@ public class PlayLayout {
                         playerBoard.preCell = cellTmp;
                         pause.setOnFinished(e->{
                             cellTmp.shootEffect2(status);
+                            pl.setTextFill(Color.YELLOW);
                             plBox.getChildren().add(pl);
                         });
                         pause.play();
@@ -541,6 +546,7 @@ public class PlayLayout {
                     playerBoard.preCell = cellTmp;
                     pause.setOnFinished(e->{
                         cellTmp.shootEffect1(status);
+                        pl.setTextFill(Color.YELLOW);
                         plBox.getChildren().add(pl);
                     });
                     pause.play();

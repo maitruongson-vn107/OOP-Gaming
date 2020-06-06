@@ -105,7 +105,6 @@ import static com.company.skyfall.model.HighScoreHandler.*;
                 enemyBoard.setDisable(false);
                 playerBoard.setDisable(false);
                 if (!PlayLayout.turn_label.getChildren().isEmpty()) PlayLayout.turn_label.getChildren().clear();
-
                 if (PlayLayout.enemyTurn && PlayLayout.easyMode)
                     PlayLayout.enemyMoveEasy();
                 else if (PlayLayout.enemyTurn && !PlayLayout.easyMode) PlayLayout.enemyMoveHard();

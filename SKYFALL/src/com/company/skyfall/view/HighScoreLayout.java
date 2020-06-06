@@ -21,7 +21,7 @@ public class HighScoreLayout {
         easyTop = easyReader();
         hardTop = hardReader();
         StackPane root = new StackPane();
-        VBox hsvbox =new VBox(100);
+        VBox hsvbox =new VBox(50);
         hsvbox.setAlignment(Pos.TOP_CENTER);
         root.getChildren().add(hsvbox);
 
@@ -51,8 +51,8 @@ public class HighScoreLayout {
         e_h_hbox.setSpacing(100);
         easyvbox.getStyleClass().add("Hsbox");
         hardvbox.getStyleClass().add("Hsbox");
-        easyvbox.setPrefSize(600,200);
-        hardvbox.setPrefSize(600,200);
+//        easyvbox.setPrefSize(600,200);
+//        hardvbox.setPrefSize(600,200);
         LLabel ealabel = new LLabel();
         ealabel.setText("Easy");
         ealabel.setFont(Font.font(50));
@@ -77,7 +77,7 @@ public class HighScoreLayout {
         eanamevbox.getChildren().addAll(name1,name11,name12,name13,name14,name15);
 
         LLabel turn1 = new LLabel();
-        turn1.setText("Turns");
+        turn1.setText("Used Bullets");
         LLabel turn11 = new LLabel(easyTop[0][1]);
         LLabel turn12 = new LLabel(easyTop[1][1]);
         LLabel turn13 = new LLabel(easyTop[2][1]);
@@ -118,7 +118,7 @@ public class HighScoreLayout {
         hanamevbox.getChildren().addAll(name2,name21,name22,name23,name24,name25);
 
         LLabel turn2 = new LLabel();
-        turn2.setText("Turns");
+        turn2.setText("Used Bullets");
         LLabel turn21 = new LLabel(hardTop[0][1]);
         LLabel turn22 = new LLabel(hardTop[1][1]);
         LLabel turn23 = new LLabel(hardTop[2][1]);

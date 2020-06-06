@@ -5,6 +5,7 @@ import com.company.skyfall.Main;
 import com.company.skyfall.controller.MainMenuController;
 import com.company.skyfall.model.Board;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -80,7 +81,9 @@ public class OptionLayout {
         });
 
         root.setCenter(center);
-        root.setBottom(mainMenuBtn);
+        HBox hBox = new HBox(mainMenuBtn);
+        hBox.setAlignment(Pos.BOTTOM_LEFT);
+        root.setBottom(hBox);
 
         root.getStyleClass().setAll("OptionLayout");
         mainMenuBtn.setId("mainMenuBtn");
@@ -96,7 +99,7 @@ public class OptionLayout {
         soundLabel.getStyleClass().add("TextLabel");
         labels.getStyleClass().add("Labels");
         center.getStyleClass().add("Center");
-
+        root.setPrefSize(1080,630);
         return root;
     }
 }

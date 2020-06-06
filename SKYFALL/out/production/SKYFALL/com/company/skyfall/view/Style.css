@@ -30,10 +30,7 @@
     -fx-background-size: 200px 100px;
     -fx-background-color:transparent;
 }
-.Hsbox{
-    -fx-background-image:url("../resources/images/border.png");
-    -fx-background-size: 100% 100%;
-}
+
  #highScoreLayout{
     -fx-background-image:url("../resources/images/HighScoreBackgr.jpg");
     -fx-background-size:cover;
@@ -62,7 +59,7 @@
     -fx-spacing:50px;
 }
 .scroll-pane .label{
-    -fx-text-fill:yellow;
+    
 }
 .PlayLayout .BulletBox{
     -fx-pref-width:333;
@@ -174,6 +171,7 @@
 }
 .OptionLayout{
     -fx-background-image:url("../resources/images/MainMenuBackgr.jpg");
+    -fx-background-size: 100% 100%;
 }
 .OptionLayout .TextLabel{
     -fx-text-fill:rgb(245,214,157);
@@ -186,23 +184,23 @@
 }
 .OptionLayout .Slider_DifficultyOption{
     -fx-spacing:75;
-    -fx-padding:0 0 0 550;
+    -fx-padding:0 0 0 400;
 }
 .OptionLayout #difficultyLabel{
 
 }
 .OptionLayout .Labels{
     -fx-spacing:125;
-    -fx-padding:200 0 0 550;
+    -fx-padding:200 0 0 400;
 }
 .OptionLayout .Center{
     -fx-spacing:50;
 }
 .OptionLayout #difficultyLabel{
     -fx-spacing:75;
-    -fx-margin-left:550;
+    -fx-margin-left:400;
 }
 .OptionLayout .Hbox{
     -fx-spacing:125;
-    -fx-padding:50 0 0 550;
+    -fx-padding:50 0 0 400;
 }

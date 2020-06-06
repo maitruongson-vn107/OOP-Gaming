@@ -23,9 +23,7 @@ public class ACToSet {
         HBox vACHbox = new HBox(15); vACHbox.setPrefSize(120,120);
         //   vACHbox.setStyle("-fx-border-color:red;");
         //acHbox.setStyle("-fx-border-image-source: url(\"border.png\");-fx-border-image-width:20;-fx-border-image-slice:25;");
-        System.out.println(v2.getFitHeight());
         v2.setFitHeight(60);
-        System.out.println(v2.getFitHeight());
         h2.setFitWidth(60);
         v3.setFitHeight(90);
         h3.setFitWidth(90);

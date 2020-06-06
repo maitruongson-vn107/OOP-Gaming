@@ -25,7 +25,7 @@ public class MainMenuController implements Initializable {
     public void play(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(PlayLayout.createContent(!OptionLayout.getLevel()),1366,768);
-        stage.setTitle("Play");
+        stage.setTitle("WARSHIP BATTLE-PLAY");
         stage.setScene(scene);
         if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
@@ -38,29 +38,29 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../view/HowToPlayLayout.fxml"));
         Parent parent = loader.load();
-        Scene HowToPlayScene = new Scene(parent,1366,768);
-        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
+        Scene HowToPlayScene = new Scene(parent,1080,630);
         HowToPlayScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(HowToPlayScene);
+        stage.setTitle("WARSHIP BATTLE-HOW TO PLAY");
     }
 
 
     //switch to "OptionLayout" when "Option" button is clicked
     public void option(ActionEvent event) throws Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(OptionLayout.createOptionLayout(),1366,768);
+        Scene scene = new Scene(OptionLayout.createOptionLayout(),1080,630);
         scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
-        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         stage.setScene(scene);
+        stage.setTitle("WARSHIP BATTLE-OPTION");
     }
 
     //switch to HighScoreLayout when "High score" button is clicked
     public void highScore(ActionEvent event) throws  Exception{
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(HighScoreLayout.createHighScoreLayout(),1366,768);
-        stage.setTitle("HIGH SCORE");
+        Scene scene = new Scene(HighScoreLayout.createHighScoreLayout(),1080,630);
+        stage.setTitle("WARSHIP BATTLE-HIGH SCORE");
         stage.setScene(scene);
-        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
+      //  if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
         scene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.show();
     }
@@ -88,10 +88,10 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainMenuController.class.getResource("../View/MainMenuLayout.fxml"));
         Parent parent = loader.load();
-        Scene MainMenuScene = new Scene(parent,1366,768);
-            if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
+        Scene MainMenuScene = new Scene(parent,1080,630);
         MainMenuScene.getStylesheets().add(MainMenuController.class.getResource("../view/Style.css").toExternalForm());
-        stage.setScene(MainMenuScene); }
+        stage.setScene(MainMenuScene);
+        stage.setTitle("WARSHIP BATTLE");}
         catch (Exception ex){
             ex.printStackTrace();
         }
@@ -101,10 +101,10 @@ public class MainMenuController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("../View/MainMenuLayout.fxml"));
         Parent parent = loader.load();
-        Scene MainMenuScene = new Scene(parent,1366,768);
-        if (Screen.getPrimary().getBounds().getMaxX() <= 1366) stage.setFullScreen(true);
+        Scene MainMenuScene = new Scene(parent,1080,630);
         MainMenuScene.getStylesheets().add(getClass().getResource("../view/Style.css").toExternalForm());
         stage.setScene(MainMenuScene);
+        stage.setTitle("WARSHIP BATTLE");
     }
 
     @Override
