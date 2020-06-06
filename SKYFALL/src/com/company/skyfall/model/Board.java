@@ -263,7 +263,37 @@ public class Board extends Parent {
             setFill(Color.rgb(33, 233, 255));
             return false;
         }
-
+        public int[] dealDame1(){
+            int v1,v2 = 0;
+            // 0 ban vao thang da chet. 1 ban vao thang chua chet ( mau do ) va ban xong no chua det
+            // 2 ban vao thang chua chet, ban xong no chet. 3 ban xit
+            wasShot = true;
+            if (airCraft != null) {
+                if (airCraft.getHP() <= 0) return new int[]{0,0};
+                airCraft.hitType1();
+                v1 = 1; v2 = 1;
+                if (airCraft.getHP() <= 0) {
+                    v1 = 2; v2 = 1;
+                    board.airCrafts--;
+                }
+                return new int[]{v1,v2};
+            }
+            return new int[]{3,0};
+        }
+        public void shootEffect1(int[] v){
+            switch (v[0]){
+                case 0: return;
+                case 2: if (!this.getBoard().enemy) changeImagePlayerDead(this);
+                            else changeImageEnemyDead(this);
+                            break;
+                case 1:  if (this.getBoard().enemy) setFill(Color.rgb(255, 74, 54));
+                             else setStroke(Color.rgb(255, 74, 54));
+                         break;
+                case 3:  this.setFill(Color.rgb(33, 233, 255));
+                      break;
+            }
+            Board.playSound();
+        }
         //Bullet type 2
         public boolean shootType2() {
             Board.playSound();
@@ -289,14 +319,69 @@ public class Board extends Parent {
                         else cell.setStroke(Color.rgb(255, 233, 33));
                         if (cell.airCraft.getHP() <= 0) {
                             board.airCrafts--;
-                            if (!this.getBoard().enemy) changeImagePlayerDead(this);
-                            else changeImageEnemyDead(this);
+                            if (!this.getBoard().enemy) changeImagePlayerDead(cell);
+                            else changeImageEnemyDead(cell);
                         }
                     } else
                         cell.setFill(Color.rgb(33, 233, 255));
                 }
             }
             return tmp;
+        }
+        public int[] dealDame2(){
+            int[] v = {3,3,3,3,3,3,3,3,3,0};
+            int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+            int[] dy = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+            for (int i = 0; i < 9; i++) {
+                int xx = x + dx[i];
+                int yy = y + dy[i];
+
+                if ((isValidPoint(xx, yy))) {
+                    Cell cell = getCell(xx, yy);
+                    cell.wasShot = true;
+                    if (cell.airCraft != null) {
+                        if (cell.airCraft.getHP() <= 0)
+                        {
+                            v[i] = 0;
+                            continue;
+                        }
+                        cell.airCraft.hitType2();
+                        v[9] = 1;
+                        v[i] = 1;
+                        if (cell.airCraft.getHP() <= 0) {
+                            board.airCrafts--;
+                            v[i] = 2;
+                        }
+                    } else
+                        v[i] =3;
+                }
+            }
+            return v;
+        }
+        public void shootEffect2(int[] v){
+            Board.playSound();
+            // 3*3 block
+            int[] dx = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+            int[] dy = {-1,  0,  1, -1, 0, 1,-1, 0, 1};
+            for (int i = 0; i < 9; i++) {
+                int xx = x + dx[i];
+                int yy = y + dy[i];
+
+                if ((isValidPoint(xx, yy))) {
+                    Cell cell = getCell(xx, yy);
+                    switch (v[i]){
+                        case 0: continue;
+                        case 1: if (cell.getBoard().enemy) cell.setFill(Color.rgb(255, 233, 33));
+                                     else cell.setStroke(Color.rgb(255, 233, 33));
+                                  break;
+                        case 2:  if (!this.getBoard().enemy) changeImagePlayerDead(cell);
+                                    else changeImageEnemyDead(cell);
+                                 break;
+                        case 3: cell.setFill(Color.rgb(33, 233, 255));
+                                  break;
+                    }
+                }
+            }
         }
 
         // Bullet type 3
@@ -315,7 +400,28 @@ public class Board extends Parent {
                 setFill(Color.rgb(44, 255, 47));
             return false;
         }
-
+        public int[] dealDame3(){
+            wasShot = true;
+            if (airCraft != null) {
+                if (airCraft.getHP() <= 0) return new int[]{0,0};
+                airCraft.setDie(true);
+                board.airCrafts--;
+                airCraft.hitType3();
+                return new int[]{2,1};
+            } else
+                return new int[]{3,0};
+        }
+        public void shootEffect3(int[] v){
+            Board.playSound();
+            switch (v[0]){
+                case 0: return;
+                case 2: if (!this.getBoard().enemy) changeImagePlayerDead(this);
+                          else changeImageEnemyDead(this);
+                         break;
+                case 3:  this.setFill(Color.rgb(44, 255, 47));
+                        break;
+            }
+        }
         // shooted by type 2
         public int
         countNumberOfCellHaveAirCraft() {
