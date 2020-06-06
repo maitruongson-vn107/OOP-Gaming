@@ -72,7 +72,7 @@ public class PlayLayout {
         PlayLog playLog = new PlayLog(cell, typeOfBullet, turn, "Player");
         logList.add(playLog);
         Label pl = new Label((currentTurn != turn ? playLog.getTurn() : "") + "\t\t" + playLog.getPlayer() + "\t\t\t " + playLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + playLog.getDamage() + "\t\t" + playLog.status());
-        pl.setTextFill(Color.ORANGE);
+        pl.setTextFill(Color.RED);
         if (currentTurn != turn){
             currentTurn = turn;
         }
@@ -113,7 +113,7 @@ public class PlayLayout {
         plBox = new VBox();
         Label pl = new Label("Turn" + "\t\t" + "Player/Enemy" + "\t\t" + "Cell" + "\t\t" + "Bullet Type" + "\t\t" + "Damage" + "\t\t" + "Status" + "\n-------------------------");
         plBox.getChildren().add(pl);
-        pl.setTextFill(Color.ORANGE);
+        pl.setTextFill(Color.BLUE);
         AC[0] = AC[1] = AC[2] = null;
         acVBox.getChildren().clear();
         acHBox.getChildren().clear();

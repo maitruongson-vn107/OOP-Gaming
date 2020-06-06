@@ -8,11 +8,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class OptionLayout {
     private static RadioButton easyBtn = new RadioButton("Easy");
@@ -26,7 +29,7 @@ public class OptionLayout {
         }
     }
 
-    public static Parent createOptionLayout(){
+    public static Parent createOptionLayout() throws FileNotFoundException {
 
         //create layout
         BorderPane root = new BorderPane();
@@ -100,6 +103,16 @@ public class OptionLayout {
         labels.getStyleClass().add("Labels");
         center.getStyleClass().add("Center");
         root.setPrefSize(1080,630);
+        //stage.getIcons().add(new Image(new File("src/com/company/skyfall/resources/images/game_icon.png").toURI().toString()));
+
+        Image img = new Image(new File("src/resources/images/PlayBackgr.jpg").toURI().toString());
+        BackgroundSize bSize = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO,
+                false, false, true, false);
+        root.setBackground(new Background(new BackgroundImage(img,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                bSize)));
         return root;
     }
 }
