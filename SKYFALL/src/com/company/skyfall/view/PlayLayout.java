@@ -330,6 +330,10 @@ public class PlayLayout {
                 typeOfBullet = random.nextInt(3) + 1;
 
                 if (typeOfBullet == 1) {
+                    PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
+                    Label pl = new Label((currentTurn != turn ? enemyLog.getTurn() : "") + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
+                    pl.setTextFill(Color.YELLOW);
+                    plBox.getChildren().add(pl);
                     int[] status = cell.dealDame1();
                     enemyTurn = (status[1] == 1);
                     pause.setOnFinished(ex -> {
@@ -340,6 +344,10 @@ public class PlayLayout {
                     break;
                 }
                 if (typeOfBullet == 2 && enemyBoard.getNumBulletType2() > 0) {
+                    PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
+                    Label pl = new Label((currentTurn != turn ? enemyLog.getTurn() : "") + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
+                    pl.setTextFill(Color.YELLOW);
+                    plBox.getChildren().add(pl);
                     int[] status = cell.dealDame2();
                     enemyTurn = (status[9] == 1);
                     enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
@@ -351,6 +359,10 @@ public class PlayLayout {
                     break;
                 }
                 if (typeOfBullet == 3 && enemyBoard.getNumBulletType3() > 0) {
+                    PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
+                    Label pl = new Label((currentTurn != turn ? enemyLog.getTurn() : "") + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
+                    pl.setTextFill(Color.YELLOW);
+                    plBox.getChildren().add(pl);
                     int[] status = cell.dealDame3();
                     enemyTurn = (status[1] == 1);
                     enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
@@ -362,10 +374,7 @@ public class PlayLayout {
                     break;
                 }
             }
-            PlayLog enemyLog = new PlayLog(cell, (byte) typeOfBullet, turn, "Enemy");
-            Label pl = new Label((currentTurn != turn ? enemyLog.getTurn() : "") + "\t\t" + enemyLog.getPlayer() + "\t\t\t " + enemyLog.convertCellName(cell) + "\t\t\t" + typeOfBullet + "\t\t\t\t" + enemyLog.getDamage() + "\t\t" + enemyLog.status());
-            pl.setTextFill(Color.YELLOW);
-            plBox.getChildren().add(pl);
+
             }
             if (!overGame) {
 
@@ -440,10 +449,10 @@ public class PlayLayout {
                     // shot on edge shared cell
                     Cell cellTmp = playerBoard.findEdgeSharedCell(cell.x, cell.y);
                     if (cellTmp.wasShot && enemyBoard.getNumBulletType3() > 0) {
-                        int[] status = cellTmp.dealDame3();
-                        enemyTurn = (status[1] == 1);
                         PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 3, turn, "Enemy");
                         Label pl = new Label((currentTurn != turn ? enemyLogHard.getTurn() : "") + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 3 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        int[] status = cellTmp.dealDame3();
+                        enemyTurn = (status[1] == 1);
                         updateHP();
                         playerBoard.preCell = cellTmp;
                         enemyBoard.setNumBulletType3(enemyBoard.getNumBulletType3() - 1);
@@ -454,10 +463,11 @@ public class PlayLayout {
                         });
                         pause.play();
                     } else {
-                        int[] status = cellTmp.dealDame1();
-                        enemyTurn = (status[1] == 1);
                         PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
                         Label pl = new Label((currentTurn != turn ? enemyLogHard.getTurn() :"") + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        int[] status = cellTmp.dealDame1();
+                        enemyTurn = (status[1] == 1);
+
                         updateHP();
                         playerBoard.preCell = cellTmp;
                         pause.setOnFinished(e->{
@@ -484,10 +494,10 @@ public class PlayLayout {
                         });
                         pause.play();
                     } else {
-                        int[] status = cell.dealDame1();
-                        enemyTurn = (status[1] == 1);
                         PlayLog enemyLogHard = new PlayLog(cell, (byte) 1, turn, "Enemy");
                         Label pl = new Label((currentTurn != turn ? enemyLogHard.getTurn() : "")+ "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cell) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        int[] status = cell.dealDame1();
+                        enemyTurn = (status[1] == 1);
                         updateHP();
                         pause.setOnFinished(e->{
                             cell.shootEffect1(status);
@@ -510,10 +520,10 @@ public class PlayLayout {
                     if (y == 0) y++;
                     if (playerBoard.isAbleToShotThisCell(x, y)) {
                         Cell cellTmp = playerBoard.getCell(x, y);
-                        int[] status = cellTmp.dealDame2();
-                        enemyTurn = (status[9] == 1);
                         PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 2, turn, "Enemy");
                         Label pl = new Label((currentTurn != turn ? enemyLogHard.getTurn() : "") + "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 2 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                        int[] status = cellTmp.dealDame2();
+                        enemyTurn = (status[9] == 1);
                         updateHP();
                         enemyBoard.setNumBulletType2(enemyBoard.getNumBulletType2() - 1);
                         playerBoard.preCell = cellTmp;
@@ -538,10 +548,10 @@ public class PlayLayout {
                 int count = playerBoard.countNumberOfEdgeShared(x, y);
                 if (count == edge) {
                     Cell cellTmp = playerBoard.getCell(x, y);
-                    int[] status = cellTmp.dealDame1();
-                    enemyTurn = (status[1] == 1);
                     PlayLog enemyLogHard = new PlayLog(cellTmp, (byte) 1, turn, "Enemy");
                     Label pl = new Label((currentTurn != turn ? enemyLogHard.getTurn() : "" )+ "\t\t" + enemyLogHard.getPlayer() + "\t\t\t " + enemyLogHard.convertCellName(cellTmp) + "\t\t\t" + 1 + "\t\t\t\t" + enemyLogHard.getDamage() + "\t\t" + enemyLogHard.status());
+                    int[] status = cellTmp.dealDame1();
+                    enemyTurn = (status[1] == 1);
                     updateHP();
                     playerBoard.preCell = cellTmp;
                     pause.setOnFinished(e->{
