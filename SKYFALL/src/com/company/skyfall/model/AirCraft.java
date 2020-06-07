@@ -2,7 +2,7 @@ package com.company.skyfall.model;
 
 import javafx.scene.Parent;
 
-public class AirCraft extends Parent {
+public class AirCraft {
     private int type;
     private boolean vertical;
     private int HP;

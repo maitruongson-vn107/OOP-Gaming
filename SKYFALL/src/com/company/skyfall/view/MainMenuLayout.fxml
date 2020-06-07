@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane id="mainMenuLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/8.0.221" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.skyfall.controller.MainMenuController">
+<StackPane id="mainMenuLayout" prefHeight="720" prefWidth="1280" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.skyfall.controller.MainMenuController">
    <children>
        <VBox alignment="CENTER_RIGHT" spacing="30">
           <children>
