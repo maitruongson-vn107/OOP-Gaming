@@ -281,6 +281,7 @@ public class Board extends Parent {
             return new int[]{3,0};
         }
         public void shootEffect1(int[] v){
+            Board.playSound();
             switch (v[0]){
                 case 0: return;
                 case 2: if (!this.getBoard().enemy) changeImagePlayerDead(this);
@@ -292,7 +293,6 @@ public class Board extends Parent {
                 case 3:  this.setFill(Color.rgb(33, 233, 255));
                       break;
             }
-            Board.playSound();
         }
         //Bullet type 2
         public boolean shootType2() {
